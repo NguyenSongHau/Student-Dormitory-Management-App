@@ -1,27 +1,19 @@
 {
   "expo": {
-    "name": "SDMApp",
-    "slug": "SDMApp",
+    "name": "Student Dormitory Management",
+    "slug": "student_dormitory_management",
     "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "plugins": [
+      "expo-font"
+    ],
+    "android": {
+      "package": "com.nsh.sdm"
     },
     "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
+      "bundleIdentifier": "com.nsh.sdm"
     }
   }
 }

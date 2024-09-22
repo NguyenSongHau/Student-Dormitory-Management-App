@@ -1,5 +1,5 @@
 {
-  "name": "sdmapp",
+  "name": "student_dormitory_management",
   "version": "1.0.0",
   "main": "expo/AppEntry.js",
   "scripts": {
@@ -18,6 +18,7 @@
     "expo": "~51.0.28",
     "expo-font": "^12.0.10",
     "expo-status-bar": "~1.12.1",
+    "lottie-react-native": "^7.0.0",
     "moment": "^2.30.1",
     "react": "18.2.0",
     "react-native": "0.74.5",
