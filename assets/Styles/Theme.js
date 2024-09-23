@@ -5,6 +5,5 @@ export default {
     Medium: 'OpenSansMedium',
     Regular: 'OpenSansRegular',
     Italic: 'OpenSansItalic',
-    PrimaryColor: '#e8505b',
-    TextColor: '#414656'
+    PrimaryColor: '#e8505b'
 }

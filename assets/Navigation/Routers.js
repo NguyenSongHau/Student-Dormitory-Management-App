@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import useFonts from '../Configs/Fonts';
 import Splash from '../Components/Common/Splash';
+import Onboarding from '../Screens/Onboarding/Onboarding';
+
+const Stack = createStackNavigator();
 
 const Routers = () => {
     const fontsLoaded = useFonts();
@@ -23,7 +27,13 @@ const Routers = () => {
 
     return (
         <NavigationContainer>
-
+            <Stack.Navigator>
+                <Stack.Screen 
+                    name="Onboarding" 
+                    component={Onboarding} 
+                    options={{ headerShown: false }} 
+                />
+            </Stack.Navigator>
         </NavigationContainer>
     );
 }

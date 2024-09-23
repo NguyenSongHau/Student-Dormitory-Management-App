@@ -1,6 +1,5 @@
 import { Text, View } from "react-native";
 import LottieView from "lottie-react-native";
-import { useEffect } from "react";
 import StaticStyle from '../../Styles/StaticStyle';
 
 const Splash = () => {
