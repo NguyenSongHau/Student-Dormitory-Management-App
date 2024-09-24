@@ -1,21 +1,48 @@
-import { Text, View } from "react-native";
-import LottieView from "lottie-react-native";
+import React, { useEffect, useRef } from 'react';
+import { View, Animated } from 'react-native';
 import StaticStyle from '../../Styles/StaticStyle';
 
-const Splash = () => {
-    return(
-       <View style={StaticStyle.Container}>
-            <LottieView
+const Splash = ({ onAnimationEnd }) => {
+    const fadeAnim = useRef(new Animated.Value(0)).current;
+
+    useEffect(() => {
+        Animated.sequence([
+            Animated.timing(
+                fadeAnim,
+                {
+                    toValue: 1,
+                    duration: 2000,
+                    useNativeDriver: true,
+                }
+            ),
+            Animated.timing(
+                fadeAnim,
+                {
+                    toValue: 0,
+                    duration: 1000,
+                    useNativeDriver: true,
+                }
+            )
+        ]).start(() => {
+            // When animation finishes, call the callback
+            if (onAnimationEnd) {
+                onAnimationEnd();  // Notify parent to trigger navigation
+            }
+        });
+    }, [fadeAnim]);
+
+    return (
+        <View style={StaticStyle.Container}>
+            <Animated.Image
                 style={{
-                    width: 400,
-                    height: 400,
+                    width: '100%',
+                    height: '100%',
+                    opacity: fadeAnim,
                 }}
-                source={require('../../Assets/Animations/Splash/Splash.json')}
-                autoPlay
-                loop
+                source={require('../../Assets/Images/Splash/Splash.jpg')}
             />
-       </View>
-    )
+        </View>
+    );
 }
 
 export default Splash;

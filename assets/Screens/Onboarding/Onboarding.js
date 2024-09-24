@@ -1,32 +1,30 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRef } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 import Theme from "../../Styles/Theme";
 import StaticStyle, { screenHeight, screenWidth } from "../../Styles/StaticStyle";
-import LottieView from "lottie-react-native";
 import AppIntroSlider from 'react-native-app-intro-slider';
 
 const Onboaring = () => {
-    const refLottieView = useRef(LottieView);
-
     const onboardings = [
         {
             id: 1,
             title: 'Ký Túc Xá Sinh Viên',
             description: 'Hệ thống quản lý ký túc xá dễ dàng và tiện lợi cho sinh viên.',
-            image: require('../../Assets/Animations/Splash/Splash.json')
+            image: require('../../Assets/Images/Onboarding/Onboarding-1.png')
         },
         {
             id: 2,
             title: 'Đăng Ký Hồ Sơ',
-            description: 'Thủ tục đăng ký hồ sơ một cách nhanh chóng và tiện lợi.',
-            image: require('../../Assets/Animations/Splash/Splash.json')
+            description: 'Thủ tục đăng ký hồ sơ một cách nhanh chóng và nhanh gọn cho sinh viên.',
+            image: require('../../Assets/Images/Onboarding/Onboarding-2.png')
         },
         {
             id: 3,
             title: 'Hỗ Trợ Tận Tình',
             description: 'Đội ngũ nhân viên sẵn sàng giải đáp mọi thắc mắc của sinh viên.',
-            image: require('../../Assets/Animations/Splash/Splash.json')
-        },
+            image: require('../../Assets/Images/Onboarding/Onboarding-3.png')
+        }
     ];
 
     const handleDone = async () => {
@@ -46,34 +44,29 @@ const Onboaring = () => {
     };
 
     return (
-        <AppIntroSlider
-            style={OnboaringStyle.BackGround}
-            data={onboardings}
-            showSkipButton
-            onDone={handleDone}
-            renderItem={({ item }) => {
-                return (
-                    <View key={item.id} style={OnboaringStyle.OnboardingContainer}>
-                        {item.image && (
-                            <LottieView
-                                style={OnboaringStyle.OnboardingImage}
-                                source={item.image}
-                                ref={refLottieView}
-                                autoPlay
-                                loop
-                            />
-                        )}
-                        <Text style={OnboaringStyle.OnboardingTitle}>{item.title}</Text>
-                        <Text style={OnboaringStyle.OnboardingDescription}>{item.description}</Text>
-                    </View>
-                );
-            }}
-            activeDotStyle={{ backgroundColor: Theme.PrimaryColor, width: 20 }}
-            renderNextButton={() => renderButton('Tiếp tục')}
-            renderSkipButton={() => renderButton('Bỏ qua')}
-            renderDoneButton={() => renderButton('Hoàn tất')}
-        />
-    )
+        <View style={StaticStyle.BackGround}>
+            <AppIntroSlider
+                data={onboardings}
+                showSkipButton
+                onDone={handleDone}
+                renderItem={({ item }) => {
+                    return (
+                        <View key={item.id} style={OnboaringStyle.OnboardingContainer}>
+                            <Image source={item.image} style={OnboaringStyle.OnboardingImage} />
+                    
+                            <Text style={OnboaringStyle.OnboardingTitle}>{item.title}</Text>
+                            
+                            <Text style={OnboaringStyle.OnboardingDescription}>{item.description}</Text>
+                        </View>
+                    );
+                }}
+                activeDotStyle={{ backgroundColor: Theme.PrimaryColor, width: 20 }}
+                renderNextButton={() => renderButton('Tiếp tục')}
+                renderSkipButton={() => renderButton('Bỏ qua')}
+                renderDoneButton={() => renderButton('Hoàn tất')}
+            />
+        </View>
+    );
 }
 
 const OnboaringStyle = StyleSheet.create({
@@ -81,16 +74,17 @@ const OnboaringStyle = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         padding: 15,
-        paddingTop: screenHeight / 10,
+        paddingTop: screenHeight / 8,
     },
     OnboardingImage: {
-        width: screenWidth + 50,
-        height: 330,
+        width: screenWidth - 40,
+        height: 300,
         resizeMode: 'contain',
+        marginTop: 20
     },
     OnboardingTitle: {
         fontSize: 28,
-        marginTop: 60,
+        marginTop: 40,
         fontFamily: Theme.Bold,
     },
     OnboardingDescription: {
