@@ -4,8 +4,7 @@ import { roles } from '../Configs/Constants';
 export const signInFields = [
     {
         label: 'Email',
-        name: 'username',
-        icon: 'email',
+        name: 'username'
     },
     {
         label: 'Mật khẩu',

@@ -1,10 +1,13 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://127.0.0.1:8000';
+const BASE_URL = 'http://192.168.1.9:8081';
 const URL_TYPE = '/api';
 const API_VERSION = '/v1';
 
-const API_URL = `${BASE_URL}${URL_TYPE}${API_VERSION}/`;
+const API_URL = `${BASE_URL}${URL_TYPE}${API_VERSION}`;
+
+const CLIENT_ID = 'ybqYkYQ3JS596LaptJyHbC4GCVFRKcAV0R9zTiLE';
+const CLIENT_SECRET = 'gFKF3RbpaGENg7vFAkAeOAI3tqM8gSPazCE1VIMHVuK37ABYPXegwmQXsnUutqTUxze4pwAAh7lMbfsv5fxiQAP9ESoW0gFyWIaorFKzp3nEG7b5F1eoIdn2uNuquth6';
 
 export const endPoints = {
     ////Account

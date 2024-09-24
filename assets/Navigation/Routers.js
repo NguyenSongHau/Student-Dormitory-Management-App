@@ -1,32 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
 import useFonts from '../Configs/Fonts';
-import Splash from '../Components/Common/Splash';
-import Onboarding from '../Screens/Onboarding/Onboarding';
 import { NavigationContainer } from '@react-navigation/native';
-import SignIn from '../Screens/Auth/SignIn';
-
-const Stack = createStackNavigator();
+import { useAccount } from '../Store/Contexts/AccountContext';
+import AuthStack from '../Navigation/Stack/AuthStack';
+import MainStack from '../Navigation/Stack/MainStack';
+import Splash from '../Components/Common/Splash';
 
 const Routers = () => {
     const fontsLoaded = useFonts();
+    const account = useAccount();
     const [isSplashVisible, setIsSplashVisible] = useState(true);
 
-    const handleSplashEnd = () => {
-        setIsSplashVisible(false);
-    };
+    useEffect(() => {
+        let timeoutId;
+
+        if (fontsLoaded) {
+            timeoutId = setTimeout(() => {
+                setIsSplashVisible(false);
+            }, 4000);
+        }
+
+        return () => {
+            clearTimeout(timeoutId);
+        };
+    }, [fontsLoaded]);
+
+    if (isSplashVisible) {
+        return <Splash />;
+    }
 
     return (
         <NavigationContainer>
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
-                {isSplashVisible ? (
-                    <Stack.Screen name="Splash">
-                        {() => <Splash onAnimationEnd={handleSplashEnd} />}
-                    </Stack.Screen>
-                ) : (
-                    <Stack.Screen name="SignIn" component={SignIn} />
-                )}
-            </Stack.Navigator>
+            {!account.isLoggedIn ? <AuthStack /> : <MainStack />}
         </NavigationContainer>
     );
 }
