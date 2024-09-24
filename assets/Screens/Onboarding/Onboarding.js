@@ -1,11 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useRef } from "react";
 import { StyleSheet, Text, View, Image } from "react-native";
 import Theme from "../../Styles/Theme";
 import StaticStyle, { screenHeight, screenWidth } from "../../Styles/StaticStyle";
 import AppIntroSlider from 'react-native-app-intro-slider';
 
-const Onboaring = () => {
+const Onboarding = ({navigation}) => {
     const onboardings = [
         {
             id: 1,
@@ -31,7 +30,7 @@ const Onboaring = () => {
         await AsyncStorage.setItem('onboarding-done', 'true');
         navigation.reset({
             index: 0,
-            routes: [{ name: 'SignIn' }],
+            routes: [{ name: 'SignIn' }]
         });
     };
 
@@ -101,4 +100,4 @@ const OnboaringStyle = StyleSheet.create({
     },
 });
 
-export default Onboaring;
+export default Onboarding;

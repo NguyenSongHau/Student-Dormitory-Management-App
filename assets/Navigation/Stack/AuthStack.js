@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useEffect, useState } from 'react';
 import SignIn from '../../Screens/Auth/SignIn';
-import Onboaring from '../../Screens/Onboarding/Onboarding';
+import Onboarding from '../../Screens/Onboarding/Onboarding';
 
 const Stack = createStackNavigator();
 
@@ -20,7 +20,7 @@ const AuthStack = () => {
 
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-            {onboarding && <Stack.Screen name="Onboarding" component={Onboaring} />}
+            {onboarding && <Stack.Screen name="Onboarding" component={Onboarding} />}
             <Stack.Screen name="SignIn" component={SignIn} />
         </Stack.Navigator>
     )

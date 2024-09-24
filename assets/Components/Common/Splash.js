@@ -24,9 +24,8 @@ const Splash = ({ onAnimationEnd }) => {
                 }
             )
         ]).start(() => {
-            // When animation finishes, call the callback
             if (onAnimationEnd) {
-                onAnimationEnd();  // Notify parent to trigger navigation
+                onAnimationEnd();
             }
         });
     }, [fadeAnim]);
