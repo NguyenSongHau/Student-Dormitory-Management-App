@@ -32,4 +32,34 @@ export const signUpFields = [
         name: 'full_name',
         icon: 'account-outline',
     },
+    {
+        label: 'CCCD',
+        name: 'identification',
+        icon: 'card-account-details-outline',
+    },
+    {
+        label: 'Mã số sinh viên',
+        name: 'student_id',
+        icon: 'card-text-outline',
+    },
+    {
+        label: 'Trường đại học',
+        name: 'university',
+        icon: 'school-outline',
+    },
+    {
+        label: 'Khoa',
+        name: 'faculty',
+        icon: 'account-group-outline',
+    },
+    {
+        label: 'Ngành',
+        name: 'major',
+        icon: 'account-circle-outline',
+    },
+    {
+        label: 'Khóa',
+        name: 'academic_year',
+        icon: 'clock-time-one-outline',
+    },
 ];

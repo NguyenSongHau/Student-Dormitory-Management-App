@@ -28,7 +28,7 @@ const SignIn = ({ navigation }) => {
         for (const field of signInFields) {
             if (!account[field.name]) {
                 Dialog.show({
-                    type: ALERT_TYPE.DANGER,
+                    type: ALERT_TYPE.WARNING,
                     title: "Lỗi",
                     textBody: "Email hoặc mật khẩu không được để trống",
                     button: "Đóng"
