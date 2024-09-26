@@ -16,7 +16,7 @@ const AuthInput = ({ field, account, setAccount }) => {
 
     const handlePress = () => {
         setPasswordVisible(!passwordVisible);
-        setIcon(!passwordVisible ? 'eye-off' : 'eye');
+        setIcon(!passwordVisible ? 'eye-off-outline' : 'eye-outline');
     };
 
     const isPassowrd = field.name === 'password' || field.name === 'confirm';

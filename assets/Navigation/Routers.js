@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import useFonts from '../Configs/Fonts';
 import { NavigationContainer } from '@react-navigation/native';
 import { useAccount } from '../Store/Contexts/AccountContext';
-import AuthStack from '../Navigation/Stack/AuthStack';
-import MainStack from '../Navigation/Stack/MainStack';
+import AuthStack from './Stacks/AuthStack';
+import MainStack from './Stacks/MainStack';
 import Splash from '../Components/Common/Splash';
 
 const Routers = () => {
@@ -17,7 +17,7 @@ const Routers = () => {
         if (fontsLoaded) {
             timeoutId = setTimeout(() => {
                 setIsSplashVisible(false);
-            }, 4000);
+            }, 2000);
         }
 
         return () => {
@@ -30,9 +30,11 @@ const Routers = () => {
     }
 
     return (
-        <NavigationContainer>
-            {!account.isLoggedIn ? <AuthStack /> : <MainStack />}
-        </NavigationContainer>
+        <>
+            <NavigationContainer>
+                {!account.isLoggedIn ? <AuthStack /> : <MainStack />}
+            </NavigationContainer>
+        </>
     );
 }
 
