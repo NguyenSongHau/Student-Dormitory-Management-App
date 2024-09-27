@@ -26,7 +26,7 @@ export const roles = {
 
 export const rolesName = {
     AD: 'Quản trị viên',
-    SPC: 'Chuyên viên',
+    SPC: 'Chuyên viên cộng tác sinh viên',
     MNG: 'Quản lý',
     STU: 'Sinh viên',
 };

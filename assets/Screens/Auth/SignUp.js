@@ -46,61 +46,11 @@ const SignUp = ({ navigation }) => {
             return;
         }
     
-        if (!isValidEmail(account.email)) {
-            Dialog.show({
-                type: ALERT_TYPE.WARNING,
-                title: "Lỗi",
-                textBody: "Địa chỉ email không hợp lệ",
-                button: "Đóng"
-            });
-            return;
-        }
-    
-        if (!isValidPassword(account.password)) {
-            Dialog.show({
-                type: ALERT_TYPE.WARNING,
-                title: "Lỗi",
-                textBody: "Mật khẩu phải có tối thiểu 6 kí tự, bao gồm chữ thường, chữ hoa, số và ký tự đặc biệt",
-                button: "Đóng"
-            });
-            return;
-        }
-    
         if (account['password'] !== account['confirm']) {
             Dialog.show({
                 type: ALERT_TYPE.WARNING,
                 title: "Lỗi",
                 textBody: "Mật khẩu và xác nhận mật khẩu không khớp",
-                button: "Đóng"
-            });
-            return;
-        }
-    
-        if (account['identification'] && account['identification'].length !== 12) {
-            Dialog.show({
-                type: ALERT_TYPE.WARNING,
-                title: "Lỗi",
-                textBody: "Số CCCD phải có đúng 12 ký tự",
-                button: "Đóng"
-            });
-            return;
-        }
-    
-        if (account['student_id'] && account['student_id'].length !== 10) {
-            Dialog.show({
-                type: ALERT_TYPE.WARNING,
-                title: "Lỗi",
-                textBody: "Mã sinh viên phải có đúng 10 ký tự",
-                button: "Đóng"
-            });
-            return;
-        }
-    
-        if (account.academic_year && isNaN(account.academic_year)) {
-            Dialog.show({
-                type: ALERT_TYPE.WARNING,
-                title: "Lỗi",
-                textBody: "Khóa học phải là một số",
                 button: "Đóng"
             });
             return;
@@ -119,7 +69,7 @@ const SignUp = ({ navigation }) => {
     
         try {
             const response = await APIs.post(endPoints['register-student'], form);
-    
+        
             if (response.status === statusCode.HTTP_201_CREATED) {
                 await createUserWithEmailAndPassword(auth, account['email'], account['password'])
                     .then(() => {
@@ -129,7 +79,9 @@ const SignUp = ({ navigation }) => {
                             textBody: response.data.message,
                             button: "Đóng"
                         });
-                        navigation.navigate("SignIn");
+                        setTimeout(() => {
+                            navigation.navigate("SignIn");
+                        }, 4000);
                     })
                     .catch((error) => {
                         Dialog.show({
@@ -139,15 +91,52 @@ const SignUp = ({ navigation }) => {
                             button: "Đóng"
                         });
                     });
-            } 
+            }
         } catch (error) {
-            Dialog.show({
-                type: ALERT_TYPE.WARNING,
-                title: "Lỗi",
-                textBody: "Đăng ký không thành công!",
-                button: "Đóng"
-            });
-        }
+            if (error.response && error.response.data) {
+                const errorData = error.response.data;
+            
+                const errorMessages = {
+                    "Enter a valid email address.": "Vui lòng nhập địa chỉ email hợp lệ.",
+                    "A valid integer is required.": "Vui lòng nhập khóa học là một số nguyên.",
+                    "user with this email already exists.": "Địa chỉ email này đã tồn tại.",
+                    "user with this identification already exists.": "Căn cước công dân này đã tồn tại.",
+                    "Số CCCD không hợp lệ.": "Số CCCD không hợp lệ.",
+                    "Ensure this field has no more than 12 characters.": "Vui lòng nhập CCCD không quá 12 ký tự",
+                    "Ensure this field has no more than 10 characters.": "Vui lòng nhập mã số sinh viên không quá 10 ký tự." 
+                };
+            
+                const keysToCheck = ['email', 'password', 'identification', 'student_id', 'academic_year'];
+                let firstErrorMessage = "";
+            
+                for (const key of keysToCheck) {
+                    if (errorData[key]) {
+                        if (key === 'email' || key === 'academic_year') {
+                            firstErrorMessage = errorMessages[errorData[key][0]] || errorData[key][0];
+                        } else if (key === 'password') {
+                            firstErrorMessage = errorData[key].message;
+                        } else {
+                            firstErrorMessage = errorData[key].message || errorMessages[errorData[key][0]] || errorData[key][0];
+                        }
+                        break;
+                    }
+                }
+            
+                Dialog.show({
+                    type: ALERT_TYPE.WARNING,
+                    title: "Lỗi",
+                    textBody: firstErrorMessage,
+                    button: "Đóng"
+                });
+            } else {
+                Dialog.show({
+                    type: ALERT_TYPE.DANGER,
+                    title: "Lỗi",
+                    textBody: "Hệ thống đang bận, vui lòng thử lại sau!",
+                    button: "Đóng"
+                });
+            };  
+        };
     };
     
     return (
