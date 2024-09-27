@@ -18,7 +18,7 @@ export const endPoints = {
     //PATCH: Cập nhập thông tin tài khoản người dùng
     update: '/users/current-user/update/',
     //POST: Đăng ký tài khoản cho sinh viên
-    register: '/users/register/',
+    'register-student': '/users/register/',
 
     rooms: '/rooms/'
 };

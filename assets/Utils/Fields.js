@@ -58,7 +58,7 @@ export const signUpFields = [
         icon: 'account-circle-outline',
     },
     {
-        label: 'Khóa',
+        label: 'Khóa học',
         name: 'academic_year',
         icon: 'clock-time-one-outline',
     },
