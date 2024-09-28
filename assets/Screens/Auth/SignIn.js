@@ -30,7 +30,7 @@ const SignIn = ({ navigation }) => {
                 Dialog.show({
                     type: ALERT_TYPE.WARNING,
                     title: "Lỗi",
-                    textBody: "Email hoặc mật khẩu không được để trống",
+                    textBody: "Email và mật khẩu không được để trống.",
                     button: "Đóng"
                 });
                 return;
@@ -66,7 +66,7 @@ const SignIn = ({ navigation }) => {
                 Dialog.show({
                     type: ALERT_TYPE.DANGER,
                     title: "Lỗi",
-                    textBody: "Lấy thông tin người dùng thất bại",
+                    textBody: "Lấy thông tin người dùng thất bại!",
                     button: "Đóng"
                 });
             }
@@ -92,7 +92,7 @@ const SignIn = ({ navigation }) => {
                 Dialog.show({
                     type: ALERT_TYPE.DANGER,
                     title: "Lỗi",
-                    textBody: "Email hoặc mật khậu không chính xác!",
+                    textBody: "Email hoặc mật khậu không chính xác.",
                     button: "Đóng"
                 });
             } else {

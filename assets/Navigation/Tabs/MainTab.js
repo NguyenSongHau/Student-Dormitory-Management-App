@@ -4,48 +4,56 @@ import Rooms from '../../Screens/Home/Rooms';
 import RentalContacts from "../../Screens/Home/RentalContacts";
 import Profile from '../../Screens/Profile/Profile';
 import Theme from '../../Styles/Theme';
+import { StatusBar } from "expo-status-bar";
 
 const Tab = createBottomTabNavigator();
 
 const MainTab = () => {
     return (
-        <Tab.Navigator
-            screenOptions={({ route }) => ({
-                tabBarActiveTintColor: Theme.PrimaryColor,
-                tabBarInactiveTintColor: 'black',
-                tabBarHideOnKeyboard: true,
-                headerShown: false,
-                tabBarIcon: ({ focused }) => {
-                    let iconName, iconColor;
+        <>
+            <StatusBar hidden />
+            <Tab.Navigator
+                screenOptions={({ route }) => ({
+                    tabBarActiveTintColor: Theme.PrimaryColor,
+                    tabBarInactiveTintColor: 'black',
+                    tabBarHideOnKeyboard: true,
+                    headerShown: false,
+                    tabBarLabelStyle: {
+                        fontSize: 14,
+                        fontFamily: Theme.Medium
+                    },
+                    tabBarStyle: {
+                        height: 76,
+                        paddingBottom: 10,
+                        paddingTop: 10,
+                    },
+                    tabBarIcon: ({ focused }) => {
+                        let iconName, iconColor;
 
-                    switch (route.name) {
-                        case 'Home':
-                            iconName = focused ? 'home' : 'home-outline';
-                            break;
-                        case 'Notification':
-                            iconName = focused ? 'bell' : 'bell-outline';
-                            break;
-                        case 'Profile':
-                            iconName = focused ? 'account' : 'account-outline';
-                            break;
-                        case 'Beds':
-                            iconName = focused ? 'newspaper-variant' : 'newspaper-variant-outline';
-                            break;
-                        default:
-                            iconName = '';
-                    }
+                        switch (route.name) {
+                            case 'Home':
+                                iconName = focused ? 'home' : 'home-outline';
+                                break;
+                            case 'Profile':
+                                iconName = focused ? 'account' : 'account-outline';
+                                break;
+                            case 'RentalContacts':
+                                iconName = focused ? 'newspaper-variant' : 'newspaper-variant-outline';
+                                break;
+                        }
 
-                    iconColor = focused ? Theme.PrimaryColor : 'gray';
+                        iconColor = focused ? Theme.PrimaryColor : 'gray';
 
-                    return <Icon color={iconColor} size={36} source={iconName} />;
-                },
-            })}
-        >
-            <Tab.Screen name="Home" component={Rooms} options={{ tabBarLabel: 'Trang chủ' }} />
-            <Tab.Screen name="RentalContacts" component={RentalContacts} options={{ tabBarLabel: 'Hồ sơ' }} />
-            <Tab.Screen name="Profile" component={Profile} options={{ tabBarLabel: 'Tôi' }} />
-        </Tab.Navigator>
-    )
+                        return <Icon color={iconColor} size={36} source={iconName} />;
+                    },
+                })}
+            >
+                <Tab.Screen name="Home" component={Rooms} options={{ tabBarLabel: 'Trang chủ' }} />
+                <Tab.Screen name="RentalContacts" component={RentalContacts} options={{ tabBarLabel: 'Hồ sơ' }} />
+                <Tab.Screen name="Profile" component={Profile} options={{ tabBarLabel: 'Tôi' }} />
+            </Tab.Navigator>
+        </>
+    );
 }
 
 export default MainTab;

@@ -5,18 +5,6 @@ export const defaultImage = {
     DEFAULT_BED: 'https://res.cloudinary.com/dfzv8bql4/image/upload/v1727139676/sdmapp/default-bed.jpg',
 };
 
-export const isValidEmail = (email) => {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailPattern.test(email);
-};
-
-
-export const isValidPassword = (password) => {
-    const passwordPattern =
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
-    return passwordPattern.test(password);
-};
-
 export const roles = {
     ADMINISTRATOR: 'AD',
     SPECIALIST: 'SPC',

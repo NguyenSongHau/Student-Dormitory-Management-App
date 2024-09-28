@@ -2,7 +2,6 @@ import { StyleSheet, View } from 'react-native';
 import AuthInput from './AuthInput';
 import AuthButton from './AuthButton';
 import AuthRememberAndForgotPassword from './AuthRememberAndForgotPassword';
-import AuthDateTimePicker from './AuthDateTimePicker';
 
 const AuthForm = ({ 
     fields, 
@@ -14,23 +13,13 @@ const AuthForm = ({
     buttonText, 
     loading, 
     onPressFunc,
-    showRememberAndForgot = true,
-    showDateTimePicker = false,
-    selectedDate,
-    setSelectedDate
+    showRememberAndForgot = true
 }) => {
     return (
         <View style={FormStyle.Form}>
             {fields.map((field) => (
                 <AuthInput key={field.name} field={field} account={account} setAccount={setAccount} />
             ))}
-
-            {showDateTimePicker && (
-                <AuthDateTimePicker 
-                    selectedDate={selectedDate}
-                    setSelectedDate={setSelectedDate}
-                />
-            )}
 
             {showRememberAndForgot && (
                 <AuthRememberAndForgotPassword

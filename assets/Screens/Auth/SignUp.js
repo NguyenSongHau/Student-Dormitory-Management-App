@@ -7,7 +7,7 @@ import AuthFooter from "../../Components/Auth/AuthFooter";
 import { ScrollView, View } from "react-native";
 import { useState } from "react";
 import { ALERT_TYPE, AlertNotificationRoot } from "react-native-alert-notification";
-import { createUserWithEmailAndPassword} from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import DismissKeyboard from "../../Components/Common/DismissKeyboard";
 import { StatusBar } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
@@ -15,12 +15,11 @@ import { signUpFields } from "../../Utils/Fields";
 import { Dialog } from "react-native-alert-notification";
 import moment from "moment";
 import APIs, { endPoints } from '../../Configs/APIs';
-import { isValidEmail, isValidPassword, statusCode } from '../../Configs/Constants';
+import { statusCode } from '../../Configs/Constants';
 import { auth } from "../../Configs/Firebase";
 
 const SignUp = ({ navigation }) => {
     const [account, setAccount] = useState({});
-    const [selectedDate, setSelectedDate] = useState(null);
     const [role, setRole] = useState("STU");
 
     const handleSignUp = async () => {
@@ -35,8 +34,8 @@ const SignUp = ({ navigation }) => {
                 return;
             }
         }
-    
-        if (selectedDate === "") {
+
+        if (!account['dob']) {
             Dialog.show({
                 type: ALERT_TYPE.WARNING,
                 title: "Lỗi",
@@ -45,31 +44,31 @@ const SignUp = ({ navigation }) => {
             });
             return;
         }
-    
+
         if (account['password'] !== account['confirm']) {
             Dialog.show({
                 type: ALERT_TYPE.WARNING,
                 title: "Lỗi",
-                textBody: "Mật khẩu và xác nhận mật khẩu không khớp",
+                textBody: "Mật khẩu và xác nhận mật khẩu không khớp.",
                 button: "Đóng"
             });
             return;
         }
-    
+
         let form = new FormData();
         for (let key in account) {
             if (key !== 'confirm') {
                 form.append(key, account[key]);
             }
         }
-    
-        const formattedDate = moment(selectedDate).format('YYYY-MM-DD');
+
+        const formattedDate = moment(account['dob'], 'DD/MM/YYYY').format('YYYY-MM-DD');
         form.append('dob', formattedDate.toString());
         form.append('role', role);
-    
+
         try {
             const response = await APIs.post(endPoints['register-student'], form);
-        
+
             if (response.status === statusCode.HTTP_201_CREATED) {
                 await createUserWithEmailAndPassword(auth, account['email'], account['password'])
                     .then(() => {
@@ -81,7 +80,7 @@ const SignUp = ({ navigation }) => {
                         });
                         setTimeout(() => {
                             navigation.navigate("SignIn");
-                        }, 4000);
+                        }, 3000);
                     })
                     .catch((error) => {
                         Dialog.show({
@@ -95,7 +94,7 @@ const SignUp = ({ navigation }) => {
         } catch (error) {
             if (error.response && error.response.data) {
                 const errorData = error.response.data;
-            
+
                 const errorMessages = {
                     "Enter a valid email address.": "Vui lòng nhập địa chỉ email hợp lệ.",
                     "A valid integer is required.": "Vui lòng nhập khóa học là một số nguyên.",
@@ -103,12 +102,12 @@ const SignUp = ({ navigation }) => {
                     "user with this identification already exists.": "Căn cước công dân này đã tồn tại.",
                     "Số CCCD không hợp lệ.": "Số CCCD không hợp lệ.",
                     "Ensure this field has no more than 12 characters.": "Vui lòng nhập CCCD không quá 12 ký tự",
-                    "Ensure this field has no more than 10 characters.": "Vui lòng nhập mã số sinh viên không quá 10 ký tự." 
+                    "Ensure this field has no more than 10 characters.": "Vui lòng nhập mã số sinh viên không quá 10 ký tự."
                 };
-            
+
                 const keysToCheck = ['email', 'password', 'identification', 'student_id', 'academic_year'];
                 let firstErrorMessage = "";
-            
+
                 for (const key of keysToCheck) {
                     if (errorData[key]) {
                         if (key === 'email' || key === 'academic_year') {
@@ -121,7 +120,7 @@ const SignUp = ({ navigation }) => {
                         break;
                     }
                 }
-            
+
                 Dialog.show({
                     type: ALERT_TYPE.WARNING,
                     title: "Lỗi",
@@ -135,10 +134,10 @@ const SignUp = ({ navigation }) => {
                     textBody: "Hệ thống đang bận, vui lòng thử lại sau!",
                     button: "Đóng"
                 });
-            };  
+            };
         };
     };
-    
+
     return (
         <AlertNotificationRoot>
             <ScrollView style={StaticStyle.BackGround} showsVerticalScrollIndicator={false}>
@@ -160,9 +159,6 @@ const SignUp = ({ navigation }) => {
                                 buttonText="Đăng ký"
                                 onPressFunc={handleSignUp}
                                 showRememberAndForgot={false}
-                                selectedDate={selectedDate}
-                                setSelectedDate={setSelectedDate}
-                                showDateTimePicker={true}
                             />
 
                             <AuthFooter

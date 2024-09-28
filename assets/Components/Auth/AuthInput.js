@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import Theme from '../../Styles/Theme';
+import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
+import moment from 'moment';
 
 const AuthInput = ({ field, account, setAccount }) => {
     const [passwordVisible, setPasswordVisible] = useState(false);
@@ -19,12 +21,33 @@ const AuthInput = ({ field, account, setAccount }) => {
         setIcon(!passwordVisible ? 'eye-off-outline' : 'eye-outline');
     };
 
-    const isPassowrd = field.name === 'password' || field.name === 'confirm';
+    const isPassword = field.name === 'password' || field.name === 'confirm';
+
+    // Date Picker Logic
+    const [selectedDate, setSelectedDate] = useState(account[field.name] || null);
+
+    const onChangeDate = (event, date) => {
+        if (event.type === 'set' && date) {
+            setSelectedDate(date);
+            updateAccount(field.name, moment(date).format('DD/MM/YYYY'));
+        }
+    };
+
+    const showDatePicker = () => {
+        DateTimePickerAndroid.open({
+            value: selectedDate || new Date(),
+            onChange: onChangeDate,
+            mode: 'date',
+            is24Hour: true,
+        });
+    };
+
+    const isDateField = field.name === 'dob'; // Adjust this for date fields
 
     return (
         <TextInput
             key={field.name}
-            value={account[field.name]}
+            value={isDateField && selectedDate ? moment(selectedDate).format('DD/MM/YYYY') : account[field.name]}
             style={InputStyle.Input}
             placeholder={field.label}
             keyboardType={field.keyboardType}
@@ -32,14 +55,23 @@ const AuthInput = ({ field, account, setAccount }) => {
             underlineColor="transparent"
             activeUnderlineColor="transparent"
             onChangeText={(value) => updateAccount(field.name, value)}
-            secureTextEntry={isPassowrd ? !passwordVisible : false}
+            secureTextEntry={isPassword ? !passwordVisible : false}
             right={
-                <TextInput.Icon
-                    icon={icon}
-                    onPress={isPassowrd ? handlePress : null}
-                    pointerEvents={isPassowrd ? 'auto' : 'none'}
-                />
+                isDateField ? (
+                    <TextInput.Icon
+                        icon="calendar"
+                        onPress={showDatePicker}
+                    />
+                ) : (
+                    <TextInput.Icon
+                        icon={icon}
+                        onPress={isPassword ? handlePress : null}
+                        pointerEvents={isPassword ? 'auto' : 'none'}
+                    />
+                )
             }
+            editable={!isDateField}
+            onPressIn={isDateField ? showDatePicker : null}
         />
     );
 };

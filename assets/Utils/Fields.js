@@ -33,6 +33,11 @@ export const signUpFields = [
         icon: 'account-outline',
     },
     {
+        label: 'Ngày sinh',
+        name: 'dob',
+        icon: 'calendar',
+    },
+    {
         label: 'CCCD',
         name: 'identification',
         icon: 'card-account-details-outline',
