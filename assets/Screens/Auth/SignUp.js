@@ -28,21 +28,11 @@ const SignUp = ({ navigation }) => {
                 Dialog.show({
                     type: ALERT_TYPE.WARNING,
                     title: "Lỗi",
-                    textBody: `${field.label} không được để trống`,
+                    textBody: `${field.label} không được trống`,
                     button: "Đóng"
                 });
                 return;
             }
-        }
-
-        if (!account['dob']) {
-            Dialog.show({
-                type: ALERT_TYPE.WARNING,
-                title: "Lỗi",
-                textBody: "Ngày sinh chưa được chọn",
-                button: "Đóng"
-            });
-            return;
         }
 
         if (account['password'] !== account['confirm']) {
@@ -96,7 +86,7 @@ const SignUp = ({ navigation }) => {
                 const errorData = error.response.data;
 
                 const errorMessages = {
-                    "Enter a valid email address.": "Vui lòng nhập địa chỉ email hợp lệ.",
+                    "Enter a valid email address.": "Email không đúng định dạng.",
                     "A valid integer is required.": "Vui lòng nhập khóa học là một số nguyên.",
                     "user with this email already exists.": "Địa chỉ email này đã tồn tại.",
                     "user with this identification already exists.": "Căn cước công dân này đã tồn tại.",

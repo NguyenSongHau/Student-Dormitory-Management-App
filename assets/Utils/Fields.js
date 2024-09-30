@@ -1,3 +1,5 @@
+import { roles } from "../Configs/Constants";
+
 export const signInFields = [
     {
         label: 'Email',
@@ -68,3 +70,71 @@ export const signUpFields = [
         icon: 'clock-time-one-outline',
     },
 ];
+
+export const profileSections = (currentAccount) => {
+    return [
+        {
+            title: "Chức năng",
+            roles: [roles.ADMINISTRATOR, roles.SPECIALIST],
+            items: [
+                {
+                    label: 'Quản lý phòng',
+                    icon: 'door',
+                    screen: 'RoomSettings',
+                },
+                {
+                    label: 'Quản lý giường',
+                    icon: 'bunk-bed-outline',
+                    screen: 'BedSettings',
+                },
+                {
+                    label: 'Quản lý hồ sơ',
+                    icon: 'newspaper-variant-outline',
+                    screen: 'RentalContactSettings',
+                },
+                {
+                    label: 'Quản lý hóa đơn thuê',
+                    icon: 'newspaper-variant-outline',
+                    screen: 'receipt-text-outline',
+                },
+            ]
+        },
+        {
+            title: "Tiện ích",
+            roles: [roles.STUDENT],
+            items: [
+                {
+                    label: 'Hóa đơn thuê',
+                    icon: 'currency-usd',
+                    screen: 'StudentBillRentalContact',
+                },
+                {
+                    label: 'Hóa đơn điện, nước',
+                    icon: 'wind-turbine',
+                    screen: 'StudentElectricAndWaterBill',
+                },
+                {
+                    label: 'Vi phạm phòng',
+                    icon: 'note-text',
+                    screen: 'StudentViolateNotice',
+                }
+            ]
+        },
+        {
+            title: "Chức năng",
+            roles: [roles.ADMINISTRATOR, roles.MANAGER],
+            items: [
+                {
+                    label: 'Quản lý hóa đơn điện, nước',
+                    icon: 'wind-energy-outline',
+                    screen: 'ElectricAndWaterBillSettings',
+                },
+                {
+                    label: 'Quản lý vi phạm phòng',
+                    icon: 'note-outline',
+                    screen: 'ViolateNoticeSettings',
+                },
+            ]
+        }
+    ];
+};

@@ -26,7 +26,7 @@ export const AccountProvider = ({ children }) => {
       }
 
       try {
-         const response = await authAPI(accessToken).get(endPoints['me']);
+         const response = await authAPI(accessToken).get(endPoints['current-user']);
          if (response.status === statusCode.HTTP_200_OK) {
             dispatch(SignInAction(response.data));
          }

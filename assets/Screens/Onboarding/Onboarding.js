@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Image } from "react-native";
 import Theme from "../../Styles/Theme";
 import StaticStyle, { screenHeight, screenWidth } from "../../Styles/StaticStyle";
 import AppIntroSlider from 'react-native-app-intro-slider';
+import { StatusBar } from 'expo-status-bar';
 
 const Onboarding = ({navigation}) => {
     const onboardings = [
@@ -44,6 +45,7 @@ const Onboarding = ({navigation}) => {
 
     return (
         <View style={StaticStyle.BackGround}>
+            <StatusBar hidden />
             <AppIntroSlider
                 data={onboardings}
                 showSkipButton

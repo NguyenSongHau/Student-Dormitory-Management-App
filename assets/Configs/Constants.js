@@ -1,6 +1,5 @@
 export const defaultImage = {
-    DEFAULT_AVATAR_MALE: 'https://res.cloudinary.com/dfzv8bql4/image/upload/v1727106876/sdmapp/default-avatar-male.jpg',
-    DEFAULT_AVATAR_FEMALE: 'https://res.cloudinary.com/dfzv8bql4/image/upload/v1727107117/sdmapp/default-avatar-female.jpg',
+    DEFAULT_AVATAR: 'https://res.cloudinary.com/dfzv8bql4/image/upload/v1727592961/default-avatar.png',
     DEFAULT_ROOM: 'https://res.cloudinary.com/dfzv8bql4/image/upload/v1727107665/sdmapp/default-room.jpg',
     DEFAULT_BED: 'https://res.cloudinary.com/dfzv8bql4/image/upload/v1727139676/sdmapp/default-bed.jpg',
 };

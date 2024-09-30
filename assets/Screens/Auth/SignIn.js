@@ -30,7 +30,7 @@ const SignIn = ({ navigation }) => {
                 Dialog.show({
                     type: ALERT_TYPE.WARNING,
                     title: "Lỗi",
-                    textBody: "Email và mật khẩu không được để trống.",
+                    textBody: "Email và mật khẩu không được trống.",
                     button: "Đóng"
                 });
                 return;

@@ -34,11 +34,11 @@ const MainTab = () => {
                             case 'Home':
                                 iconName = focused ? 'home' : 'home-outline';
                                 break;
-                            case 'Profile':
-                                iconName = focused ? 'account' : 'account-outline';
-                                break;
                             case 'RentalContacts':
                                 iconName = focused ? 'newspaper-variant' : 'newspaper-variant-outline';
+                                break;
+                            case 'Profile':
+                                iconName = focused ? 'account' : 'account-outline';
                                 break;
                         }
 
