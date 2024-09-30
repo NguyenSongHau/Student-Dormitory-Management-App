@@ -23,7 +23,6 @@ const AuthInput = ({ field, account, setAccount }) => {
 
     const isPassword = field.name === 'password' || field.name === 'confirm';
 
-    // Date Picker Logic
     const [selectedDate, setSelectedDate] = useState(account[field.name] || null);
 
     const onChangeDate = (event, date) => {
@@ -42,7 +41,7 @@ const AuthInput = ({ field, account, setAccount }) => {
         });
     };
 
-    const isDateField = field.name === 'dob'; // Adjust this for date fields
+    const isDateField = field.name === 'dob';
 
     return (
         <TextInput

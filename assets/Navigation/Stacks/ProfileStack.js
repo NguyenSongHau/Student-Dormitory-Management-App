@@ -3,6 +3,7 @@ import StudentBillRentalContact from '../../Screens/Profile/StudentBillRentalCon
 import StudentElectricAndWaterBill from '../../Screens/Profile/StudentElectricAndWaterBill';
 import StudentViolateNotice from '../../Screens/Profile/StudentViolateNotice';
 import Theme from "../../Styles/Theme";
+import EditProfile from '../../Screens/Profile/EditProfile';
 
 const Stack = createStackNavigator();
 
@@ -15,6 +16,12 @@ const ProfileStack = () => {
             }}
         >
             <Stack.Group>
+                <Stack.Screen
+                    name="EditProfile"
+                    component={EditProfile}
+                    options={{ title: 'Hồ sơ cá nhân' }}
+                />
+
                 <Stack.Screen
                     name="StudentBillRentalContact"
                     component={StudentBillRentalContact}

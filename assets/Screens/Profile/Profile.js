@@ -85,6 +85,9 @@ const Profile = ({ navigation }) => {
                         </View>
                         <TouchableOpacity
                             style={[StaticStyle.Center, ProfileStyle.HeaderButton]}
+                            onPress={() =>
+                                goToScreen({ screen: 'EditProfile' })
+                            }
                         >
                             <Text style={ProfileStyle.ButtonText}>Trang cá nhân</Text>
                             <Icon color="white" source="chevron-right" size={20} />

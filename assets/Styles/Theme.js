@@ -9,6 +9,7 @@ export default {
     SecondaryColor: '#f1f4ff',
     Gray: 'gray',
     WhiteColor: '#ffffff',
+    BlackColor: '#000',
     LinearColor: ["rgba(232, 80, 91, 1)", "rgba(232, 80, 91, 0.8)"],
     LinearColor1: ["rgba(232, 80, 91, 1)", "rgba(255, 255, 255, 0.8)"]
 }

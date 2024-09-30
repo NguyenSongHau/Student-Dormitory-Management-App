@@ -138,3 +138,76 @@ export const profileSections = (currentAccount) => {
         }
     ];
 };
+
+export const userFields = (currentAccount) => {
+    return [
+        {
+            label: 'ID',
+            name: 'id',
+            icon: 'badge-account-alert-outline',
+            disabled: true,
+        },
+        {
+            label: 'Email',
+            name: 'email',
+            icon: 'email',
+            disabled: true,
+        },
+        {
+            label: 'Họ và tên',
+            name: 'full_name',
+            icon: 'account-outline',
+        },
+        {
+            label: 'Ngày sinh',
+            name: 'dob',
+            icon: 'calendar',
+        },
+        {
+            label: 'CCCD',
+            name: 'identification',
+            icon: 'card-account-details-outline',
+        },
+        {
+            label: 'Địa chỉ',
+            name: 'address',
+            icon: 'map-marker-outline',
+        },
+        {
+            label: 'Số điện thoại',
+            name: 'phone',
+            icon: 'phone',
+            keyboardType: 'numeric',
+        }
+    ]
+};
+
+export const studentField = (currentAccount) => {
+    return [
+        {
+            label: 'Mã số sinh viên',
+            name: 'student_id',
+            icon: 'card-text-outline',
+        },
+        {
+            label: 'Trường đại học',
+            name: 'university',
+            icon: 'school-outline',
+        },
+        {
+            label: 'Khoa',
+            name: 'faculty',
+            icon: 'account-group-outline',
+        },
+        {
+            label: 'Ngành',
+            name: 'major',
+            icon: 'account-circle-outline',
+        },
+        {
+            label: 'Khóa học',
+            name: 'academic_year',
+            icon: 'clock-time-one-outline',
+        }
+    ]
+}
