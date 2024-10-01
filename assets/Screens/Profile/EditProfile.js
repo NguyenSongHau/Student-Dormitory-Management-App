@@ -16,13 +16,7 @@ const EditProfile = ({ navigation }) => {
    const currentAccount = useAccount();
    const refSheetSelectImage = useRef(BottomSheet);
    const [isRendered, setIsRendered] = useState(false);
-   const [tempAccount, setTempAccount] = useState({
-      ...currentAccount,
-      data: {
-         ...currentAccount.data,
-         avatar: currentAccount.data.avatar || null,
-      },
-   });
+   const [tempAccount, setTempAccount] = useState(currentAccount);
 
    console.log(tempAccount);
 
@@ -100,7 +94,7 @@ const EditProfile = ({ navigation }) => {
                            <Image
                               style={EditProfileStyle.Avatar}
                               source={{
-                                 uri: tempAccount.data.avatar ? tempAccount.data.avatar.uri : defaultImage.DEFAULT_AVATAR,
+                                 uri: tempAccount.data.avatar === null ? defaultImage.DEFAULT_AVATAR : tempAccount.data.avatar.uri,
                               }}
                            />
                            <View style={EditProfileStyle.CameraIcon}>

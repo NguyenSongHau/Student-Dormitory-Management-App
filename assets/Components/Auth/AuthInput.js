@@ -27,7 +27,7 @@ const AuthInput = ({ field, account, setAccount }) => {
     const onChangeDate = (event, date) => {
         if (event.type === 'set' && date) {
             setSelectedDate(date);
-            updateAccount(field.name, moment(date).format('DD/MM/YYYY'));
+            updateAccount(field.name, moment(date).format('DD-MM-YYYY'));
         }
     };
 
@@ -43,7 +43,7 @@ const AuthInput = ({ field, account, setAccount }) => {
     return (
         <TextInput
             key={field.name}
-            value={isDateField && selectedDate ? moment(selectedDate).format('DD/MM/YYYY') : account[field.name]}
+            value={isDateField && selectedDate ? moment(selectedDate).format('DD-MM-YYYY') : account[field.name]}
             style={InputStyle.Input}
             placeholder={field.label}
             keyboardType={field.keyboardType}
