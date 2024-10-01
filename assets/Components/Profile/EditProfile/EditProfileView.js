@@ -1,8 +1,9 @@
 import { useAccount } from '../../../Store/Contexts/AccountContext';
 import { userFields, studentField } from '../../../Utils/Fields';
-import { View, Text, StyleSheet, TextInput } from 'react-native';
-import StaticStyle from '../../../Styles/StaticStyle';
+import { View, Text, StyleSheet } from 'react-native';
+import { TextInput } from 'react-native-paper';
 import Theme from '../../../Styles/Theme';
+import { useState } from 'react';
 
 const EditProfileView = ({ tempAccount, setTempAccount }) => {
     const currentAccount = useAccount();
@@ -25,7 +26,13 @@ const EditProfileView = ({ tempAccount, setTempAccount }) => {
                         placeholder={field.label}
                         onChangeText={(value) => updateTempAccount(field.name, value)}
                         editable={!field.disabled}
-                        keyboardType={field.keyboardType || 'default'}
+                        keyboardType={field.keyboardType}
+                        disabled={field.disabled}
+                        right={
+                            <TextInput.Icon
+                                icon={field.icon}
+                            />
+                        }
                     />
                 </View>
             ))}
@@ -43,7 +50,12 @@ const EditProfileView = ({ tempAccount, setTempAccount }) => {
                             }
                             placeholder={field.label}
                             onChangeText={(value) => updateTempAccount(field.name, value)}
-                            keyboardType={field.keyboardType || 'default'}
+                            keyboardType={field.keyboardType}
+                            right={
+                                <TextInput.Icon
+                                    icon={field.icon}
+                                />
+                            }
                         />
                     </View>
                 ))
@@ -58,7 +70,6 @@ const EditProfileViewStyle = StyleSheet.create({
         marginBottom: 20,
         borderColor: Theme.PrimaryColor,
         backgroundColor: Theme.SecondaryColor,
-        padding: 10,
         borderRadius: 5,
     },
     SectionContainer: {

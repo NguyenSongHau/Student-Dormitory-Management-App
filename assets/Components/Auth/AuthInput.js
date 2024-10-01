@@ -6,8 +6,11 @@ import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import moment from 'moment';
 
 const AuthInput = ({ field, account, setAccount }) => {
-    const [passwordVisible, setPasswordVisible] = useState(false);
+    const isDateField = field.name === 'dob';
     const [icon, setIcon] = useState(field.icon);
+    const [passwordVisible, setPasswordVisible] = useState(false);
+    const isPassword = field.name === 'password' || field.name === 'confirm';
+    const [selectedDate, setSelectedDate] = useState(account[field.name] || null);
 
     const updateAccount = (field, value) => {
         setAccount((prevAccount) => ({
@@ -20,10 +23,6 @@ const AuthInput = ({ field, account, setAccount }) => {
         setPasswordVisible(!passwordVisible);
         setIcon(!passwordVisible ? 'eye-off-outline' : 'eye-outline');
     };
-
-    const isPassword = field.name === 'password' || field.name === 'confirm';
-
-    const [selectedDate, setSelectedDate] = useState(account[field.name] || null);
 
     const onChangeDate = (event, date) => {
         if (event.type === 'set' && date) {
@@ -40,8 +39,6 @@ const AuthInput = ({ field, account, setAccount }) => {
             is24Hour: true,
         });
     };
-
-    const isDateField = field.name === 'dob';
 
     return (
         <TextInput
@@ -81,7 +78,7 @@ const InputStyle = StyleSheet.create({
         marginBottom: 20,
         borderColor: Theme.PrimaryColor,
         backgroundColor: Theme.SecondaryColor,
-    },
+    }
 });
 
 export default AuthInput;

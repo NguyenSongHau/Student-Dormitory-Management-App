@@ -23,6 +23,9 @@ const EditProfile = ({ navigation }) => {
          avatar: currentAccount.data.avatar || null,
       },
    });
+
+   console.log(tempAccount);
+
    const [indexSheetSelectImage, setIndexSheetSelectImage] = useState(-1);
 
    useEffect(() => {
@@ -107,9 +110,8 @@ const EditProfile = ({ navigation }) => {
                      </View>
                   </ImageBackground>
 
-                  <View>
-                     <EditProfileView tempAccount={tempAccount} setTempAccount={setTempAccount} />
-                  </View>
+                  <EditProfileView tempAccount={tempAccount} setTempAccount={setTempAccount} />
+               
                </DismissKeyboard>
             </ScrollView>
          </View>

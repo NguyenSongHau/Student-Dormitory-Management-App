@@ -139,7 +139,7 @@ export const profileSections = (currentAccount) => {
     ];
 };
 
-export const userFields = (currentAccount) => {
+export const userFields = () => {
     return [
         {
             label: 'ID',
