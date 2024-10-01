@@ -182,7 +182,7 @@ export const userFields = () => {
     ]
 };
 
-export const studentField = (currentAccount) => {
+export const studentField = () => {
     return [
         {
             label: 'Mã số sinh viên',

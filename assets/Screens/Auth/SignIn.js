@@ -55,7 +55,7 @@ const SignIn = ({ navigation }) => {
                 Dialog.show({
                     type: ALERT_TYPE.DANGER,
                     title: "Lỗi",
-                    textBody: "Đăng nhập thất bại",
+                    textBody: "Đăng nhập thất bại!",
                     button: "Đóng"
                 });
             }

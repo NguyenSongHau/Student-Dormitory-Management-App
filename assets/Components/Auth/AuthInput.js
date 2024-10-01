@@ -27,7 +27,7 @@ const AuthInput = ({ field, account, setAccount }) => {
     const onChangeDate = (event, date) => {
         if (event.type === 'set' && date) {
             setSelectedDate(date);
-            updateAccount(field.name, moment(date).format('DD-MM-YYYY'));
+            updateAccount(field.name, moment(date).format('YYYY-MM-DD'));
         }
     };
 
