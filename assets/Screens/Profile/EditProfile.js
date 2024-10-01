@@ -12,14 +12,13 @@ import StaticStyle, { screenHeight } from '../../Styles/StaticStyle';
 import EditProfileView from "../../Components/Profile/EditProfile/EditProfileView";
 import { ALERT_TYPE, AlertNotificationRoot, Dialog } from 'react-native-alert-notification';
 import { Image, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View, Alert } from "react-native";
-import { getTokens } from "../../Utils/Utilities";
+import { getTokens, refreshAccessToken } from "../../Utils/Utilities";
 import { authAPI, endPoints } from "../../Configs/APIs";
 import { UpdateAccountAction } from "../../Store/Actions/AccountAction";
 
 const EditProfile = ({ navigation }) => {
    const currentAccount = useAccount();
    const dispatch = useAccountDispatch();
-   const [loading, setLoading] = useState(false);
    const refSheetSelectImage = useRef(BottomSheet);
    const [isRendered, setIsRendered] = useState(false);
    const [tempAccount, setTempAccount] = useState(currentAccount);
@@ -68,9 +67,7 @@ const EditProfile = ({ navigation }) => {
       }
 
       if (size <= 0) return;
-
-      setLoading(true);
-
+      
       const { accessToken, refreshToken } = await getTokens();
       
       try{
