@@ -55,7 +55,7 @@ const EditProfileView = ({ tempAccount, setTempAccount }) => {
             {userFields(currentAccount).map((field, index) => {
                 const isDateField = field.name === 'dob';
                 const value = tempAccount.data[field.name] || currentAccount.data[field.name];
-
+                
                 return (
                     <View key={index} style={EditProfileViewStyle.FormWrap}>
                         <Text style={EditProfileViewStyle.FormText}>{field.label}</Text>

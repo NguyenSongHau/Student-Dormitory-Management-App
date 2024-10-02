@@ -11,10 +11,11 @@ import DismissKeyboard from '../../Components/Common/DismissKeyboard';
 import StaticStyle, { screenHeight } from '../../Styles/StaticStyle';
 import EditProfileView from "../../Components/Profile/EditProfile/EditProfileView";
 import { ALERT_TYPE, AlertNotificationRoot, Dialog } from 'react-native-alert-notification';
-import { Image, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View, Alert } from "react-native";
+import { Image, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { getTokens, refreshAccessToken } from "../../Utils/Utilities";
 import { authAPI, endPoints } from "../../Configs/APIs";
 import { UpdateAccountAction } from "../../Store/Actions/AccountAction";
+import moment from "moment";
 
 const EditProfile = ({ navigation }) => {
    const currentAccount = useAccount();
@@ -24,6 +25,9 @@ const EditProfile = ({ navigation }) => {
    const [tempAccount, setTempAccount] = useState(currentAccount);
    const [indexSheetSelectImage, setIndexSheetSelectImage] = useState(-1);
 
+   console.log(currentAccount);
+   console.log(tempAccount);
+
    useEffect(() => {
       setIsRendered(true);
    }, []);
@@ -32,16 +36,16 @@ const EditProfile = ({ navigation }) => {
       navigation.setOptions({
          headerRight: () => (
             <TouchableOpacity
-               onPress={handleEditProfle}
+               onPress={handleEditProfile}
                style={[StaticStyle.Center, StaticStyle.HeaderButton]}
             >
                <Text style={StaticStyle.HeaderButtonText}>Cập nhật</Text>
             </TouchableOpacity>
          ),
       });
-   }, [navigation, currentAccount, tempAccount]);
-
-   const handleEditProfle = async () => {
+   }, [navigation, tempAccount]);
+   
+   const handleEditProfile = async () => {
       let form = new FormData();
       let size = 0;
 
@@ -50,42 +54,69 @@ const EditProfile = ({ navigation }) => {
          size++;
       }
 
-      for (let key in tempAccount.data) {
-         if (currentAccount.data[key] !== tempAccount.data[key]) {
-            console.log(key);
-            console.log(tempAccount.data[key]);
+     for (let key in tempAccount.data) {
+      if (currentAccount.data[key] !== tempAccount.data[key]) {
+         if (key === 'dob') {
+            const formattedDob = moment(tempAccount.data[key]).format('YYYY-MM-DD');
+            if (formattedDob) {
+               form.append(key, formattedDob);
+               size++;
+            }
+         } else {
             form.append(key, tempAccount.data[key]);
             size++;
          }
       }
+   }
 
       for (let key in tempAccount.data.user_instance) {
-         if (currentAccount.data.user_instance[key] !== tempAccount.data.user_instance[key]) {
+         if (currentAccount.data.user_instance[key] !== currentAccount.data.user_instance[key]) {
             form.append(key, tempAccount.data.user_instance[key]);
             size++;
          }
       }
 
       if (size <= 0) return;
-      
+
       const { accessToken, refreshToken } = await getTokens();
-      
-      try{
+
+      try {
          let response = await authAPI(accessToken).patch(endPoints['update'], form);
 
-         if(response.status === statusCode.HTTP_200_OK){
+         if (response.status === statusCode.HTTP_200_OK) {
             dispatch(UpdateAccountAction(response.data));
+
             Dialog.show({
                type: ALERT_TYPE.SUCCESS,
                title: "Thành công",
-               textBody: "Cập nhập thông tin thành công",
+               textBody: "Cập nhập thông tin thành công!",
                button: "Đóng"
-           });
-         };
-      }catch(error){
-         console.error(error);
+            });
+
+            setTimeout(() => {
+               navigation.navigate('Profile');
+            }, 3000);
+         }
+      } catch (error) {
+         if (
+            error.response &&
+            (error.response.status === statusCode.HTTP_401_UNAUTHORIZED ||
+               error.response.status === statusCode.HTTP_403_FORBIDDEN)
+         ) {
+            const newAccessToken = await refreshAccessToken(refreshToken, dispatch);
+            if (newAccessToken) {
+               handleEditProfile();
+            }
+         } else {
+            Dialog.show({
+               type: ALERT_TYPE.DANGER,
+               title: "Lỗi",
+               textBody: "Có lỗi xảy ra khi cập nhập!",
+               button: "Đóng"
+            });
+         }
       }
-   }
+   };
 
    const handleGallerySelection = () =>
       handleSelection(ImagePicker.requestMediaLibraryPermissionsAsync, ImagePicker.launchImageLibraryAsync);
@@ -101,7 +132,7 @@ const EditProfile = ({ navigation }) => {
             title: "Lỗi",
             textBody: "Không có quyền truy cập!",
             button: "Đóng"
-        });
+         });
       } else {
          let response = await launchFunction({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -135,60 +166,58 @@ const EditProfile = ({ navigation }) => {
    if (!isRendered) return <Loading />;
 
    return (
-      <AlertNotificationRoot>
-         <GestureHandlerRootView>
-            <View style={StaticStyle.BackGround}>
-               <ScrollView showsVerticalScrollIndicator={false}>
-                  <DismissKeyboard>
-                     <ImageBackground style={EditProfileStyle.AvatarContainer}>
-                        <View style={EditProfileStyle.AvatarTouch}>
-                           <TouchableOpacity
-                              activeOpacity={0.8}
-                              onPress={() => refSheetSelectImage?.current?.expand()}
-                           >
-                              <Image
-                                 style={EditProfileStyle.Avatar}
-                                 source={{
-                                    uri: tempAccount.data.avatar === null ? defaultImage.DEFAULT_AVATAR : tempAccount.data.avatar,
-                                 }}
-                              />
-                              <View style={EditProfileStyle.CameraIcon}>
-                                 <Icon source="camera" color="white" size={24} />
-                              </View>
-                           </TouchableOpacity>
-                        </View>
-                     </ImageBackground>
+      <GestureHandlerRootView>
+         <View style={StaticStyle.BackGround}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+               <DismissKeyboard>
+                  <ImageBackground style={EditProfileStyle.AvatarContainer}>
+                     <View style={EditProfileStyle.AvatarTouch}>
+                        <TouchableOpacity
+                           activeOpacity={0.8}
+                           onPress={() => refSheetSelectImage?.current?.expand()}
+                        >
+                           <Image
+                              style={EditProfileStyle.Avatar}
+                              source={{
+                                 uri: tempAccount.data.avatar === null ? defaultImage.DEFAULT_AVATAR : tempAccount.data.avatar,
+                              }}
+                           />
+                           <View style={EditProfileStyle.CameraIcon}>
+                              <Icon source="camera" color="white" size={24} />
+                           </View>
+                        </TouchableOpacity>
+                     </View>
+                  </ImageBackground>
 
-                     <EditProfileView tempAccount={tempAccount} setTempAccount={setTempAccount} />
+                  <EditProfileView tempAccount={tempAccount} setTempAccount={setTempAccount} />
 
-                  </DismissKeyboard>
-               </ScrollView>
-            </View>
+               </DismissKeyboard>
+            </ScrollView>
+         </View>
 
-            <BottomSheet
-               ref={refSheetSelectImage}
-               index={-1}
-               snapPoints={['25%']}
-               enablePanDownToClose
-               onChange={setIndexSheetSelectImage}
-               backgroundStyle={{ backgroundColor: '#273238' }}
-               handleIndicatorStyle={{ backgroundColor: Theme.WhiteColor }}
-            >
-               <BottomSheetView style={StaticStyle.BottomSheetView}>
-                  <TouchableOpacity style={StaticStyle.BottomSheetItem} onPress={handleGallerySelection}>
-                     <Icon source="image-multiple" color="white" size={24} />
-                     <Text style={StaticStyle.BottomSheetItemText}>Chọn ảnh từ thư viện</Text>
-                  </TouchableOpacity>
-               </BottomSheetView>
-               <BottomSheetView style={StaticStyle.BottomSheetView}>
-                  <TouchableOpacity style={StaticStyle.BottomSheetItem} onPress={handleCameraSelection}>
-                     <Icon source="camera" color="white" size={24} />
-                     <Text style={StaticStyle.BottomSheetItemText}>Chụp ảnh từ camera</Text>
-                  </TouchableOpacity>
-               </BottomSheetView>
-            </BottomSheet>
-         </GestureHandlerRootView>
-      </AlertNotificationRoot>
+         <BottomSheet
+            ref={refSheetSelectImage}
+            index={-1}
+            snapPoints={['25%']}
+            enablePanDownToClose
+            onChange={setIndexSheetSelectImage}
+            backgroundStyle={{ backgroundColor: '#273238' }}
+            handleIndicatorStyle={{ backgroundColor: Theme.WhiteColor }}
+         >
+            <BottomSheetView style={StaticStyle.BottomSheetView}>
+               <TouchableOpacity style={StaticStyle.BottomSheetItem} onPress={handleGallerySelection}>
+                  <Icon source="image-multiple" color="white" size={24} />
+                  <Text style={StaticStyle.BottomSheetItemText}>Chọn ảnh từ thư viện</Text>
+               </TouchableOpacity>
+            </BottomSheetView>
+            <BottomSheetView style={StaticStyle.BottomSheetView}>
+               <TouchableOpacity style={StaticStyle.BottomSheetItem} onPress={handleCameraSelection}>
+                  <Icon source="camera" color="white" size={24} />
+                  <Text style={StaticStyle.BottomSheetItemText}>Chụp ảnh từ camera</Text>
+               </TouchableOpacity>
+            </BottomSheetView>
+         </BottomSheet>
+      </GestureHandlerRootView>
    );
 };
 

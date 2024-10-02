@@ -55,9 +55,11 @@ const SignUp = ({ navigation }) => {
         const formattedDate = moment(account['dob'], 'DD/MM/YYYY').format('YYYY-MM-DD');
         form.append('dob', formattedDate.toString());
         form.append('role', role);
-
+        
         try {
             const response = await APIs.post(endPoints['register-student'], form);
+            
+            console.log(response);
 
             if (response.status === statusCode.HTTP_201_CREATED) {
                 await createUserWithEmailAndPassword(auth, account['email'], account['password'])
@@ -80,6 +82,7 @@ const SignUp = ({ navigation }) => {
                             button: "Đóng"
                         });
                     });
+                console.log(201);
             }
         } catch (error) {
             if (error.response && error.response.data) {
@@ -90,7 +93,6 @@ const SignUp = ({ navigation }) => {
                     "A valid integer is required.": "Vui lòng nhập khóa học là một số nguyên.",
                     "user with this email already exists.": "Địa chỉ email này đã tồn tại.",
                     "user with this identification already exists.": "Căn cước công dân này đã tồn tại.",
-                    "Số CCCD không hợp lệ.": "Số CCCD không hợp lệ.",
                     "Ensure this field has no more than 12 characters.": "Vui lòng nhập CCCD không quá 12 ký tự",
                     "Ensure this field has no more than 10 characters.": "Vui lòng nhập mã số sinh viên không quá 10 ký tự."
                 };

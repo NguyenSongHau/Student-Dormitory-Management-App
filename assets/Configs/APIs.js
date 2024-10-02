@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://192.168.1.7:8000';
+const BASE_URL = 'http://192.168.1.3:8000';
 const URL_TYPE = 'api';
 const API_VERSION = 'v1';
 
