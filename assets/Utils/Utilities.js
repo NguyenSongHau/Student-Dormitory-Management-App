@@ -39,11 +39,3 @@ export const refreshAccessToken = async (refreshToken, dispatch) => {
         return null;
     }
 };
-
-export const getFirstDayOfYear = (date) => {
-    return new Date(date.getFullYear(), 0, 1);
-};
-
-export const getLastDayOfYear = (date) => {
-    return new Date(date.getFullYear(), 11, 31);
-};

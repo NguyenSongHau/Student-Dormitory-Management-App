@@ -25,9 +25,6 @@ const EditProfile = ({ navigation }) => {
    const [tempAccount, setTempAccount] = useState(currentAccount);
    const [indexSheetSelectImage, setIndexSheetSelectImage] = useState(-1);
 
-   console.log(currentAccount);
-   console.log(tempAccount);
-
    useEffect(() => {
       setIsRendered(true);
    }, []);
@@ -43,8 +40,8 @@ const EditProfile = ({ navigation }) => {
             </TouchableOpacity>
          ),
       });
-   }, [navigation, tempAccount]);
-   
+   }, [navigation, currentAccount, tempAccount]);
+
    const handleEditProfile = async () => {
       let form = new FormData();
       let size = 0;
@@ -54,20 +51,22 @@ const EditProfile = ({ navigation }) => {
          size++;
       }
 
-     for (let key in tempAccount.data) {
-      if (currentAccount.data[key] !== tempAccount.data[key]) {
-         if (key === 'dob') {
-            const formattedDob = moment(tempAccount.data[key]).format('YYYY-MM-DD');
-            if (formattedDob) {
-               form.append(key, formattedDob);
+      for (let key in tempAccount.data) {
+         if (currentAccount.data[key] !== tempAccount.data[key]) {
+            if (key === 'dob') {
+               const dobValue = tempAccount.data[key];
+               const formattedDob = moment(dobValue, 'DD-MM-YYYY').format('YYYY-MM-DD')
+               
+               if (formattedDob) {
+                  form.append(key, formattedDob);
+                  size++;
+               }
+            } else {
+               form.append(key, tempAccount.data[key]);
                size++;
             }
-         } else {
-            form.append(key, tempAccount.data[key]);
-            size++;
          }
       }
-   }
 
       for (let key in tempAccount.data.user_instance) {
          if (currentAccount.data.user_instance[key] !== currentAccount.data.user_instance[key]) {

@@ -31,7 +31,7 @@ const EditProfileView = ({ tempAccount, setTempAccount }) => {
     const updateTempAccount = (field, value) => {
         setTempAccount((prevTempAccount) => {
             const isUserInstanceField = ['student_id', 'university', 'faculty', 'major', 'academic_year'].includes(field);
-
+            
             return {
                 ...prevTempAccount,
                 data: {
