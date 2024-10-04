@@ -28,30 +28,19 @@ const EditProfileView = ({ tempAccount, setTempAccount }) => {
     };
 
     
-    const updateTempAccount = (field, value, isUserInstance = false) => {
+    const updateTempAccount = (field, value) => {
         setTempAccount((prevTempAccount) => {
-            if (isUserInstance) {
-                return {
-                    ...prevTempAccount,
-                    data: {
-                        ...prevTempAccount.data,
-                        user_instance: {
-                            ...prevTempAccount.data.user_instance,
-                            [field]: value
-                        }
-                    },
-                };
-            } else {
-                return {
-                    ...prevTempAccount,
-                    data: {
-                        ...prevTempAccount.data,
-                        [field]: value
-                    },
-                };
-            }
+            const updatedTempAccount = {
+                ...prevTempAccount,
+                data: {
+                    ...prevTempAccount.data,
+                    [field]: value
+                }
+            };
+            return updatedTempAccount;
         });
     };
+    
     
     return (
         <View style={[EditProfileViewStyle.FormContainer, EditProfileViewStyle.SectionContainer]}>
@@ -124,6 +113,7 @@ const EditProfileView = ({ tempAccount, setTempAccount }) => {
                             style={EditProfileViewStyle.Input}
                             value={String(tempAccount.data.user_instance[field.name])}
                             placeholder={field.label}
+                            disabled={field.disabled}
                             onChangeText={(value) => updateTempAccount(field.name, value)}
                             keyboardType={field.keyboardType}
                             right={
@@ -136,13 +126,13 @@ const EditProfileView = ({ tempAccount, setTempAccount }) => {
                 ))
             )}
 
-            {/* {tempAccount.data.role === roles.SPECIALIST && (
+            {tempAccount.data.role === roles.SPECIALIST && (
                 specialistField(tempAccount).map((field, index) => (
                     <View key={index} style={EditProfileViewStyle.FormWrap}>
                         <Text style={EditProfileViewStyle.FormText}>{field.label}</Text>
                         <TextInput
                             style={EditProfileViewStyle.Input}
-                            value={String(tempAccount.data.user_instance[field.name])}
+                            value={tempAccount.data.user_instance[field.name]}
                             placeholder={field.label}
                             onChangeText={(value) => updateTempAccount(field.name, value)}
                             keyboardType={field.keyboardType}
@@ -156,7 +146,7 @@ const EditProfileView = ({ tempAccount, setTempAccount }) => {
                         />
                     </View>
                 ))
-            )} */}
+            )}
         </View>
     );
 };

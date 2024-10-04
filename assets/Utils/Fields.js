@@ -188,26 +188,31 @@ export const studentField = () => {
             label: 'Mã số sinh viên',
             name: 'student_id',
             icon: 'card-text-outline',
+            disabled: true,
         },
         {
             label: 'Trường đại học',
             name: 'university',
             icon: 'school-outline',
+            disabled: true,
         },
         {
             label: 'Khoa',
             name: 'faculty',
             icon: 'account-group-outline',
+            disabled: true,
         },
         {
             label: 'Ngành',
             name: 'major',
             icon: 'account-circle-outline',
+            disabled: true,
         },
         {
             label: 'Khóa học',
             name: 'academic_year',
             icon: 'clock-time-one-outline',
+            disabled: true,
         }
     ]
 }; 
@@ -218,6 +223,7 @@ export const specialistField = () => {
             label: 'Bằng cấp',
             name: 'degree',
             icon: 'account-box-multiple-outline',
+            disabled: true
         }
     ]
 }; 

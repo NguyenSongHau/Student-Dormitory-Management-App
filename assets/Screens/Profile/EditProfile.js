@@ -56,7 +56,7 @@ const EditProfile = ({ navigation }) => {
             if (key === 'dob') {
                const dobValue = tempAccount.data[key];
                const formattedDob = moment(dobValue, 'DD-MM-YYYY').format('YYYY-MM-DD')
-               
+
                if (formattedDob) {
                   form.append(key, formattedDob);
                   size++;
@@ -68,14 +68,19 @@ const EditProfile = ({ navigation }) => {
          }
       }
 
-      for (let key in tempAccount.data.user_instance) {
-         if (currentAccount.data.user_instance[key] !== tempAccount.data.user_instance[key]) {
-            form.append(key, tempAccount.data.user_instance[key]);
-            size++;
-         }
-      }
+      if (form._parts.length === 0) {
+         Dialog.show({
+            type: ALERT_TYPE.SUCCESS,
+            title: "Thông báo",
+            textBody: "Cập nhập thông tin thành công!",
+            button: "Đóng"
+         });
 
-      if (size <= 0) return;
+         setTimeout(() => {
+            navigation.navigate('Profile');
+         }, 2000);
+         return;
+      }
 
       const { accessToken, refreshToken } = await getTokens();
 
@@ -83,7 +88,6 @@ const EditProfile = ({ navigation }) => {
          let response = await authAPI(accessToken).patch(endPoints['update'], form);
 
          if (response.status === statusCode.HTTP_200_OK) {
-            console.log(response);
             dispatch(UpdateAccountAction(response.data));
 
             Dialog.show({
@@ -108,10 +112,27 @@ const EditProfile = ({ navigation }) => {
                handleEditProfile();
             }
          } else {
+            const errorData = error.response.data;
+
+            const errorMessages = {
+               "user with this identification already exists.": "CCCD này đã tồn tại.",
+               "Ensure this field has no more than 12 characters.": "Số CCCD không được vượt quá 12 ký tự.",
+            };
+
+            const keysToCheck = ['identification'];
+            let firstErrorMessage = "";
+
+            for (const key of keysToCheck) {
+               if (errorData[key]) {
+                  firstErrorMessage = errorData[key].message || errorMessages[errorData[key][0]] || errorData[key][0];
+                  break;
+               }
+            }
+
             Dialog.show({
                type: ALERT_TYPE.DANGER,
                title: "Lỗi",
-               textBody: "Có lỗi xảy ra khi cập nhập!",
+               textBody: firstErrorMessage,
                button: "Đóng"
             });
          }

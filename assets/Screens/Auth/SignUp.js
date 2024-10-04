@@ -89,11 +89,11 @@ const SignUp = ({ navigation }) => {
 
                 const errorMessages = {
                     "Enter a valid email address.": "Email không đúng định dạng.",
-                    "A valid integer is required.": "Vui lòng nhập khóa học là một số nguyên.",
-                    "user with this email already exists.": "Địa chỉ email này đã tồn tại.",
-                    "user with this identification already exists.": "Căn cước công dân này đã tồn tại.",
-                    "Ensure this field has no more than 12 characters.": "Vui lòng nhập CCCD không quá 12 ký tự",
-                    "Ensure this field has no more than 10 characters.": "Vui lòng nhập mã số sinh viên không quá 10 ký tự."
+                    "A valid integer is required.": "Khóa học phải là một số nguyên.",
+                    "user with this email already exists.": "Email này đã tồn tại.",
+                    "user with this identification already exists.": "CCCD này đã tồn tại.",
+                    "Ensure this field has no more than 12 characters.": "Số CCCD không được vượt quá 12 ký tự.",
+                    "Ensure this field has no more than 10 characters.": "Mã số sinh viên không được vượt quá 10 ký tự."
                 };
 
                 const keysToCheck = ['email', 'password', 'identification', 'student_id', 'academic_year'];

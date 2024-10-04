@@ -6,8 +6,8 @@ const API_VERSION = 'v1';
 
 const API_URL = `${BASE_URL}/${URL_TYPE}/${API_VERSION}`;
 
-export const CLIENT_ID = '5con2xGAVGKxI5oQE1rjGALlWQwP5y2pWb0BYAiv';
-export const CLIENT_SECRET = 'XTvYQjkgRAb5y23otSGtiuS2Tt1jL62oMpZvtxYAc2XA2l1SqFNhXj2g55KnjBB1rBucIZYX9n6dNairGxj8gQhMdWYWq91qAG9rSLZGhESh1TTvYRXl7N0pF8zTC9tg';
+export const CLIENT_ID = 'p2xw2fFUFlzNAvR2fJqvKRTLszUEkiqAxiVZemmE';
+export const CLIENT_SECRET = 'lXk7P97UPJtgDrMVU6Pzc64s3zPZjIPfVzVb2TnEeWb7f9pibQ3qNBn4W1jZKsXRPsFqmiOxkjl7UXbPJBcjKS62Jr4y45sI3JsjGhdgnMM4OGirndd3Srf8GkyugFap';
 
 export const endPoints = {
     ////Account
