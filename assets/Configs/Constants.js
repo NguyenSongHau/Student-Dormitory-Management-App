@@ -7,7 +7,7 @@ export const defaultImage = {
 export const roles = {
     ADMINISTRATOR: 'AD',
     SPECIALIST: 'SPC',
-    MANAGER: 'MNG',
+    MANAGER: 'MAG',
     STUDENT: 'STU',
 };
 

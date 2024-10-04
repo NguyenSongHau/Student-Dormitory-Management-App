@@ -1,14 +1,13 @@
-import { useAccount } from '../../../Store/Contexts/AccountContext';
-import { userFields, studentField } from '../../../Utils/Fields';
+import moment from 'moment';
+import { useState } from 'react';
+import { roles } from '../../../Configs/Constants';
+import { userFields, studentField, specialistField } from '../../../Utils/Fields';
 import { View, Text, StyleSheet } from 'react-native';
 import { RadioButton, TextInput } from 'react-native-paper';
 import Theme from '../../../Styles/Theme';
-import { useState } from 'react';
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
-import moment from 'moment';
 
 const EditProfileView = ({ tempAccount, setTempAccount }) => {
-    const currentAccount = useAccount();
     const [selectedDate, setSelectedDate] = useState(tempAccount.dob ? new Date(tempAccount.dob) : null);
 
     const onChangeDate = (event, date) => {
@@ -28,44 +27,49 @@ const EditProfileView = ({ tempAccount, setTempAccount }) => {
         });
     };
 
-    const updateTempAccount = (field, value) => {
+    
+    const updateTempAccount = (field, value, isUserInstance = false) => {
         setTempAccount((prevTempAccount) => {
-            const isUserInstanceField = ['student_id', 'university', 'faculty', 'major', 'academic_year'].includes(field);
-            
-            return {
-                ...prevTempAccount,
-                data: {
-                    ...prevTempAccount.data,
-                    ...(isUserInstanceField ? {
+            if (isUserInstance) {
+                return {
+                    ...prevTempAccount,
+                    data: {
+                        ...prevTempAccount.data,
                         user_instance: {
                             ...prevTempAccount.data.user_instance,
                             [field]: value
                         }
-                    } : {
+                    },
+                };
+            } else {
+                return {
+                    ...prevTempAccount,
+                    data: {
+                        ...prevTempAccount.data,
                         [field]: value
-                    })
-                }
-            };
+                    },
+                };
+            }
         });
     };
-
-
+    
     return (
         <View style={[EditProfileViewStyle.FormContainer, EditProfileViewStyle.SectionContainer]}>
-            {userFields(currentAccount).map((field, index) => {
+            {userFields(tempAccount).map((field, index) => {
                 const isDateField = field.name === 'dob';
-                const value = tempAccount.data[field.name] || currentAccount.data[field.name];
-                
+                const id = tempAccount.data.id;
                 return (
                     <View key={index} style={EditProfileViewStyle.FormWrap}>
                         <Text style={EditProfileViewStyle.FormText}>{field.label}</Text>
                         <TextInput
                             style={EditProfileViewStyle.Input}
-                            value={isDateField ? value : String(value)}
+                            value={id ? String(tempAccount.data[field.name]) : tempAccount.data[field.name]}
                             placeholder={field.label}
                             onChangeText={(value) => updateTempAccount(field.name, value)}
                             editable={!isDateField}
                             disabled={field.disabled}
+                            underlineColor="transparent"
+                            activeUnderlineColor="transparent"
                             keyboardType={field.keyboardType}
                             right={
                                 isDateField ? (
@@ -84,30 +88,6 @@ const EditProfileView = ({ tempAccount, setTempAccount }) => {
                     </View>
                 );
             })}
-
-            {currentAccount.data.role === "STU" && (
-                studentField(currentAccount).map((field, index) => (
-                    <View key={index} style={EditProfileViewStyle.FormWrap}>
-                        <Text style={EditProfileViewStyle.FormText}>{field.label}</Text>
-                        <TextInput
-                            style={EditProfileViewStyle.Input}
-                            value={
-                                field.name === 'academic_year'
-                                    ? String(tempAccount.data.user_instance[field.name] || currentAccount.data.user_instance[field.name])
-                                    : tempAccount.data.user_instance[field.name] || currentAccount.data.user_instance[field.name]
-                            }
-                            placeholder={field.label}
-                            onChangeText={(value) => updateTempAccount(field.name, value)}
-                            keyboardType={field.keyboardType}
-                            right={
-                                <TextInput.Icon
-                                    icon={field.icon}
-                                />
-                            }
-                        />
-                    </View>
-                ))
-            )}
 
             <View>
                 <Text style={EditProfileViewStyle.FormText}>Giới tính</Text>
@@ -135,6 +115,48 @@ const EditProfileView = ({ tempAccount, setTempAccount }) => {
                     </View>
                 </View>
             </View>
+
+            {tempAccount.data.role === roles.STUDENT && (
+                studentField(tempAccount).map((field, index) => ( 
+                    <View key={index} style={EditProfileViewStyle.FormWrap}>
+                        <Text style={EditProfileViewStyle.FormText}>{field.label}</Text>
+                        <TextInput
+                            style={EditProfileViewStyle.Input}
+                            value={String(tempAccount.data.user_instance[field.name])}
+                            placeholder={field.label}
+                            onChangeText={(value) => updateTempAccount(field.name, value)}
+                            keyboardType={field.keyboardType}
+                            right={
+                                <TextInput.Icon
+                                    icon={field.icon}
+                                />
+                            }
+                        />
+                    </View>
+                ))
+            )}
+
+            {/* {tempAccount.data.role === roles.SPECIALIST && (
+                specialistField(tempAccount).map((field, index) => (
+                    <View key={index} style={EditProfileViewStyle.FormWrap}>
+                        <Text style={EditProfileViewStyle.FormText}>{field.label}</Text>
+                        <TextInput
+                            style={EditProfileViewStyle.Input}
+                            value={String(tempAccount.data.user_instance[field.name])}
+                            placeholder={field.label}
+                            onChangeText={(value) => updateTempAccount(field.name, value)}
+                            keyboardType={field.keyboardType}
+                            underlineColor="transparent"
+                            activeUnderlineColor="transparent"
+                            right={
+                                <TextInput.Icon
+                                    icon={field.icon}
+                                />
+                            }
+                        />
+                    </View>
+                ))
+            )} */}
         </View>
     );
 };
@@ -170,7 +192,7 @@ const EditProfileViewStyle = StyleSheet.create({
     },
     RadioWrap: {
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     RadioText: {
         fontSize: 16,

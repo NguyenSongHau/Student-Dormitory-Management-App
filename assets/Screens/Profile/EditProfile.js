@@ -10,7 +10,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import DismissKeyboard from '../../Components/Common/DismissKeyboard';
 import StaticStyle, { screenHeight } from '../../Styles/StaticStyle';
 import EditProfileView from "../../Components/Profile/EditProfile/EditProfileView";
-import { ALERT_TYPE, AlertNotificationRoot, Dialog } from 'react-native-alert-notification';
+import { ALERT_TYPE, Dialog } from 'react-native-alert-notification';
 import { Image, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { getTokens, refreshAccessToken } from "../../Utils/Utilities";
 import { authAPI, endPoints } from "../../Configs/APIs";
@@ -69,7 +69,7 @@ const EditProfile = ({ navigation }) => {
       }
 
       for (let key in tempAccount.data.user_instance) {
-         if (currentAccount.data.user_instance[key] !== currentAccount.data.user_instance[key]) {
+         if (currentAccount.data.user_instance[key] !== tempAccount.data.user_instance[key]) {
             form.append(key, tempAccount.data.user_instance[key]);
             size++;
          }
@@ -83,6 +83,7 @@ const EditProfile = ({ navigation }) => {
          let response = await authAPI(accessToken).patch(endPoints['update'], form);
 
          if (response.status === statusCode.HTTP_200_OK) {
+            console.log(response);
             dispatch(UpdateAccountAction(response.data));
 
             Dialog.show({

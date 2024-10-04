@@ -19,7 +19,7 @@ const Profile = ({ navigation }) => {
     const dispatch = useAccountDispatch();
     const currentAccount = useAccount();
     const [isRendered, setIsRendered] = useState(false);
-
+    
     useEffect(() => {
         setIsRendered(true);
     }, []);

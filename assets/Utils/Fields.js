@@ -210,4 +210,14 @@ export const studentField = () => {
             icon: 'clock-time-one-outline',
         }
     ]
-}
+}; 
+
+export const specialistField = () => {
+    return [
+        {
+            label: 'Bằng cấp',
+            name: 'degree',
+            icon: 'account-box-multiple-outline',
+        }
+    ]
+}; 
