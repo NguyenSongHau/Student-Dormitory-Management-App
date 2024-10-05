@@ -18,6 +18,11 @@ export const rolesName = {
     STU: 'Sinh viên',
 };
 
+export const typeRoom = {
+    NORMAL: "Phòng thường",
+    SERVICE: "Phòng dịch vụ"
+}
+
 export const statusCode = {
     HTTP_100_CONTINUE: 100,
     HTTP_101_SWITCHING_PROTOCOLS: 101,

@@ -39,3 +39,31 @@ export const refreshAccessToken = async (refreshToken, dispatch) => {
         return null;
     }
 };
+
+export const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
+    const paddingToBottom = 20;
+    return layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom;
+};
+
+export const loadMore = (nativeEvent, loading, page, setPage) => {
+    if (!loading && page > 0 && isCloseToBottom(nativeEvent)) {
+        setPage(page + 1);
+    }
+};
+
+export const onRefresh = ({ setPage, setRefreshing, setFilter = null, setData = null }) => {
+    setPage(1);
+    setRefreshing(true);
+    if (setData) setData([]);
+    if (setFilter) setFilter('');
+};
+
+export const search = (value, setPage, callback) => {
+    setPage((prevPage) => 1);
+    callback(value);
+};
+
+export const formatDate = (dateString) => {
+    const datePart = dateString.split(" ")[0];
+    return datePart;
+};

@@ -20,7 +20,10 @@ export const endPoints = {
     //POST: Đăng ký tài khoản cho sinh viên
     'register-student': '/users/register/',
 
-    rooms: '/rooms/'
+    //GET: Lấy danh sách bài viết
+    post : '/posts/',
+    //GET: Lấy chi tiết một bài viết
+    'retrive-post': ''
 };
 
 export default axios.create({
