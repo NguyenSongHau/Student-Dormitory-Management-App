@@ -1,11 +1,12 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { defaultImage } from '../../Configs/Constants';
 import Theme from '../../Styles/Theme';
-import { typeBed } from '../../Configs/Constants';
+import { statusBed } from '../../Configs/Constants';
 import { screenHeight, screenWidth } from '../../Styles/StaticStyle';
 import RenderHTML from 'react-native-render-html';
+import { formatCurrency } from '../../Utils/Utilities';
 
-const BedCard = ({ instance, index, onPress}) => {
+const BedCard = ({ instance, onPress}) => {
     return (
         <TouchableOpacity onPress={onPress}>
             <View style={CardStyle.Card}>
@@ -28,13 +29,13 @@ const BedCard = ({ instance, index, onPress}) => {
 
                 <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 5}}>
                     <Text style={CardStyle.DescriptionLabel}>Giá:</Text>
-                    <Text style={CardStyle.Price}>{instance.price} VNĐ</Text>
+                    <Text style={CardStyle.Price}>{formatCurrency(instance.price)} VNĐ</Text>
                 </View>
 
                 <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 5}}>
                     <Text style={CardStyle.DescriptionLabel}>Trạng thái:</Text>
-                    <Text style={CardStyle.Price}>
-                        {instance.status === "VACUITY" ? typeBed.VACUITY : typeBed.NONVACUITY}
+                    <Text style={CardStyle.Status}>
+                        {instance.status === "VACUITY" ? statusBed.VACUITY : typeBed.NONVACUITY}
                     </Text>
                 </View>
             </View>
@@ -74,18 +75,17 @@ const CardStyle = StyleSheet.create({
     CardDescription: {
         width: '100%',
         fontSize: 18,
-        fontFamily: Theme.Regular,
-        lineHeight: 30,
+        fontFamily: Theme.Italic,
     },
-    CardDate: {
-        fontSize: 16,
-        marginVertical: 12,
-        fontFamily: Theme.SemiBold,
+    Status: {
+        fontSize: 18,
+        color: Theme.PrimaryColor,
+        fontFamily: Theme.SemiBold
     },
     Price:{
         fontSize: 18,
         color: Theme.PrimaryColor,
-        fontFamily: Theme.Bold
+        fontFamily: Theme.SemiBold
     }
 });
 

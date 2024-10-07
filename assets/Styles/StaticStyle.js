@@ -45,6 +45,14 @@ const StaticStyle = StyleSheet.create({
         color: Theme.BlackColor,
         fontFamily: Theme.Bold,
     },
+    BackButton: {
+        position: 'absolute',
+        top: 20,
+        left: 20,
+        backgroundColor: 'rgba(255, 255, 255, 0.7)',
+        borderRadius: 20,
+        padding: 8,
+    },
 });
 
 export default StaticStyle;

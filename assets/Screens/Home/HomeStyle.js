@@ -58,7 +58,7 @@ const HomeStyle = StyleSheet.create({
     },
     DetailsIcon: {
         padding: 8,
-        marginRight: 12,
+        marginRight: 8,
         borderRadius: 8,
         backgroundColor: 'lightgrey',
     },
@@ -80,7 +80,7 @@ const HomeStyle = StyleSheet.create({
     DetailsDescription: {
         fontSize: 16,
         lineHeight: 28,
-        fontFamily: Theme.Regular,
+        fontFamily: Theme.Regular
     },
     MoreButton: {
         fontFamily: Theme.Bold,

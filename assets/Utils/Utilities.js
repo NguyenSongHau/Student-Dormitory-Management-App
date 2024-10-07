@@ -64,6 +64,18 @@ export const search = (value, setPage, callback) => {
 };
 
 export const formatDate = (dateString) => {
+    if (!dateString) {
+        return "Không có ngày";
+    }
+
     const datePart = dateString.split(" ")[0];
     return datePart;
+};
+
+export const formatCurrency = (price) => {
+    if (isNaN(price)) return "0";
+
+    return Number(price)
+        .toFixed(0)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 };

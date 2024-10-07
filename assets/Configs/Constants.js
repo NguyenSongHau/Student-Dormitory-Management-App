@@ -23,10 +23,15 @@ export const typeRoom = {
     SERVICE: "Phòng dịch vụ"
 }
 
-export const typeBed = {
+export const statusBed = {
     VACUITY : "Trống",
     NONVACUITY: "Đã thuê"
-}
+};
+
+export const gender = {
+    M: "Nam",
+    F: "Nữ"
+};
 
 export const statusCode = {
     HTTP_100_CONTINUE: 100,

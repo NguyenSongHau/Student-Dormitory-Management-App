@@ -6,6 +6,8 @@ import HomeStyle from '../../../Screens/Home/HomeStyle';
 import Theme from '../../../Styles/Theme';
 import Loading from '../../Common/Loading';
 import { screenWidth } from '../../../Styles/StaticStyle';
+import { Icon } from 'react-native-paper';
+import { gender } from '../../../Configs/Constants';
 
 const PostSummary = ({ post, ...props }) => {
     if (props?.loading) return <Loading />;
@@ -26,7 +28,52 @@ const PostSummary = ({ post, ...props }) => {
                         <View style={HomeStyle.DetailsWrap}>
                             <View style={[HomeStyle.DetailsItem, { flexDirection: 'row', alignItems: 'center' }]}>
                                 <View style={HomeStyle.DetailsIcon}>
-                                    <AntDesign name="clockcircle" size={32} />
+                                    <Icon source="video-stabilization" size={32} color={Theme.PrimaryColor} />
+                                </View>
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <Text style={[HomeStyle.DetailsText, { marginRight: 8 }]}>Mã phòng:</Text>
+                                    <Text style={HomeStyle.DetailsValue}>
+                                        {post.id}
+                                    </Text>
+                                </View>
+                            </View>
+
+                        </View>
+                        
+                        <View style={HomeStyle.DetailsWrap}>
+                            <View style={[HomeStyle.DetailsItem, { flexDirection: 'row', alignItems: 'center' }]}>
+                                <View style={HomeStyle.DetailsIcon}>
+                                    <Icon source="gender-female" size={32} color={Theme.PrimaryColor} />
+                                </View>
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <Text style={[HomeStyle.DetailsText, { marginRight: 8 }]}>Phòng cho:</Text>
+                                    <Text style={HomeStyle.DetailsValue}>
+                                        {post.room.room_for === "M" ? gender.M : gender.F}
+                                    </Text>
+                                </View>
+                            </View>
+
+                        </View>
+
+                        <View style={HomeStyle.DetailsWrap}>
+                            <View style={[HomeStyle.DetailsItem, { flexDirection: 'row', alignItems: 'center' }]}>
+                                <View style={HomeStyle.DetailsIcon}>
+                                    <Icon source="bed-empty" size={32} color={Theme.PrimaryColor} />
+                                </View>
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <Text style={[HomeStyle.DetailsText, { marginRight: 8 }]}>Số lượng giường:</Text>
+                                    <Text style={HomeStyle.DetailsValue}>
+                                        {post.room.number_of_bed}
+                                    </Text>
+                                </View>
+                            </View>
+
+                        </View>
+
+                        <View style={HomeStyle.DetailsWrap}>
+                            <View style={[HomeStyle.DetailsItem, { flexDirection: 'row', alignItems: 'center' }]}>
+                                <View style={HomeStyle.DetailsIcon}>
+                                    <AntDesign name="clockcircle" size={32} color={Theme.PrimaryColor} />
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     <Text style={[HomeStyle.DetailsText, { marginRight: 8 }]}>Ngày tạo:</Text>
@@ -41,7 +88,7 @@ const PostSummary = ({ post, ...props }) => {
                         <View style={HomeStyle.DetailsWrap}>
                             <View style={[HomeStyle.DetailsItem, { flexDirection: 'row', alignItems: 'center' }]}>
                                 <View style={HomeStyle.DetailsIcon}>
-                                    <AntDesign name="clockcircle" size={32} />
+                                    <AntDesign name="clockcircle" size={32} color={Theme.PrimaryColor} />
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     <Text style={[HomeStyle.DetailsText, { marginRight: 8 }]}>Ngày cập nhập:</Text>

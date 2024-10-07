@@ -39,7 +39,7 @@ const Filter = ({ type, onSelectType }) => {
                         <Text 
                             style={[
                                 FilterStyle.ModalText, 
-                                type === 'ALL' && { color: Theme.PrimaryColor, fontWeight: 'bold' }
+                                type === 'ALL' && { color: Theme.PrimaryColor, fontFamily: Theme.Bold}
                             ]}
                             onPress={() => handleSelectType('Tất cả')}
                         >
@@ -48,7 +48,7 @@ const Filter = ({ type, onSelectType }) => {
                         <Text 
                             style={[
                                 FilterStyle.ModalText, 
-                                type === 'NORMAL' && { color: Theme.PrimaryColor, fontWeight: 'bold' }
+                                type === 'NORMAL' && { color: Theme.PrimaryColor, fontFamily: Theme.Bold }
                             ]}
                             onPress={() => handleSelectType('Phòng thường')}
                         >
@@ -57,7 +57,7 @@ const Filter = ({ type, onSelectType }) => {
                         <Text 
                             style={[
                                 FilterStyle.ModalText, 
-                                type === 'SERVICE' && { color: Theme.PrimaryColor, fontWeight: 'bold' }
+                                type === 'SERVICE' && { color: Theme.PrimaryColor, fontFamily: Theme.Bold }
                             ]}
                             onPress={() => handleSelectType('Phòng dịch vụ')}
                         >

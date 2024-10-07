@@ -64,6 +64,7 @@ const BedsListViewStyle = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 20,
+        paddingBottom: 100
     },
     NoBedsImage: {
         width: 200,

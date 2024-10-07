@@ -1,5 +1,5 @@
-import { Ionicons } from '@expo/vector-icons';
-import { ImageBackground, Keyboard, Text, TouchableOpacity, View, Animated } from "react-native";
+import { AntDesign } from '@expo/vector-icons';
+import { ImageBackground, Keyboard, Text, TouchableOpacity, View, Animated, StyleSheet } from "react-native";
 import StaticStyle, { screenHeight } from "../../Styles/StaticStyle";
 import HomeStyle from './HomeStyle';
 import { useEffect, useState } from 'react';
@@ -21,7 +21,7 @@ const PostDeTails = ({ navigation, route }) => {
     const animatedHeight = useState(new Animated.Value(screenHeight / 3))[0];
 
     useEffect(() => {
-        const loadPost = async () => {
+        const loadPostDetail = async () => {
             if (!postID) return;
 
             setPostLoading(true);
@@ -45,14 +45,14 @@ const PostDeTails = ({ navigation, route }) => {
             }
         };
 
-        loadPost();
-    }, []);
+        loadPostDetail();
+    }, [postID]);
 
     const handleChangeTab = (name) => {
         setTab(name);
-    
+
         const toValue = name !== 'overview' ? screenHeight / 6 : screenHeight / 3;
-    
+
         Animated.timing(animatedHeight, {
             toValue,
             duration: 300,
@@ -62,7 +62,7 @@ const PostDeTails = ({ navigation, route }) => {
 
     const tabContent = () => {
         if (isRendered) {
-            switch (tab) { 
+            switch (tab) {
                 case 'overview':
                     return <PostSummary post={post} loading={postLoading} />;
                 case 'rooms':
@@ -83,7 +83,7 @@ const PostDeTails = ({ navigation, route }) => {
                         activeOpacity={0.8}
                         style={StaticStyle.BackButton}
                         onPress={() => navigation.goBack()}>
-                        <Ionicons name="chevron-back" color={Theme.BlackColor} size={30} />
+                        <AntDesign name="arrowleft" color={Theme.PrimaryColor} size={30} />
                     </TouchableOpacity>
                 </ImageBackground>
             </Animated.View>

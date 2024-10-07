@@ -19,10 +19,6 @@ const CommonCard = ({ instance, ...props }) => {
                 </View>
                 <Text style={CardStyle.CardTitle}>{instance.name}</Text>
 
-                <Text style={CardStyle.CardType}>
-                    Loại: {instance.room.type === "SERVICE" ? typeRoom.SERVICE : typeRoom.NORMAL}
-                </Text>
-
                 <RenderHTML
                     contentWidth={screenWidth}
                     source={{ html: instance.description }}
@@ -32,7 +28,11 @@ const CommonCard = ({ instance, ...props }) => {
                         ellipsizeMode: 'tail',
                     }}
                 />
-                
+
+                <Text style={CardStyle.CardType}>
+                    Loại: {instance.room.type === "SERVICE" ? typeRoom.SERVICE : typeRoom.NORMAL}
+                </Text>
+
                 <Text style={CardStyle.CardDate}>
                     Ngày tạo: <Text>{formatDate(instance.created_date)}</Text>
                 </Text>
@@ -67,18 +67,16 @@ const CardStyle = StyleSheet.create({
     },
     CardDescription: {
         width: '100%',
-        fontSize: 20,
-        fontFamily: Theme.Regular,
+        fontSize: 18,
         lineHeight: 30
     },
     CardType: {
-        fontSize: 20,
+        fontSize: 18,
         fontFamily: Theme.SemiBold,
-        marginBottom: 10
+        marginVertical: 8
     },
     CardDate: {
-        fontSize: 16,
-        marginVertical: 12,
+        fontSize: 17,
         fontFamily: Theme.SemiBold,
     },
 });

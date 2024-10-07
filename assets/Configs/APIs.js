@@ -22,8 +22,12 @@ export const endPoints = {
 
     //GET: Lấy danh sách bài viết
     post : '/posts/',
-    //GET: Lấy, cập nhập, xóa một bài viết
-    'post-detail': (postID) => `/posts/${postID}/`
+    //GET, PATCH, DELETE: Lấy, cập nhập, xóa một bài viết
+    'post-detail': (postID) => `/posts/${postID}/`,
+
+
+    //GET, PATCH, DELETE: Lấy, cập nhập, xóa một giường
+    'bed-detail': (bedID) => `/beds/${bedID}/`
 };
 
 export default axios.create({
