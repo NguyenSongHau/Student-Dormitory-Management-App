@@ -3,16 +3,17 @@ import { StyleSheet, View, Modal, Text, TouchableOpacity } from "react-native";
 import { Icon } from "react-native-paper";
 import Theme from "../../Styles/Theme";
 
-const Filter = ({ type, onSelectType }) => { // Thêm onSelectType vào props
+const Filter = ({ type, onSelectType }) => {
     const [visible, setVisible] = useState(false);
 
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
 
     const handleSelectType = (selectedType) => {
-        // Gửi giá trị tương ứng với loại phòng đã chọn
-        const typeValue = selectedType === 'Phòng thường' ? 'NORMAL' : 'SERVICE';
-        onSelectType(typeValue); // Gọi callback với loại phòng được chọn
+        const typeValue = selectedType === 'Tất cả' ? 'ALL' : 
+                          selectedType === 'Phòng thường' ? 'NORMAL' : 
+                          'SERVICE';
+        onSelectType(typeValue);
         hideModal();
     };
 
@@ -36,13 +37,28 @@ const Filter = ({ type, onSelectType }) => { // Thêm onSelectType vào props
                     <View style={FilterStyle.ModalContent}>
                         <Text style={FilterStyle.ModalTitle}>Chọn loại phòng</Text>
                         <Text 
-                            style={[FilterStyle.ModalText, type === 'Phòng thường' && { fontWeight: 'bold' }]} // Đậm nếu được chọn
+                            style={[
+                                FilterStyle.ModalText, 
+                                type === 'ALL' && { color: Theme.PrimaryColor, fontWeight: 'bold' }
+                            ]}
+                            onPress={() => handleSelectType('Tất cả')}
+                        >
+                            Tất cả
+                        </Text>
+                        <Text 
+                            style={[
+                                FilterStyle.ModalText, 
+                                type === 'NORMAL' && { color: Theme.PrimaryColor, fontWeight: 'bold' }
+                            ]}
                             onPress={() => handleSelectType('Phòng thường')}
                         >
                             Phòng thường
                         </Text>
                         <Text 
-                            style={[FilterStyle.ModalText, type === 'Phòng dịch vụ' && { fontWeight: 'bold' }]} // Đậm nếu được chọn
+                            style={[
+                                FilterStyle.ModalText, 
+                                type === 'SERVICE' && { color: Theme.PrimaryColor, fontWeight: 'bold' }
+                            ]}
                             onPress={() => handleSelectType('Phòng dịch vụ')}
                         >
                             Phòng dịch vụ
@@ -88,10 +104,11 @@ const FilterStyle = StyleSheet.create({
     ModalText: {
         fontSize: 18,
         marginVertical: 8,
-        fontFamily: Theme.Medium
+        fontFamily: Theme.Medium,
+        color: Theme.BlackColor
     },
     CloseText: {
-        fontSize: 16,
+        fontSize: 20,
         color: Theme.PrimaryColor,
         marginTop: 20,
         fontFamily: Theme.Bold

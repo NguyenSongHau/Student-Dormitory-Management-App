@@ -15,7 +15,7 @@ const Posts = ({ navigation }) => {
     const [posts, setPosts] = useState([]);
     const [page, setPage] = useState(1);
     const [name, setName] = useState('');
-    const [type, setType] = useState('');
+    const [type, setType] = useState('ALL');
     const [loading, setLoading] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
 
@@ -25,7 +25,12 @@ const Posts = ({ navigation }) => {
 
             setLoading(true);
             try {
-                const response = await APIs.get(endPoints['post'], { params: { page, name, type } });
+                const params = { page, name };
+                if (type !== 'ALL') {
+                    params.type = type;
+                }
+
+                const response = await APIs.get(endPoints['post'], { params });
                 if (response.status === statusCode.HTTP_200_OK) {
                     if (page === 1) {
                         setPosts(response.data.results);
@@ -37,6 +42,7 @@ const Posts = ({ navigation }) => {
                     setPage(0);
                 }
             } catch (error) {
+                console.error(error);
                 Dialog.show({
                     type: ALERT_TYPE.DANGER,
                     title: "Lỗi",
@@ -51,6 +57,13 @@ const Posts = ({ navigation }) => {
 
         loadPosts();
     }, [page, name, type, refreshing]);
+
+    const goToPostDetails = (postID) => {
+        navigation.navigate('HomeStack', {
+            screen: 'PostDeTails',
+            params: { postID }
+        });
+    };
 
     return (
         <View style={StaticStyle.BackGround}>
@@ -84,6 +97,7 @@ const Posts = ({ navigation }) => {
                         setPage={setPage}
                         setName={setName}
                         setRefreshing={setRefreshing}
+                        onPress={(post) => goToPostDetails(post.id)}
                     />
                 </View>
             </DismissKeyboard>

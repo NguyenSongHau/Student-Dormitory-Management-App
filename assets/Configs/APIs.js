@@ -22,8 +22,8 @@ export const endPoints = {
 
     //GET: Lấy danh sách bài viết
     post : '/posts/',
-    //GET: Lấy chi tiết một bài viết
-    'retrive-post': ''
+    //GET: Lấy, cập nhập, xóa một bài viết
+    'post-detail': (postID) => `/posts/${postID}/`
 };
 
 export default axios.create({

@@ -41,21 +41,19 @@ const HomeStyle = StyleSheet.create({
         justifyContent: 'space-between',
     },
     TabItem: {
-        marginHorizontal: 12,
+        marginHorizontal: 40,
         paddingVertical: 12,
     },
     TabText: {
         fontSize: 16,
         fontFamily: Theme.SemiBold,
     },
-    DetailsContainer: {},
     DetailsWrap: {
         marginBottom: 12,
         flexDirection: 'row',
     },
     DetailsItem: {
         width: '50%',
-        alignItems: 'center',
         flexDirection: 'row',
     },
     DetailsIcon: {
