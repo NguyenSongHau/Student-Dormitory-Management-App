@@ -14,7 +14,7 @@ const PostSummary = ({ post, ...props }) => {
         <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
             <View style={{ ...props?.style }}>
                 <View style={{ marginTop: 12 }}>
-                    <Text style={{ fontFamily: Theme.Bold, fontSize: 20 }}>Mô tả phòng</Text>
+                    <Text style={{ fontFamily: Theme.Bold, fontSize: 20 }}>Mô tả phòng:</Text>
                     <RenderHTML
                         contentWidth={screenWidth}
                         source={{ html: post.description }}

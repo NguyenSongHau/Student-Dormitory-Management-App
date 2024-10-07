@@ -24,7 +24,7 @@ const CommonCardList = ({ navigation, data, loading, refreshing, setRefreshing, 
 
     return (
         <ScrollView
-            style={{ marginBottom: 60 }}
+            style={{ marginBottom: 150 }}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             onScroll={handleOnScroll}

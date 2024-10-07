@@ -23,6 +23,11 @@ export const typeRoom = {
     SERVICE: "Phòng dịch vụ"
 }
 
+export const typeBed = {
+    VACUITY : "Trống",
+    NONVACUITY: "Đã thuê"
+}
+
 export const statusCode = {
     HTTP_100_CONTINUE: 100,
     HTTP_101_SWITCHING_PROTOCOLS: 101,

@@ -1,74 +1,91 @@
-import { AntDesign, Ionicons } from '@expo/vector-icons';
-import moment from 'moment';
-import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { defaultImage } from '../../Configs/Constants';
 import Theme from '../../Styles/Theme';
+import { typeBed } from '../../Configs/Constants';
+import { screenHeight, screenWidth } from '../../Styles/StaticStyle';
+import RenderHTML from 'react-native-render-html';
 
-const BedCard = ({ instance, index, ...props }) => {
+const BedCard = ({ instance, index, onPress}) => {
     return (
-        <View style={{ ...props?.style }}>
-            <ImageBackground
-                source={{ uri: instance?.image && instance.image !== "" ? instance.image : defaultImage.DEFAULT_BED }}
-                style={{ ...CarddActivityStyle.Background, marginTop: index === 0 ? 0 : 12 }}
-            />
+        <TouchableOpacity onPress={onPress}>
+            <View style={CardStyle.Card}>
+                <View style={CardStyle.CardImage}>
+                    <Image
+                        style={CardStyle.Image}
+                        source={{ uri: instance.image ? instance.image : defaultImage.DEFAULT_BED }}
+                    />
+                </View>
+                <Text style={CardStyle.CardTitle}>{instance.name}</Text>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <Text style={CardStyle.DescriptionLabel}>Mô tả:</Text>
+                    <RenderHTML
+                        contentWidth={screenWidth}
+                        source={{ html: instance.description }}
+                        baseStyle={CardStyle.CardDescription}
+                        defaultTextProps={{ numberOfLines: 2, ellipsizeMode: 'tail' }}
+                    />
+                </View>
 
-            <View style={CarddActivityStyle.CardContainer}>
-                <View style={{ ...CarddActivityStyle.CardRow, marginTop: 0 }}>
-                    <Text style={CarddActivityStyle.CardTitle}>{instance.name}</Text>
+                <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 5}}>
+                    <Text style={CardStyle.DescriptionLabel}>Giá:</Text>
+                    <Text style={CardStyle.Price}>{instance.price} VNĐ</Text>
+                </View>
+
+                <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 5}}>
+                    <Text style={CardStyle.DescriptionLabel}>Trạng thái:</Text>
+                    <Text style={CardStyle.Price}>
+                        {instance.status === "VACUITY" ? typeBed.VACUITY : typeBed.NONVACUITY}
+                    </Text>
                 </View>
             </View>
-        </View>
-    )
+        </TouchableOpacity>
+    );
 }
 
-const CarddActivityStyle = StyleSheet.create({
-    Background: {
-        borderRadius: 8,
-        overflow: 'hidden',
+const CardStyle = StyleSheet.create({
+    Card: {
+        flexDirection: 'column',
+        marginBottom: 20,
+        borderWidth: 1,
+        padding: 12,
+        borderRadius: 16,
+        borderColor: Theme.PrimaryColor,
     },
-    ReportButton: {
-        borderRadius: 8,
-        paddingVertical: 8,
-        alignItems: 'center',
+    CardImage: {
         justifyContent: 'center',
-        backgroundColor: '#6ac239',
-        alignSelf: 'flex-start',
-        flexDirection: 'row',
-        paddingHorizontal: 16,
+        width: '100%',
+        height: screenHeight / 4,
     },
-    CardContainer: {
-        padding: 16,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    Image: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 8,
     },
     CardTitle: {
-        flex: 1,
         fontSize: 20,
-        color: 'white',
-        flexWrap: 'wrap',
+        marginVertical: 12,
         fontFamily: Theme.Bold,
     },
-    CardRow: {
-        marginTop: 12,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
+    DescriptionLabel: {
+        fontFamily: Theme.Bold,
+        fontSize: 18,
+        marginRight: 5
     },
-    CardText: {
+    CardDescription: {
+        width: '100%',
+        fontSize: 18,
+        fontFamily: Theme.Regular,
+        lineHeight: 30,
+    },
+    CardDate: {
         fontSize: 16,
-        marginLeft: 8,
-        fontStyle: 'italic',
-        color: 'white',
+        marginVertical: 12,
         fontFamily: Theme.SemiBold,
     },
-    CardAvatar: {
-        width: 28,
-        height: 28,
-        borderRadius: 8,
-        backgroundColor: Theme.SecondaryColor,
-    },
-    CardWrap: {
-        flexDirection: 'row',
-        alignItems: 'center',
+    Price:{
+        fontSize: 18,
+        color: Theme.PrimaryColor,
+        fontFamily: Theme.Bold
     }
 });
 

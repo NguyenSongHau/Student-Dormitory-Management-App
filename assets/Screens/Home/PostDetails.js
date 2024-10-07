@@ -66,7 +66,7 @@ const PostDeTails = ({ navigation, route }) => {
                 case 'overview':
                     return <PostSummary post={post} loading={postLoading} />;
                 case 'rooms':
-                    return <BedsListView />
+                    return <BedsListView beds={post.room.beds} navigation={navigation} />;
                 default:
                     return null;
             }
@@ -83,7 +83,7 @@ const PostDeTails = ({ navigation, route }) => {
                         activeOpacity={0.8}
                         style={StaticStyle.BackButton}
                         onPress={() => navigation.goBack()}>
-                        <Ionicons name="chevron-back" color={Theme.WhiteColor} size={30} />
+                        <Ionicons name="chevron-back" color={Theme.BlackColor} size={30} />
                     </TouchableOpacity>
                 </ImageBackground>
             </Animated.View>
