@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Icon } from "react-native-paper";
 import Posts from '../../Screens/Home/Posts';
-import RentalContacts from "../../Screens/Home/RentalContacts";
+import RentalContacts from "../../Screens/RentalContact/RentalContacts";
 import Profile from '../../Screens/Profile/Profile';
 import Theme from '../../Styles/Theme';
 import { StatusBar } from "expo-status-bar";

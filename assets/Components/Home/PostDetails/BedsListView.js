@@ -3,7 +3,7 @@ import { Text, View, Image, StyleSheet, FlatList, ActivityIndicator } from 'reac
 import Theme from '../../../Styles/Theme';
 import BedCardList from '../../Common/BedCardList';
 
-const BedsListView = ({ beds, navigation }) => {
+const BedsListView = ({ beds, navigation, room }) => {
     const [filteredBeds, setFilteredBeds] = useState(beds || []);
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
@@ -43,7 +43,7 @@ const BedsListView = ({ beds, navigation }) => {
     }
 
     const handleBedPress = (bedID) => {
-        navigation.navigate('BedDetails', { bedID });
+        navigation.navigate('BedDetails', { bedID, roomID: room.id });
     };
 
     return (

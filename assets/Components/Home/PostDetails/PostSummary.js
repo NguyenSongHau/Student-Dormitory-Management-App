@@ -43,6 +43,21 @@ const PostSummary = ({ post, ...props }) => {
                         <View style={HomeStyle.DetailsWrap}>
                             <View style={[HomeStyle.DetailsItem, { flexDirection: 'row', alignItems: 'center' }]}>
                                 <View style={HomeStyle.DetailsIcon}>
+                                    <Icon source="google-classroom" size={32} color={Theme.PrimaryColor} />
+                                </View>
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <Text style={[HomeStyle.DetailsText, { marginRight: 8 }]}>Tên phòng:</Text>
+                                    <Text style={HomeStyle.DetailsValue}>
+                                        {post.room.name}
+                                    </Text>
+                                </View>
+                            </View>
+
+                        </View>
+
+                        <View style={HomeStyle.DetailsWrap}>
+                            <View style={[HomeStyle.DetailsItem, { flexDirection: 'row', alignItems: 'center' }]}>
+                                <View style={HomeStyle.DetailsIcon}>
                                     <Icon source="gender-female" size={32} color={Theme.PrimaryColor} />
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>

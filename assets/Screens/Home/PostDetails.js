@@ -66,7 +66,7 @@ const PostDeTails = ({ navigation, route }) => {
                 case 'overview':
                     return <PostSummary post={post} loading={postLoading} />;
                 case 'rooms':
-                    return <BedsListView beds={post.room.beds} navigation={navigation} />;
+                    return <BedsListView beds={post.room.beds} navigation={navigation} room={post.room} />;
                 default:
                     return null;
             }

@@ -15,10 +15,9 @@ import HomeStyle from './HomeStyle';
 import RenderHTML from 'react-native-render-html';
 
 const BedDetails = ({ navigation, route }) => {
-    const { bedID } = route?.params;
+    const { bedID, roomID } = route?.params;
     const [bed, setBed] = useState({});
     const [isRendered, setIsRendered] = useState(false);
-    const [modalVisible, setModalVisible] = useState(false);
     const [bedLoading, setBedLoading] = useState(false);
 
     useEffect(() => {
@@ -150,13 +149,16 @@ const BedDetails = ({ navigation, route }) => {
                     </View>
                 </View>
 
-                <Button
-    mode="contained"
-    style={BedDetailsStyle.CreateProfileButton}
-    labelStyle={BedDetailsStyle.CreateProfileButtonText}  // Thêm style cho text
->
-    Tạo hồ sơ
-</Button>
+                {bed.status === "VACUITY" && (
+                    <Button
+                        mode="contained"
+                        style={BedDetailsStyle.CreateProfileButton}
+                        labelStyle={BedDetailsStyle.CreateProfileButtonText}
+                        onPress={() => navigation.navigate('RentBed', { roomID, bedID })}
+                    >
+                        Tạo hồ sơ
+                    </Button>
+                )}
             </View>
         </View>
     );
