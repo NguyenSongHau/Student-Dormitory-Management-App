@@ -1,7 +1,7 @@
 export const defaultImage = {
-    DEFAULT_AVATAR: 'https://res.cloudinary.com/dfzv8bql4/image/upload/v1727592961/default-avatar.png',
-    DEFAULT_ROOM: 'https://res.cloudinary.com/dfzv8bql4/image/upload/v1727107665/sdmapp/default-room.jpg',
-    DEFAULT_BED: 'https://res.cloudinary.com/dfzv8bql4/image/upload/v1727139676/sdmapp/default-bed.jpg',
+    DEFAULT_AVATAR: 'https://djangostorage27.blob.core.windows.net/images/default-avatar.png',
+    DEFAULT_ROOM: 'https://djangostorage27.blob.core.windows.net/images/default-room.jpg',
+    DEFAULT_BED: 'https://djangostorage27.blob.core.windows.net/images/default-bed.jpg',
 };
 
 export const roles = {

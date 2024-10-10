@@ -152,8 +152,8 @@ const BedDetails = ({ navigation, route }) => {
                 {bed.status === "VACUITY" && (
                     <Button
                         mode="contained"
-                        style={BedDetailsStyle.CreateProfileButton}
-                        labelStyle={BedDetailsStyle.CreateProfileButtonText}
+                        style={StaticStyle.Button}
+                        labelStyle={StaticStyle.ButtonText}
                         onPress={() => navigation.navigate('RentBed', { roomID, bedID })}
                     >
                         Tạo hồ sơ
@@ -216,12 +216,12 @@ const BedDetailsStyle = StyleSheet.create({
     CreateProfileButton: {
         marginTop: 20,
         backgroundColor: Theme.PrimaryColor,
-        paddingVertical: 10,
         borderRadius: 16,
     },
     CreateProfileButtonText: {
         fontSize: 16,
         fontFamily: Theme.Bold,
+        padding: 10
     }
 });
 

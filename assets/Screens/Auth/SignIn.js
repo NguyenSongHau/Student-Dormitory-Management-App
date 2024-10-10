@@ -11,7 +11,7 @@ import AuthFooter from '../../Components/Auth/AuthFooter';
 import DismissKeyboard from "../../Components/Common/DismissKeyboard";
 import StaticStyle from "../../Styles/StaticStyle";
 import { signInFields } from '../../Utils/Fields';
-import { ALERT_TYPE, AlertNotificationRoot, Dialog} from 'react-native-alert-notification';
+import { ALERT_TYPE, AlertNotificationRoot, Dialog } from 'react-native-alert-notification';
 import { statusCode } from '../../Configs/Constants';
 import { useAccountDispatch } from '../../Store/Contexts/AccountContext';
 import { setTokens } from '../../Utils/Utilities';

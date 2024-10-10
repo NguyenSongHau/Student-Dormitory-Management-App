@@ -53,6 +53,16 @@ const StaticStyle = StyleSheet.create({
         borderRadius: 20,
         padding: 8,
     },
+    Button: {
+        marginTop: 20,
+        backgroundColor: Theme.PrimaryColor,
+        borderRadius: 16,
+    },
+    ButtonText: {
+        fontSize: 16,
+        fontFamily: Theme.Bold,
+        padding: 10,
+    },
 });
 
 export default StaticStyle;

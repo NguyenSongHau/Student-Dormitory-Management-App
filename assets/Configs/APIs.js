@@ -1,13 +1,13 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://192.168.1.3:8000';
+const BASE_URL = 'https://studentdormitory.vercel.app';
 const URL_TYPE = 'api';
 const API_VERSION = 'v1';
 
 const API_URL = `${BASE_URL}/${URL_TYPE}/${API_VERSION}`;
 
-export const CLIENT_ID = 'p2xw2fFUFlzNAvR2fJqvKRTLszUEkiqAxiVZemmE';
-export const CLIENT_SECRET = 'lXk7P97UPJtgDrMVU6Pzc64s3zPZjIPfVzVb2TnEeWb7f9pibQ3qNBn4W1jZKsXRPsFqmiOxkjl7UXbPJBcjKS62Jr4y45sI3JsjGhdgnMM4OGirndd3Srf8GkyugFap';
+export const CLIENT_ID = 'uOqz2uf28tiT7Xt8C4XMwjJlAat4Wiv4jg9svICb';
+export const CLIENT_SECRET = 'MF9xWpb21LaGo4jMIuBJxeyx8jPMUi3KV8Gpj2hjps5mzEnDU6jJDCDMFPlUH2Zg2nofbfN2L1rmrhU50PXV61mvC7GFBeF9EeiGc9oxXxJ6QlkkbqVfKGiZAQ4bAYXo';
 
 export const endPoints = {
     ////Account
@@ -31,7 +31,11 @@ export const endPoints = {
     //GET, PATCH, DELETE: Lấy, cập nhập, xóa một giường
     'bed-detail': (bedID) => `/beds/${bedID}/`,
     //POST: Thuê giường
-    'rent-bed': (bedID) => `/beds/${bedID}/rent/`
+    'rent-bed': (bedID) => `/beds/${bedID}/rent/`,
+
+
+    //GET: Lấy danh sách hồ sơ thuê của sinh viên đã đăng ký
+    'rental-contact-student' : '/users/students/rental-contacts/'
 };
 
 export default axios.create({

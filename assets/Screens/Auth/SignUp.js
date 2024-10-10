@@ -55,10 +55,10 @@ const SignUp = ({ navigation }) => {
         const formattedDate = moment(account['dob'], 'DD-MM-YYYY').format('YYYY-MM-DD');
         form.append('dob', formattedDate.toString());
         form.append('role', role);
-        
+
         try {
             const response = await APIs.post(endPoints['register-student'], form);
-            
+
             console.log(response);
 
             if (response.status === statusCode.HTTP_201_CREATED) {

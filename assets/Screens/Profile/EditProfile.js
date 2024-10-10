@@ -210,7 +210,7 @@ const EditProfile = ({ navigation }) => {
                      </View>
                   </ImageBackground>
 
-                  <EditProfileView tempAccount={tempAccount} setTempAccount={setTempAccount} />
+                  <EditProfileView tempAccount={tempAccount} setTempAccount={setTempAccount}/>
 
                </DismissKeyboard>
             </ScrollView>

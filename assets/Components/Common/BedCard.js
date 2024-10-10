@@ -1,10 +1,10 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { defaultImage } from '../../Configs/Constants';
 import Theme from '../../Styles/Theme';
-import { statusBed } from '../../Configs/Constants';
 import { screenHeight, screenWidth } from '../../Styles/StaticStyle';
 import RenderHTML from 'react-native-render-html';
 import { formatCurrency } from '../../Utils/Utilities';
+import { statusBed } from '../../Configs/Constants';
 
 const BedCard = ({ instance, onPress}) => {
     return (
@@ -35,7 +35,7 @@ const BedCard = ({ instance, onPress}) => {
                 <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 5}}>
                     <Text style={CardStyle.DescriptionLabel}>Trạng thái:</Text>
                     <Text style={CardStyle.Status}>
-                        {instance.status === "VACUITY" ? statusBed.VACUITY : typeBed.NONVACUITY}
+                        {instance.status === "VACUITY" ? statusBed.VACUITY : statusBed.NONVACUITY}
                     </Text>
                 </View>
             </View>
