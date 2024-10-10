@@ -65,6 +65,11 @@ const Posts = ({ navigation }) => {
         });
     };
 
+    const handleSelectType = (selectedType) => {
+        setType(selectedType);
+        setPage(1);
+    };
+
     return (
         <View style={StaticStyle.BackGround}>
             <DismissKeyboard>
@@ -83,7 +88,7 @@ const Posts = ({ navigation }) => {
 
                         <Filter
                             type={type}
-                            onSelectType={(selectedType) => setType(selectedType)}
+                            onSelectType={handleSelectType}
                         />
                     </View>
 
