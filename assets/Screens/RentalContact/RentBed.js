@@ -63,15 +63,6 @@ const RentBed = ({ navigation, route }) => {
     }, []);
 
     const rentBed = async () => {
-        if (!isSelected) {
-            Dialog.show({
-                type: ALERT_TYPE.WARNING,
-                title: "Chưa chấp nhận điều khoản",
-                textBody: "Vui lòng chấp nhận điều khoản ký túc xá trước khi tạo hồ sơ.",
-                button: "Đóng"
-            });
-            return;
-        }
         try {
             const { accessToken } = await getTokens();
             let response = await authAPI(accessToken).post(endPoints['rent-bed'](bedID));

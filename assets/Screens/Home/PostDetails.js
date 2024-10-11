@@ -69,7 +69,7 @@ const PostDeTails = ({ navigation, route }) => {
                 case 'rooms':
                     return <BedsListView beds={post.room.beds} navigation={navigation} room={post.room} />;
                 case 'comments':
-                    return <Conmments/>
+                    return <Conmments postID={postID}/>
                 default:
                     return null;
             }

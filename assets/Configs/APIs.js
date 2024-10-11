@@ -33,9 +33,13 @@ export const endPoints = {
     //POST: Thuê giường
     'rent-bed': (bedID) => `/beds/${bedID}/rent/`,
 
-
     //GET: Lấy danh sách hồ sơ thuê của sinh viên đã đăng ký
-    'rental-contact-student' : '/users/students/rental-contacts/'
+    'rental-contact-student' : '/users/students/rental-contacts/',
+
+    //GET, POST: Lấy danh sách bình luận và bình luận vào bài viết
+    comments : (postID) => `/posts/${postID}/comments/`,
+    //PUT, DELETE: Cập nhập và xóa bình luận của bài viết
+    'comment-detail': (commentID) => `/comments/${commentID}/`
 };
 
 export default axios.create({
