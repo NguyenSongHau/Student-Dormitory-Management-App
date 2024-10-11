@@ -150,6 +150,12 @@ const Comments = ({ postID }) => {
                 );
                 setIsEditing(false);
                 setEditContent('');
+                Dialog.show({
+                    type: ALERT_TYPE.SUCCESS,
+                    title: "Lỗi",
+                    textBody: "Cập nhập bình luận thành công.",
+                    button: "Đóng",
+                });
             }
         } catch (error) {
             console.error(error);
@@ -187,7 +193,7 @@ const Comments = ({ postID }) => {
                                 Dialog.show({
                                     type: ALERT_TYPE.DANGER,
                                     title: "Thành công",
-                                    textBody: "Xóa bình luận thành công!",
+                                    textBody: "Xóa bình luận thành công.",
                                     button: "Đóng"
                                 });
                             }
