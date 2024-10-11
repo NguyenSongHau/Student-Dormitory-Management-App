@@ -33,6 +33,13 @@ export const gender = {
     F: "Nữ"
 };
 
+export const statusRentalContact = {
+    CANCEL: "Hủy",
+    PROCESSING: "Đang xử lý",
+    SUCCESS : "Thành công",
+    FAIL: "Từ chối"
+};
+
 export const statusCode = {
     HTTP_100_CONTINUE: 100,
     HTTP_101_SWITCHING_PROTOCOLS: 101,

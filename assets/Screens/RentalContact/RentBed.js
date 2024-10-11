@@ -22,7 +22,7 @@ const RentBed = ({ navigation, route }) => {
     const [isSelected, setSelection] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const currentAccount = useAccount();
-
+    
     useEffect(() => {
         const loadRoom = async () => {
             try {
