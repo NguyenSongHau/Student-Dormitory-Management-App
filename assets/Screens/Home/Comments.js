@@ -445,6 +445,7 @@ const CommentStyle = StyleSheet.create({
         borderRadius: 5,
         padding: 10,
         marginBottom: 20,
+        fontSize: 16
     },
     ModalButton: {
         backgroundColor: Theme.PrimaryColor,
@@ -455,6 +456,7 @@ const CommentStyle = StyleSheet.create({
     ModalButtonText: {
         color: 'white',
         textAlign: 'center',
+        fontFamily: Theme.Bold
     },
 });
 
