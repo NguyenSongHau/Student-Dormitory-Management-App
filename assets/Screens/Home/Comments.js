@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { StyleSheet, Text, View, ScrollView, Image, TextInput, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, ScrollView, Image, TextInput, TouchableOpacity, Modal, Alert } from "react-native";
 import APIs, { authAPI, endPoints } from '../../Configs/APIs';
 import { statusCode } from "../../Configs/Constants";
 import Loading from '../../Components/Common/Loading';
@@ -9,7 +9,7 @@ import { defaultImage } from "../../Configs/Constants";
 import moment from 'moment';
 import StaticStyle from "../../Styles/StaticStyle";
 import { getTokens } from "../../Utils/Utilities";
-import { BottomSheet, BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from '@gorhom/bottom-sheet';
+import { BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from '@gorhom/bottom-sheet';
 import { useAccount } from "../../Store/Contexts/AccountContext";
 import { Icon } from "react-native-paper";
 import 'moment/locale/vi';
@@ -27,6 +27,8 @@ const Comments = ({ postID }) => {
     const [submitting, setSubmitting] = useState(false);
     const bottomSheetRef = useRef(null);
     const [selectedComment, setSelectedComment] = useState(null);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editContent, setEditContent] = useState('');
 
     useEffect(() => {
         const loadComments = async () => {
@@ -111,6 +113,103 @@ const Comments = ({ postID }) => {
         bottomSheetRef.current?.present();
     };
 
+    const handleEdit = () => {
+        setEditContent(selectedComment.content);
+        setIsEditing(true);
+    };
+
+    const handleUpdateComment = async () => {
+        if (!editContent.trim()) {
+            Dialog.show({
+                type: ALERT_TYPE.WARNING,
+                title: "Lỗi",
+                textBody: "Chưa nhập nội dung bình luận!",
+                button: "Đóng",
+            });
+            return;
+        }
+
+        setSubmitting(true);
+
+        try {
+            const formData = new FormData();
+            formData.append('content', editContent);
+
+            const { accessToken } = await getTokens();
+            let res = await authAPI(accessToken).put(endPoints['comment-detail'](selectedComment.id), formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            if (res.status === statusCode.HTTP_200_OK) {
+                setComments((prevComments) =>
+                    prevComments.map((comment) =>
+                        comment.id === selectedComment.id ? res.data : comment
+                    )
+                );
+                setIsEditing(false);
+                setEditContent('');
+            }
+        } catch (error) {
+            console.error(error);
+            Dialog.show({
+                type: ALERT_TYPE.DANGER,
+                title: "Lỗi",
+                textBody: "Cập nhật bình luận thất bại, vui lòng thử lại sau!",
+                button: "Đóng"
+            });
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
+    const handleDeleteComment = async () => {
+        Alert.alert(
+            "Xác nhận xóa",
+            "Bạn có chắc chắn muốn xóa bình luận này không?",
+            [
+                {
+                    text: "Hủy",
+                    style: "cancel",
+                    onPress: () => {
+                        bottomSheetRef.current?.close();
+                    },
+                },
+                {
+                    text: "Đồng ý",
+                    onPress: async () => {
+                        const { accessToken } = await getTokens();
+                        try {
+                            let res = await authAPI(accessToken).delete(endPoints['comment-detail'](selectedComment.id));
+                            if (res.status === statusCode.HTTP_204_NO_CONTENT) {
+                                setComments(prevComments => prevComments.filter(comment => comment.id !== selectedComment.id));
+                                Dialog.show({
+                                    type: ALERT_TYPE.DANGER,
+                                    title: "Thành công",
+                                    textBody: "Xóa bình luận thành công!",
+                                    button: "Đóng"
+                                });
+                            }
+                        } catch (error) {
+                            console.error(error);
+                            Dialog.show({
+                                type: ALERT_TYPE.DANGER,
+                                title: "Lỗi",
+                                textBody: "Xóa bình luận thất bại, vui lòng thử lại sau!",
+                                button: "Đóng"
+                            });
+                        } finally {
+                            bottomSheetRef.current?.close();
+                            setSelectedComment(null);
+                        }
+                    },
+                },
+            ],
+            { cancelable: true }
+        );
+    };
+
     if (!isRendered) return <Loading />;
 
     return (
@@ -174,14 +273,39 @@ const Comments = ({ postID }) => {
                 >
                     <BottomSheetView style={CommentStyle.BottomSheetView}>
                         <Text style={CommentStyle.BottomSheetTitle}>Options</Text>
-                        <TouchableOpacity style={CommentStyle.BottomSheetButton} onPress={() => {/* Handle edit */ }}>
+                        <TouchableOpacity style={CommentStyle.BottomSheetButton} onPress={handleEdit}>
                             <Text style={CommentStyle.BottomSheetButtonText}>Chỉnh sửa</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={CommentStyle.BottomSheetButton} onPress={() => {/* Handle delete */ }}>
+                        <TouchableOpacity style={CommentStyle.BottomSheetButton} onPress={handleDeleteComment}>
                             <Text style={CommentStyle.BottomSheetButtonText}>Xóa</Text>
                         </TouchableOpacity>
                     </BottomSheetView>
                 </BottomSheetModal>
+
+                <Modal
+                    visible={isEditing}
+                    animationType="slide"
+                    transparent={true}
+                >
+                    <View style={CommentStyle.ModalContainer}>
+                        <View style={CommentStyle.ModalContent}>
+                            <Text style={CommentStyle.ModalTitle}>Chỉnh sửa bình luận</Text>
+                            <TextInput
+                                value={editContent}
+                                onChangeText={setEditContent}
+                                placeholder="Nhập nội dung mới..."
+                                style={CommentStyle.ModalTextInput}
+                                multiline
+                            />
+                            <TouchableOpacity style={CommentStyle.ModalButton} onPress={handleUpdateComment}>
+                                <Text style={CommentStyle.ModalButtonText}>Cập nhật</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={CommentStyle.ModalButton} onPress={() => setIsEditing(false)}>
+                                <Text style={CommentStyle.ModalButtonText}>Hủy</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
             </View>
         </BottomSheetModalProvider>
     );
@@ -220,12 +344,12 @@ const CommentStyle = StyleSheet.create({
     },
     Content: {
         fontFamily: Theme.Regular,
-        fontSize: 14,
+        fontSize: 16,
         marginVertical: 4,
     },
     CreatedDate: {
         fontFamily: Theme.Regular,
-        fontSize: 12,
+        fontSize: 14,
         color: 'grey',
         fontStyle: 'italic',
     },
@@ -295,7 +419,43 @@ const CommentStyle = StyleSheet.create({
         fontFamily: Theme.Bold,
         fontSize: 16,
         color: Theme.WhiteColor,
-    }
+    },
+    ModalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    ModalContent: {
+        width: '80%',
+        backgroundColor: 'white',
+        borderRadius: 10,
+        padding: 20,
+        elevation: 5,
+    },
+    ModalTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    ModalTextInput: {
+        height: 60,
+        borderColor: '#ccc',
+        borderWidth: 1,
+        borderRadius: 5,
+        padding: 10,
+        marginBottom: 20,
+    },
+    ModalButton: {
+        backgroundColor: Theme.PrimaryColor,
+        borderRadius: 5,
+        padding: 10,
+        marginVertical: 5,
+    },
+    ModalButtonText: {
+        color: 'white',
+        textAlign: 'center',
+    },
 });
 
 export default Comments;
