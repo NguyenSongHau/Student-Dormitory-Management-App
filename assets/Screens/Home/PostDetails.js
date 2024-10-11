@@ -11,6 +11,7 @@ import { defaultImage } from '../../Configs/Constants';
 import Theme from '../../Styles/Theme';
 import PostSummary from '../../Components/Home/PostDetails/PostSummary';
 import BedsListView from '../../Components/Home/PostDetails/BedsListView';
+import Conmments from './Comments';
 
 const PostDeTails = ({ navigation, route }) => {
     const { postID } = route?.params;
@@ -67,6 +68,8 @@ const PostDeTails = ({ navigation, route }) => {
                     return <PostSummary post={post} loading={postLoading} />;
                 case 'rooms':
                     return <BedsListView beds={post.room.beds} navigation={navigation} room={post.room} />;
+                case 'comments':
+                    return <Conmments/>
                 default:
                     return null;
             }

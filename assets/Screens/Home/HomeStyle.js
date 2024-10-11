@@ -41,7 +41,7 @@ const HomeStyle = StyleSheet.create({
         justifyContent: 'space-between',
     },
     TabItem: {
-        marginHorizontal: 40,
+        marginHorizontal: 20,
         paddingVertical: 12,
     },
     TabText: {

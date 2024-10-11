@@ -231,6 +231,7 @@ export const specialistField = () => {
 export const tabsContent = {
     post: [
         { label: 'Tổng quan', name: 'overview' },
-        { label: 'Giường', name: 'rooms' }
+        { label: 'Giường', name: 'rooms' },
+        { label: 'Bình luận', name: 'comments' },
     ]
 }
