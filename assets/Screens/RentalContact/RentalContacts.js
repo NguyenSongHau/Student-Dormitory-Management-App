@@ -18,7 +18,7 @@ const RentalContacts = ({ navigation }) => {
     const [refreshing, setRefreshing] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState('ALL');
     const [filterModalVisible, setFilterModalVisible] = useState(false);
-    
+
     const loadRentContacts = async (pageToLoad = page) => {
         if (pageToLoad < 1) return;
 
@@ -98,6 +98,13 @@ const RentalContacts = ({ navigation }) => {
         toggleFilterModal();
     };
 
+    const goToRentalContactDetails = (rentalContactID) => {
+        navigation.navigate('RentalContactStack', {
+            screen: 'RentalContactDetails',
+            params: { rentalContactID }
+        });
+    };
+
     return (
         <View style={[RentContactStyle.Container, StaticStyle.BackGround]}>
             <Text style={RentContactStyle.Title}>Danh sách hồ sơ</Text>
@@ -136,7 +143,11 @@ const RentalContacts = ({ navigation }) => {
             >
                 {!refreshing && loading && page === 1 && <Loading style={{ marginBottom: 16 }} />}
                 {filteredContacts.map((contact, index) => (
-                    <View key={contact.id} style={RentContactStyle.Card}>
+                    <TouchableOpacity
+                        key={contact.id}
+                        style={RentContactStyle.Card}
+                        onPress={() => goToRentalContactDetails(contact.id)}
+                    >
                         <View style={RentContactStyle.CardContent}>
                             <Icon name="file" size={25} color={Theme.PrimaryColor} style={{ marginRight: 10 }} />
                             <View style={RentContactStyle.CardTextContainer}>
@@ -172,7 +183,7 @@ const RentalContacts = ({ navigation }) => {
                                 <Text style={RentContactStyle.CardValue}>{contact.updated_date}</Text>
                             </View>
                         </View>
-                    </View>
+                    </TouchableOpacity>
                 ))}
                 {loading && page > 1 && <ActivityIndicator size="large" color={Theme.PrimaryColor} style={{ marginBottom: 16 }} />}
             </ScrollView>
@@ -239,14 +250,8 @@ const RentContactStyle = StyleSheet.create({
         borderRadius: 8,
         padding: 10,
         marginVertical: 8,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 1,
-        },
-        shadowOpacity: 0.2,
-        shadowRadius: 1.41,
-        elevation: 2,
+        borderWidth: 1,
+        borderColor: Theme.PrimaryColor
     },
     CardContent: {
         flexDirection: 'row',

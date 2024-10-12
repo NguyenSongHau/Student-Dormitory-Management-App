@@ -3,7 +3,7 @@ import RentalContactDetails from '../../Screens/RentalContact/RentalContactDetai
 
 const Stack = createStackNavigator();
 
-const HomeStack = () => {
+const RentalContactStack = () => {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="RentalContactDetails" component={RentalContactDetails} />
@@ -11,4 +11,4 @@ const HomeStack = () => {
     );
 };
 
-export default HomeStack;
+export default RentalContactStack;
