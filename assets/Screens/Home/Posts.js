@@ -101,6 +101,7 @@ const Posts = ({ navigation }) => {
                         onRefresh={true}
                         setPage={setPage}
                         setName={setName}
+                        setData={setPosts}
                         setRefreshing={setRefreshing}
                         onPress={(post) => goToPostDetails(post.id)}
                     />

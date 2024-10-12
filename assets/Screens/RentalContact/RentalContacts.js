@@ -10,7 +10,7 @@ import StaticStyle from '../../Styles/StaticStyle';
 import Loading from "../../Components/Common/Loading";
 import { statusRentalContact } from "../../Configs/Constants";
 
-const RentalContacts = () => {
+const RentalContacts = ({ navigation }) => {
     const [rentalContacts, setRentalContacts] = useState([]);
     const [filteredContacts, setFilteredContacts] = useState([]);
     const [page, setPage] = useState(1);
@@ -136,7 +136,7 @@ const RentalContacts = () => {
             >
                 {!refreshing && loading && page === 1 && <Loading style={{ marginBottom: 16 }} />}
                 {filteredContacts.map((contact, index) => (
-                    <View key={contact.id.toString()} style={RentContactStyle.Card}>
+                    <View key={contact.id} style={RentContactStyle.Card}>
                         <View style={RentContactStyle.CardContent}>
                             <Icon name="file" size={25} color={Theme.PrimaryColor} style={{ marginRight: 10 }} />
                             <View style={RentContactStyle.CardTextContainer}>

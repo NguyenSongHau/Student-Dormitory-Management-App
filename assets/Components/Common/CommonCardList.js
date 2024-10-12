@@ -15,11 +15,26 @@ const CommonCardList = ({ navigation, data, loading, refreshing, setRefreshing, 
         }
     };
 
-    const handleRefresh = () =>
-        onRefresh({ setPage, setRefreshing, setData: props?.setData, setFilter: props?.setFilter });
+    const handleRefresh = () => {
+        setRefreshing(true);
+        setTimeout(() => {
+            setPage(1);
+            if (props?.setData) {
+                props.setData([]);
+            }
+            if (props?.setFilter) {
+                props.setFilter('ALL');
+            }
+            setRefreshing(false);
+        }, 500);
+    };
 
     const renderRefreshControl = () => (
-        <RefreshControl colors={[Theme.PrimaryColor]} refreshing={refreshing} onRefresh={handleRefresh} />
+        <RefreshControl
+            colors={[Theme.PrimaryColor]}
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+        />
     );
 
     return (
@@ -28,7 +43,7 @@ const CommonCardList = ({ navigation, data, loading, refreshing, setRefreshing, 
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             onScroll={handleOnScroll}
-            refreshControl={props?.onRefresh ? renderRefreshControl() : null}
+            refreshControl={renderRefreshControl()}
         >
             {!refreshing && loading && page === 1 && <Loading style={{ marginBottom: 16 }} />}
             {data.map((item) => (
