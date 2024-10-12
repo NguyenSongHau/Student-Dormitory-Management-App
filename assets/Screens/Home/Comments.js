@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { StyleSheet, Text, View, ScrollView, Image, TextInput, TouchableOpacity, Modal, Alert } from "react-native";
+import { StyleSheet, Text, View, ScrollView, Image, TextInput, TouchableOpacity, Modal, Alert, RefreshControl } from "react-native";
 import APIs, { authAPI, endPoints } from '../../Configs/APIs';
 import { statusCode } from "../../Configs/Constants";
 import Loading from '../../Components/Common/Loading';
@@ -8,7 +8,7 @@ import { ALERT_TYPE, Dialog } from 'react-native-alert-notification';
 import { defaultImage } from "../../Configs/Constants";
 import moment from 'moment';
 import StaticStyle from "../../Styles/StaticStyle";
-import { getTokens } from "../../Utils/Utilities";
+import { getTokens, loadMore, onRefresh } from "../../Utils/Utilities";
 import { BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from '@gorhom/bottom-sheet';
 import { useAccount } from "../../Store/Contexts/AccountContext";
 import { Icon } from "react-native-paper";
@@ -30,40 +30,37 @@ const Comments = ({ postID }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [editContent, setEditContent] = useState('');
 
-    useEffect(() => {
-        const loadComments = async () => {
-            if (!postID || page < 1) return;
+    const loadComments = async () => {
+        if (!postID || page < 1) return;
 
-            setLoading(true);
+        try {
+            let res = await APIs.get(endPoints['comments'](postID), { params: { page } });
 
-            try {
-                let res = await APIs.get(endPoints['comments'](postID), { params: { page } });
-
-                if (res.status === statusCode.HTTP_200_OK) {
-                    if (page === 1) {
-                        setComments(res.data.results);
-                    } else {
-                        setComments((prevComments) => [...prevComments, ...res.data.results]);
-                    }
+            if (res.status === statusCode.HTTP_200_OK) {
+                if (page === 1) {
+                    setComments(res.data.results);
+                } else {
+                    setComments((prevComments) => [...prevComments, ...res.data.results]);
                 }
-                if (res.data.next === null) {
-                    setPage(0);
-                }
-            } catch (error) {
-                console.error(error);
-                Dialog.show({
-                    type: ALERT_TYPE.DANGER,
-                    title: "Lỗi",
-                    textBody: "Hệ thống đang bận, vui lòng thử lại sau!",
-                    button: "Đóng"
-                });
-            } finally {
-                setLoading(false);
-                setRefreshing(false);
-                setIsRendered(true);
             }
-        };
+            if (res.data.next === null) {
+                setPage(0);
+            }
+        } catch (error) {
+            console.error(error);
+            Dialog.show({
+                type: ALERT_TYPE.DANGER,
+                title: "Lỗi",
+                textBody: "Hệ thống đang bận, vui lòng thử lại sau!",
+                button: "Đóng"
+            });
+        } finally {
+            setRefreshing(false);
+            setIsRendered(true);
+        }
+    };
 
+    useEffect(() => {
         loadComments();
     }, [page]);
 
@@ -216,6 +213,28 @@ const Comments = ({ postID }) => {
         );
     };
 
+    const handleOnScroll = ({ nativeEvent }) => {
+        loadMore(nativeEvent, loading, page, setPage);
+    }
+
+    const handleRefresh = () => {
+        onRefresh({
+            setPage,
+            setRefreshing,
+            setData: setComments
+        });
+
+        loadComments(1);
+    }
+
+    const renderRefreshControl = () => (
+        <RefreshControl
+            colors={[Theme.PrimaryColor]}
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+        />
+    );
+
     if (!isRendered) return <Loading />;
 
     return (
@@ -224,7 +243,11 @@ const Comments = ({ postID }) => {
                 <ScrollView
                     showsHorizontalScrollIndicator={false}
                     showsVerticalScrollIndicator={false}
+                    onScroll={handleOnScroll}
+                    refreshControl={renderRefreshControl()}
+                    scrollEventThrottle={16}
                 >
+                    {!refreshing && loading && page === 1 && <Loading style={{ marginBottom: 16 }} />}
                     {comments.map((item) => (
                         <View key={item.id} style={CommentStyle.CommentCard}>
                             <View style={CommentStyle.CommentContent}>
@@ -250,7 +273,7 @@ const Comments = ({ postID }) => {
                             </View>
                         </View>
                     ))}
-                    {loading && <Loading style={CommentStyle.Loading} />}
+                    {loading && page > 1 && <ActivityIndicator size="large" color={Theme.PrimaryColor} style={{ marginBottom: 16 }} />}
                 </ScrollView>
 
                 <View style={CommentStyle.InputContainer}>
