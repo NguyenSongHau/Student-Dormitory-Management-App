@@ -135,6 +135,18 @@ export const profileSections = (currentAccount) => {
                     screen: 'ViolateNoticeSettings',
                 },
             ]
+        },
+        {
+            title: 'Trợ giúp',
+            roles: [roles.ADMINISTRATOR, roles.SPECIALIST, roles.ASSISTANT, roles.STUDENT],
+            items: [
+                {
+                    label: 'Trung tâm trợ giúp',
+                    icon: 'help-circle-outline',
+                    otherTab: 'ChatTab',
+                    params: { avatar: currentAccount.data.avatar, fullName: currentAccount.data.full_name },
+                },
+            ],
         }
     ];
 };
@@ -215,7 +227,7 @@ export const studentField = () => {
             disabled: true,
         }
     ]
-}; 
+};
 
 export const specialistField = () => {
     return [
@@ -226,7 +238,7 @@ export const specialistField = () => {
             disabled: true
         }
     ]
-}; 
+};
 
 export const tabsContent = {
     post: [

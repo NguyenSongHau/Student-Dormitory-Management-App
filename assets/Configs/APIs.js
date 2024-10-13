@@ -19,6 +19,8 @@ export const endPoints = {
     update: '/users/current-user/update/',
     //POST: Đăng ký tài khoản cho sinh viên
     'register-student': '/users/register/',
+    //GET: Lấy ra danh sách chuyên viên và quản lý
+    'specialists-managers': '/users/specialists-managers/',
 
     //GET: Lấy danh sách bài viết
     post : '/posts/',
@@ -35,6 +37,12 @@ export const endPoints = {
 
     //GET: Lấy danh sách hồ sơ thuê của sinh viên đã đăng ký
     'rental-contact-student' : '/users/students/rental-contacts/',
+    //POST: Sinh viên hủy hồ sơ đăng ký
+    'cancel-rental-contact':  (rentalContactID) => `/rental-contacts/${rentalContactID}/cancel/`,
+    //GET: Lấy danh sách hồ sơ thuê cho Chuyên viên
+    'rental-contacts' : '/rental-contacts/',
+    //GET: Lấy thông tin một hồ sơ cho Chuyên viên
+    'rental-contact-details' : (rentalContactID) => `/rental-contacts/${rentalContactID}/`,
 
     //GET, POST: Lấy danh sách bình luận và bình luận vào bài viết
     comments : (postID) => `/posts/${postID}/comments/`,

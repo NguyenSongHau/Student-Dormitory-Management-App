@@ -5,10 +5,24 @@ import RentalContacts from "../../Screens/RentalContact/RentalContacts";
 import Profile from '../../Screens/Profile/Profile';
 import Theme from '../../Styles/Theme';
 import { StatusBar } from "expo-status-bar";
+import { useAccount } from "../../Store/Contexts/AccountContext";
+import RentalContactSpecialist from "../../Screens/RentalContact/RentalContactSpecialist";
+import { roles } from "../../Configs/Constants";
 
 const Tab = createBottomTabNavigator();
 
 const MainTab = () => {
+    const currentAccount = useAccount();
+    
+    const renderRentalContactScreen = () => {
+        if (currentAccount.data.role === roles.STUDENT) {
+            return RentalContacts;
+        } else if (currentAccount.data.role === roles.SPECIALIST) {
+            return RentalContactSpecialist;
+        }
+        return null;
+    };
+
     return (
         <>
             <StatusBar hidden />
@@ -49,7 +63,13 @@ const MainTab = () => {
                 })}
             >
                 <Tab.Screen name="Home" component={Posts} options={{ tabBarLabel: 'Trang chủ' }} />
-                <Tab.Screen name="RentalContacts" component={RentalContacts} options={{ tabBarLabel: 'Hồ sơ' }} />
+                {currentAccount.data.role && (
+                    <Tab.Screen 
+                        name="RentalContacts" 
+                        component={renderRentalContactScreen()} 
+                        options={{ tabBarLabel: 'Hồ sơ' }} 
+                    />
+                )}
                 <Tab.Screen name="Profile" component={Profile} options={{ tabBarLabel: 'Tôi' }} />
             </Tab.Navigator>
         </>

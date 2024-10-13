@@ -12,31 +12,19 @@ import { Button, Icon } from "react-native-paper";
 import { useAccount } from "../../Store/Contexts/AccountContext";
 import { statusRentalContact } from "../../Configs/Constants";
 
-const RentalContactDetails = ({ navigation, route }) => {
+const RentalContactSpecialistDetails = ({ navigation, route }) => {
     const currentAccount = useAccount();
     const { rentalContactID } = route?.params;
     const [contactDetails, setContactDetails] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const loadRentContactDetail = async () => {
+    const loadRentContactSpecialistDetails = async () => {
         setLoading(true);
         const { accessToken } = await getTokens();
         try {
-            let response = await authAPI(accessToken).get(endPoints['rental-contact-student']);
+            let response = await authAPI(accessToken).get(endPoints['rental-contact-details'](rentalContactID));
             if (response.status === statusCode.HTTP_200_OK) {
-                const contacts = response.data.results;
-
-                const foundContact = contacts.find(contact => contact.id === rentalContactID);
-                if (foundContact) {
-                    setContactDetails(foundContact);
-                } else {
-                    Dialog.show({
-                        type: ALERT_TYPE.WARNING,
-                        title: "Không tìm thấy",
-                        textBody: "Hồ sơ không tồn tại!",
-                        button: "Đóng"
-                    });
-                }
+                setContactDetails(response.data);
             }
         } catch (error) {
             console.error(error);
@@ -51,56 +39,8 @@ const RentalContactDetails = ({ navigation, route }) => {
         }
     };
 
-    const cancelRentalContact = async () => {
-        const { accessToken } = await getTokens();
-        try {
-            const response = await authAPI(accessToken).post(endPoints['cancel-rental-contact'](rentalContactID));
-            if (response.status === statusCode.HTTP_200_OK) {
-                Dialog.show({
-                    type: ALERT_TYPE.SUCCESS,
-                    title: "Thành công",
-                    textBody: "Hủy hồ sơ thành công.",
-                    button: "Đóng"
-                });
-                navigation.goBack();
-            } else {
-                Dialog.show({
-                    type: ALERT_TYPE.WARNING,
-                    title: "Lỗi",
-                    textBody: "Không thể hủy hồ sơ, vui lòng thử lại sau!",
-                    button: "Đóng"
-                });
-            }
-        } catch (error) {
-            console.error(error);
-            Dialog.show({
-                type: ALERT_TYPE.DANGER,
-                title: "Lỗi",
-                textBody: "Hệ thống đang bận, vui lòng thử lại sau!",
-                button: "Đóng"
-            });
-        }
-    };
-
-    const handleCancelPress = () => {
-        Alert.alert(
-            "Xác nhận hủy hồ sơ",
-            "Bạn có chắc chắn muốn hủy hồ sơ này không?",
-            [
-                {
-                    text: "Hủy",
-                    style: "cancel"
-                },
-                {
-                    text: "Xác nhận",
-                    onPress: cancelRentalContact
-                }
-            ]
-        );
-    };
-
     useEffect(() => {
-        loadRentContactDetail();
+        loadRentContactSpecialistDetails();
     }, [rentalContactID]);
 
     if (loading) {
@@ -255,9 +195,8 @@ const RentalContactDetails = ({ navigation, route }) => {
                                     mode="contained"
                                     style={StaticStyle.Button}
                                     labelStyle={StaticStyle.ButtonText}
-                                    onPress={handleCancelPress}
                                 >
-                                    Hủy hồ sơ
+                                    Duyệt hồ sơ
                                 </Button>
                             )}
                         </View>
@@ -268,4 +207,4 @@ const RentalContactDetails = ({ navigation, route }) => {
     );
 };
 
-export default RentalContactDetails;
+export default RentalContactSpecialistDetails;

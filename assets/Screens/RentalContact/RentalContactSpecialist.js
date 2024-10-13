@@ -10,7 +10,7 @@ import StaticStyle from '../../Styles/StaticStyle';
 import Loading from "../../Components/Common/Loading";
 import { statusRentalContact } from "../../Configs/Constants";
 
-const RentalContacts = ({ navigation }) => {
+const RentalContactSpecialist = ({ navigation }) => {
     const [rentalContacts, setRentalContacts] = useState([]);
     const [filteredContacts, setFilteredContacts] = useState([]);
     const [page, setPage] = useState(1);
@@ -25,7 +25,7 @@ const RentalContacts = ({ navigation }) => {
         setLoading(true);
         const { accessToken } = await getTokens();
         try {
-            let response = await authAPI(accessToken).get(endPoints['rental-contact-student'], {
+            let response = await authAPI(accessToken).get(endPoints['rental-contacts'], {
                 params: { page: pageToLoad }
             });
             if (response.status === statusCode.HTTP_200_OK) {
@@ -105,8 +105,8 @@ const RentalContacts = ({ navigation }) => {
     };
 
     const goToRentalContactDetails = (rentalContactID) => {
-        navigation.navigate('RentalContactStack', {
-            screen: 'RentalContactDetails',
+        navigation.navigate('RentalContactSpecialistStack', {
+            screen: 'RentalContactSpecialistDetails',
             params: { rentalContactID }
         });
     };
@@ -291,4 +291,4 @@ const RentContactStyle = StyleSheet.create({
     }
 });
 
-export default RentalContacts;
+export default RentalContactSpecialist;
