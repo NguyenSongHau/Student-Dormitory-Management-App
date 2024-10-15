@@ -1,6 +1,6 @@
 import { RefreshControl, ScrollView } from 'react-native';
 import Theme from '../../Styles/Theme';
-import { loadMore, onRefresh } from '../../Utils/Utilities';
+import { loadMore } from '../../Utils/Utilities';
 import Loading from './Loading';
 import CommonCard from './CommonCard';
 
@@ -24,6 +24,9 @@ const CommonCardList = ({ navigation, data, loading, refreshing, setRefreshing, 
             }
             if (props?.setFilter) {
                 props.setFilter('ALL');
+            }
+            if (props?.setName) {
+                props.setName('');
             }
             setRefreshing(false);
         }, 500);
