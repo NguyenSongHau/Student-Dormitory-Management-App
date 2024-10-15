@@ -11,15 +11,6 @@ const BedCardList = ({ data, loading, refreshing, setRefreshing, page, setPage, 
         }
     };
 
-    const handleRefresh = () => {
-        setRefreshing(true);
-        onRefresh({
-            setPage,
-            setRefreshing,
-            setData,
-        });
-    };
-
     const renderRefreshControl = () => (
         <RefreshControl
             colors={[Theme.PrimaryColor]}

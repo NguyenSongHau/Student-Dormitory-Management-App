@@ -11,7 +11,7 @@ import StaticStyle from "../../Styles/StaticStyle";
 import { getTokens, loadMore, onRefresh } from "../../Utils/Utilities";
 import { BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from '@gorhom/bottom-sheet';
 import { useAccount } from "../../Store/Contexts/AccountContext";
-import { Icon } from "react-native-paper";
+import { ActivityIndicator, Icon } from "react-native-paper";
 import 'moment/locale/vi';
 
 moment.locale('vi');
@@ -188,7 +188,7 @@ const Comments = ({ postID }) => {
                             if (res.status === statusCode.HTTP_204_NO_CONTENT) {
                                 setComments(prevComments => prevComments.filter(comment => comment.id !== selectedComment.id));
                                 Dialog.show({
-                                    type: ALERT_TYPE.DANGER,
+                                    type: ALERT_TYPE.SUCCESS,
                                     title: "Thành công",
                                     textBody: "Xóa bình luận thành công.",
                                     button: "Đóng"
@@ -235,6 +235,14 @@ const Comments = ({ postID }) => {
         />
     );
 
+    if (refreshing) {
+        return (
+            <View style={CommentStyle.LoadingContanier}>
+                <Loading />
+            </View>
+        );
+    }
+
     if (!isRendered) return <Loading />;
 
     return (
@@ -247,7 +255,7 @@ const Comments = ({ postID }) => {
                     refreshControl={renderRefreshControl()}
                     scrollEventThrottle={16}
                 >
-                    {!refreshing && loading && page === 1 && <Loading style={{ marginBottom: 16 }} />}
+                    {!refreshing && loading && page === 1 && <Loading style={{ marginBottom: 50 }} />}
                     {comments.map((item) => (
                         <View key={item.id} style={CommentStyle.CommentCard}>
                             <View style={CommentStyle.CommentContent}>
@@ -456,14 +464,14 @@ const CommentStyle = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     ModalContent: {
-        width: '80%',
+        width: '86%',
         backgroundColor: 'white',
         borderRadius: 10,
         padding: 20,
         elevation: 5,
     },
     ModalTitle: {
-        fontSize: 20,
+        fontSize: 22,
         fontWeight: 'bold',
         marginBottom: 10,
     },
@@ -474,7 +482,7 @@ const CommentStyle = StyleSheet.create({
         borderRadius: 5,
         padding: 10,
         marginBottom: 20,
-        fontSize: 16
+        fontSize: 18
     },
     ModalButton: {
         backgroundColor: Theme.PrimaryColor,
@@ -483,10 +491,16 @@ const CommentStyle = StyleSheet.create({
         marginVertical: 5,
     },
     ModalButtonText: {
-        color: 'white',
+        color: Theme.WhiteColor,
         textAlign: 'center',
-        fontFamily: Theme.Bold
+        fontFamily: Theme.Bold,
+        fontSize: 17
     },
+    LoadingContanier:{
+          flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
 });
 
 export default Comments;

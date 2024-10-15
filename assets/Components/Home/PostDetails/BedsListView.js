@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, Image, StyleSheet, ActivityIndicator } from 'react-native';
 import Theme from '../../../Styles/Theme';
 import BedCardList from '../../Common/BedCardList';
+import Loading from '../../Common/Loading';
 
 const BedsListView = ({ beds, navigation, room }) => {
     const [filteredBeds, setFilteredBeds] = useState(beds || []);
@@ -31,8 +32,7 @@ const BedsListView = ({ beds, navigation, room }) => {
     if (loading) {
         return (
             <View style={BedsListViewStyle.LoadingContainer}>
-                <ActivityIndicator size="large" color={Theme.PrimaryColor} />
-                <Text style={BedsListViewStyle.LoadingText}>Đang tải giường...</Text>
+                <Loading/>
             </View>
         );
     }
@@ -93,12 +93,6 @@ const BedsListViewStyle = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    LoadingText: {
-        fontFamily: Theme.Bold,
-        color: Theme.PrimaryColor,
-        fontSize: 16,
-        marginTop: 10,
     },
 });
 
