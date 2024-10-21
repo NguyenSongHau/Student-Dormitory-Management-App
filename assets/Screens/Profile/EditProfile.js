@@ -5,14 +5,13 @@ import { useEffect, useRef, useState } from "react";
 import Loading from '../../Components/Common/Loading';
 import { defaultImage, statusCode } from "../../Configs/Constants";
 import { useAccount, useAccountDispatch } from '../../Store/Contexts/AccountContext';
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from '@gorhom/bottom-sheet';
 import DismissKeyboard from '../../Components/Common/DismissKeyboard';
 import StaticStyle, { screenHeight } from '../../Styles/StaticStyle';
 import EditProfileView from "../../Components/Profile/EditProfile/EditProfileView";
 import { ALERT_TYPE, Dialog } from 'react-native-alert-notification';
 import { Image, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { getTokens, refreshAccessToken } from "../../Utils/Utilities";
+import { formatDateDob, getTokens, refreshAccessToken } from "../../Utils/Utilities";
 import { authAPI, endPoints } from "../../Configs/APIs";
 import { UpdateAccountAction } from "../../Store/Actions/AccountAction";
 import moment from "moment";
@@ -20,7 +19,7 @@ import moment from "moment";
 const EditProfile = ({ navigation }) => {
    const currentAccount = useAccount();
    const dispatch = useAccountDispatch();
-   const refSheetSelectImage = useRef(BottomSheet);
+   const refSheetSelectImage = useRef(null);
    const [isRendered, setIsRendered] = useState(false);
    const [tempAccount, setTempAccount] = useState(currentAccount);
    const [indexSheetSelectImage, setIndexSheetSelectImage] = useState(-1);
@@ -86,7 +85,6 @@ const EditProfile = ({ navigation }) => {
 
       try {
          let response = await authAPI(accessToken).patch(endPoints['update'], form);
-
          if (response.status === statusCode.HTTP_200_OK) {
             dispatch(UpdateAccountAction(response.data));
 
@@ -174,20 +172,19 @@ const EditProfile = ({ navigation }) => {
                   },
                },
             }));
-
             refSheetSelectImage.current.close();
          }
       }
 
-      if (indexSheetSelectImage > -1) {
-         refSheetSelectImage?.current?.close();
+      if (refSheetSelectImage?.current) {
+         refSheetSelectImage.current.close();
       }
    };
 
    if (!isRendered) return <Loading />;
 
    return (
-      <GestureHandlerRootView>
+      <BottomSheetModalProvider>
          <View style={StaticStyle.BackGround}>
             <ScrollView showsVerticalScrollIndicator={false}>
                <DismissKeyboard>
@@ -195,12 +192,17 @@ const EditProfile = ({ navigation }) => {
                      <View style={EditProfileStyle.AvatarTouch}>
                         <TouchableOpacity
                            activeOpacity={0.8}
-                           onPress={() => refSheetSelectImage?.current?.expand()}
+                           onPress={() => {
+                              refSheetSelectImage?.current?.present();
+                           }}
                         >
                            <Image
                               style={EditProfileStyle.Avatar}
                               source={{
-                                 uri: tempAccount.data.avatar === null ? defaultImage.DEFAULT_AVATAR : tempAccount.data.avatar,
+                                 uri:  
+                                    typeof tempAccount.data.avatar === 'string'
+                                    ? tempAccount.data.avatar
+                                    : tempAccount.data.avatar.uri,
                               }}
                            />
                            <View style={EditProfileStyle.CameraIcon}>
@@ -210,35 +212,29 @@ const EditProfile = ({ navigation }) => {
                      </View>
                   </ImageBackground>
 
-                  <EditProfileView tempAccount={tempAccount} setTempAccount={setTempAccount}/>
+                  <EditProfileView tempAccount={tempAccount} setTempAccount={setTempAccount} />
 
                </DismissKeyboard>
             </ScrollView>
          </View>
 
-         <BottomSheet
-            ref={refSheetSelectImage}
-            index={-1}
-            snapPoints={['25%']}
+         <BottomSheetModal
+            ref={refSheetSelectImage} 
+            index={0}
+            snapPoints={['21%']}
             enablePanDownToClose
             onChange={setIndexSheetSelectImage}
-            backgroundStyle={{ backgroundColor: '#273238' }}
-            handleIndicatorStyle={{ backgroundColor: Theme.WhiteColor }}
          >
             <BottomSheetView style={StaticStyle.BottomSheetView}>
-               <TouchableOpacity style={StaticStyle.BottomSheetItem} onPress={handleGallerySelection}>
-                  <Icon source="image-multiple" color="white" size={24} />
-                  <Text style={StaticStyle.BottomSheetItemText}>Chọn ảnh từ thư viện</Text>
+               <TouchableOpacity style={StaticStyle.BottomSheetButton} onPress={handleGallerySelection}>
+                  <Text style={StaticStyle.BottomSheetButtonText}>Chọn ảnh từ thư viện</Text>
+               </TouchableOpacity>
+               <TouchableOpacity style={StaticStyle.BottomSheetButton} onPress={handleCameraSelection}>
+                  <Text style={StaticStyle.BottomSheetButtonText}>Chụp ảnh từ camera</Text>
                </TouchableOpacity>
             </BottomSheetView>
-            <BottomSheetView style={StaticStyle.BottomSheetView}>
-               <TouchableOpacity style={StaticStyle.BottomSheetItem} onPress={handleCameraSelection}>
-                  <Icon source="camera" color="white" size={24} />
-                  <Text style={StaticStyle.BottomSheetItemText}>Chụp ảnh từ camera</Text>
-               </TouchableOpacity>
-            </BottomSheetView>
-         </BottomSheet>
-      </GestureHandlerRootView>
+         </BottomSheetModal>
+      </BottomSheetModalProvider>
    );
 };
 

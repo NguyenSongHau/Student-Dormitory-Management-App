@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { roles } from '../../../Configs/Constants';
 import { userFields, studentField, specialistField } from '../../../Utils/Fields';
 import { View, Text, StyleSheet } from 'react-native';
@@ -8,8 +8,12 @@ import Theme from '../../../Styles/Theme';
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 
 const EditProfileView = ({ tempAccount, setTempAccount }) => {
-    const [selectedDate, setSelectedDate] = useState(tempAccount.dob ? new Date(tempAccount.dob) : null);
-
+    const [selectedDate, setSelectedDate] = useState(
+        tempAccount.data.dob 
+            ? moment(tempAccount.data.dob, 'DD-MM-YYYY').toDate() 
+            : null
+    );
+    
     const onChangeDate = (event, date) => {
         if (event.type === 'set' && date) {
             setSelectedDate(date);
@@ -17,7 +21,7 @@ const EditProfileView = ({ tempAccount, setTempAccount }) => {
             updateTempAccount('dob', formattedDate);
         }
     };
-
+    
     const showDatePicker = () => {
         DateTimePickerAndroid.open({
             value: selectedDate || new Date(),
@@ -27,7 +31,6 @@ const EditProfileView = ({ tempAccount, setTempAccount }) => {
         });
     };
 
-    
     const updateTempAccount = (field, value) => {
         setTempAccount((prevTempAccount) => {
             const updatedTempAccount = {
@@ -46,7 +49,7 @@ const EditProfileView = ({ tempAccount, setTempAccount }) => {
         <View style={[EditProfileViewStyle.FormContainer, EditProfileViewStyle.SectionContainer]}>
             {userFields(tempAccount).map((field, index) => {
                 const isDateField = field.name === 'dob';
-                const id = tempAccount.data.id;
+                const id = tempAccount.data.id
                 return (
                     <View key={index} style={EditProfileViewStyle.FormWrap}>
                         <Text style={EditProfileViewStyle.FormText}>{field.label}</Text>

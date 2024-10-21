@@ -155,6 +155,7 @@ const RentalContacts = ({ navigation }) => {
                 scrollEventThrottle={16}
             >
                 {!refreshing && loading && page === 1 && <Loading style={{ marginBottom: 16 }} />}
+                
                 {filteredContacts.map((contact) => (
                     <RentalContactCard
                         key={contact.id}
