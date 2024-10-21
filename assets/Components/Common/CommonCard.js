@@ -5,7 +5,6 @@ import { defaultImage } from "../../Configs/Constants";
 import { screenHeight, screenWidth } from "../../Styles/StaticStyle";
 import { formatDate } from '../../Utils/Utilities';
 import Theme from "../../Styles/Theme";
-import { typeRoom } from "../../Configs/Constants";
 
 const CommonCard = ({ instance, ...props }) => {
     return (
@@ -28,10 +27,6 @@ const CommonCard = ({ instance, ...props }) => {
                         ellipsizeMode: 'tail',
                     }}
                 />
-
-                <Text style={CardStyle.CardType}>
-                    Loại: {instance.room.type === "SERVICE" ? typeRoom.SERVICE : typeRoom.NORMAL}
-                </Text>
 
                 <Text style={CardStyle.CardDate}>
                     Ngày tạo: <Text>{formatDate(instance.created_date)}</Text>
@@ -62,8 +57,9 @@ const CardStyle = StyleSheet.create({
     },
     CardTitle: {
         fontSize: 24,
-        marginVertical: 10,
         fontFamily: Theme.Bold,
+        marginTop: 10,
+        marginBottom: 5
     },
     CardDescription: {
         width: '100%',

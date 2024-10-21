@@ -3,11 +3,11 @@ import { ScrollView, Text, View, StyleSheet, RefreshControl, ActivityIndicator, 
 import { formatDate, getTokens, loadMore, onRefresh } from "../../Utils/Utilities";
 import { authAPI, endPoints } from "../../Configs/APIs";
 import { statusCode } from "../../Configs/Constants";
-import Icon from 'react-native-vector-icons/FontAwesome';
 import Theme from '../../Styles/Theme';
 import { ALERT_TYPE, Dialog } from 'react-native-alert-notification';
 import StaticStyle from '../../Styles/StaticStyle';
 import Loading from "../../Components/Common/Loading";
+import RentalContactCard from "../../Components/RentalContact/RentalContactCard";
 import { statusRentalContact } from "../../Configs/Constants";
 
 const RentalContacts = ({ navigation }) => {
@@ -155,48 +155,12 @@ const RentalContacts = ({ navigation }) => {
                 scrollEventThrottle={16}
             >
                 {!refreshing && loading && page === 1 && <Loading style={{ marginBottom: 16 }} />}
-                {filteredContacts.map((contact, index) => (
-                    <TouchableOpacity
+                {filteredContacts.map((contact) => (
+                    <RentalContactCard
                         key={contact.id}
-                        style={RentContactStyle.Card}
+                        contact={contact}
                         onPress={() => goToRentalContactDetails(contact.id)}
-                    >
-                        <View style={RentContactStyle.CardContent}>
-                            <Icon name="file" size={25} color={Theme.PrimaryColor} style={{ marginRight: 10 }} />
-                            <View style={RentContactStyle.CardTextContainer}>
-                                <Text style={RentContactStyle.CardTitle}>Mã hồ sơ:</Text>
-                                <Text style={RentContactStyle.CardValue}>{contact.rental_number}</Text>
-                            </View>
-                        </View>
-                        <View style={RentContactStyle.CardContent}>
-                            <Icon name="clock-o" size={25} color={Theme.PrimaryColor} style={{ marginRight: 10 }} />
-                            <View style={RentContactStyle.CardTextContainer}>
-                                <Text style={RentContactStyle.CardTitle}>Thời gian thuê:</Text>
-                                <Text style={RentContactStyle.CardValue}>{contact.time_rental}</Text>
-                            </View>
-                        </View>
-                        <View style={RentContactStyle.CardContent}>
-                            <Icon name="check-circle" size={25} color={Theme.PrimaryColor} style={{ marginRight: 10 }} />
-                            <View style={RentContactStyle.CardTextContainer}>
-                                <Text style={RentContactStyle.CardTitle}>Trạng thái:</Text>
-                                <Text style={RentContactStyle.CardValueStatus}>{statusRentalContact[contact.status]}</Text>
-                            </View>
-                        </View>
-                        <View style={RentContactStyle.CardContent}>
-                            <Icon name="calendar" size={25} color={Theme.PrimaryColor} style={{ marginRight: 10 }} />
-                            <View style={RentContactStyle.CardTextContainer}>
-                                <Text style={RentContactStyle.CardTitle}>Ngày tạo:</Text>
-                                <Text style={RentContactStyle.CardValue}>{formatDate(contact.created_date)}</Text>
-                            </View>
-                        </View>
-                        <View style={RentContactStyle.CardContent}>
-                            <Icon name="refresh" size={25} color={Theme.PrimaryColor} style={{ marginRight: 10 }} />
-                            <View style={RentContactStyle.CardTextContainer}>
-                                <Text style={RentContactStyle.CardTitle}>Ngày cập nhật:</Text>
-                                <Text style={RentContactStyle.CardValue}>{formatDate(contact.updated_date)}</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
+                    />
                 ))}
                 {loading && page > 1 && <ActivityIndicator size="large" color={Theme.PrimaryColor} style={{ marginBottom: 16 }} />}
             </ScrollView>
@@ -258,37 +222,6 @@ const RentContactStyle = StyleSheet.create({
         marginTop: 20,
         fontFamily: Theme.Bold,
     },
-    Card: {
-        backgroundColor: Theme.WhiteColor,
-        borderRadius: 8,
-        padding: 10,
-        marginVertical: 8,
-        borderWidth: 1,
-        borderColor: Theme.PrimaryColor
-    },
-    CardContent: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 10,
-    },
-    CardTextContainer: {
-        flex: 1,
-    },
-    CardTitle: {
-        fontFamily: Theme.Bold,
-        fontSize: 16,
-        color: Theme.GrayColor,
-    },
-    CardValue: {
-        fontFamily: Theme.Regular,
-        fontSize: 16,
-        color: Theme.BlackColor,
-    },
-    CardValueStatus: {
-        fontFamily: Theme.Bold,
-        fontSize: 16,
-        color: Theme.PrimaryColor,
-    }
 });
 
 export default RentalContacts;

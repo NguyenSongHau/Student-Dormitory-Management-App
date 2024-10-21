@@ -153,6 +153,7 @@ const Comments = ({ postID }) => {
                     textBody: "Cập nhập bình luận thành công.",
                     button: "Đóng",
                 });
+                bottomSheetRef.current?.close();
             }
         } catch (error) {
             console.error(error);
@@ -193,6 +194,7 @@ const Comments = ({ postID }) => {
                                     textBody: "Xóa bình luận thành công.",
                                     button: "Đóng"
                                 });
+                                bottomSheetRef.current?.close();
                             }
                         } catch (error) {
                             console.error(error);
@@ -308,13 +310,13 @@ const Comments = ({ postID }) => {
                     enablePanDownToClose
                     onDismiss={() => setSelectedComment(null)}
                 >
-                    <BottomSheetView style={CommentStyle.BottomSheetView}>
-                        <Text style={CommentStyle.BottomSheetTitle}>Options</Text>
-                        <TouchableOpacity style={CommentStyle.BottomSheetButton} onPress={handleEdit}>
-                            <Text style={CommentStyle.BottomSheetButtonText}>Chỉnh sửa</Text>
+                    <BottomSheetView style={StaticStyle.BottomSheetView}>
+                        <Text style={StaticStyle.BottomSheetTitle}>Lựa chọn</Text>
+                        <TouchableOpacity style={StaticStyle.BottomSheetButton} onPress={handleEdit}>
+                            <Text style={StaticStyle.BottomSheetButtonText}>Chỉnh sửa</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={CommentStyle.BottomSheetButton} onPress={handleDeleteComment}>
-                            <Text style={CommentStyle.BottomSheetButtonText}>Xóa</Text>
+                        <TouchableOpacity style={StaticStyle.BottomSheetButton} onPress={handleDeleteComment}>
+                            <Text style={StaticStyle.BottomSheetButtonText}>Xóa</Text>
                         </TouchableOpacity>
                     </BottomSheetView>
                 </BottomSheetModal>
@@ -430,32 +432,6 @@ const CommentStyle = StyleSheet.create({
         position: 'absolute',
         right: 10,
         top: 10,
-    },
-    BottomSheetView: {
-        padding: 16,
-        backgroundColor: Theme.WhiteColor,
-        borderTopLeftRadius: 16,
-        borderTopRightRadius: 16,
-        elevation: 4,
-    },
-    BottomSheetTitle: {
-        fontFamily: Theme.Bold,
-        fontSize: 18,
-        marginBottom: 12,
-        textAlign: 'center',
-    },
-    BottomSheetButton: {
-        paddingVertical: 12,
-        paddingHorizontal: 16,
-        backgroundColor: Theme.PrimaryColor,
-        borderRadius: 8,
-        marginVertical: 6,
-        alignItems: 'center',
-    },
-    BottomSheetButtonText: {
-        fontFamily: Theme.Bold,
-        fontSize: 16,
-        color: Theme.WhiteColor,
     },
     ModalContainer: {
         flex: 1,

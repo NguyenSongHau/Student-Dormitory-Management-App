@@ -18,21 +18,6 @@ const StaticStyle = StyleSheet.create({
         height: '100%',
         backgroundColor: Theme.WhiteColor,
     },
-    BottomSheetView: {
-        padding: 16,
-        marginBottom: 12,
-        backgroundColor: '#273238',
-    },
-    BottomSheetItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    BottomSheetItemText: {
-        fontFamily: Theme.SemiBold,
-        fontSize: 20,
-        color: Theme.WhiteColor,
-        marginLeft: 16,
-    },
     HeaderButton: {
         height: 40,
         minWidth: 80,
@@ -62,6 +47,33 @@ const StaticStyle = StyleSheet.create({
         fontSize: 16,
         fontFamily: Theme.Bold,
         padding: 10,
+    },
+    BottomSheetView: {
+        paddingLeft: 16,
+        paddingRight: 16,
+        backgroundColor: Theme.WhiteColor,
+        borderTopLeftRadius: 16,
+        borderTopRightRadius: 16,
+        elevation: 4,
+    },
+    BottomSheetTitle: {
+        fontSize: 24,
+        fontFamily: Theme.Bold,
+        color: Theme.WhiteColor,
+        marginBottom: 16,
+        textAlign: 'center',
+    },
+    BottomSheetButton: {
+        marginVertical: 8,
+        padding: 12,
+        borderRadius: 8,
+        backgroundColor: Theme.PrimaryColor,
+        alignItems: 'center',
+    },
+    BottomSheetButtonText: {
+        color: Theme.WhiteColor,
+        fontFamily: Theme.Bold,
+        fontSize: 18,
     },
 });
 

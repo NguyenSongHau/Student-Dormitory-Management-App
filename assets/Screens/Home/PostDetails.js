@@ -12,6 +12,7 @@ import Theme from '../../Styles/Theme';
 import PostSummary from '../../Components/Home/PostDetails/PostSummary';
 import BedsListView from '../../Components/Home/PostDetails/BedsListView';
 import Conmments from './Comments';
+import Loading from '../../Components/Common/Loading';
 
 const PostDeTails = ({ navigation, route }) => {
     const { postID } = route?.params;
@@ -78,45 +79,51 @@ const PostDeTails = ({ navigation, route }) => {
 
     return (
         <View style={StaticStyle.BackGround} onTouchStart={() => Keyboard.dismiss()}>
-            <Animated.View style={{ ...HomeStyle.Image, height: animatedHeight }}>
-                <ImageBackground
-                    source={{ uri: post.image ? post.image : defaultImage.DEFAULT_ROOM }}
-                    style={{ flex: 1 }}>
-                    <TouchableOpacity
-                        activeOpacity={0.8}
-                        style={StaticStyle.BackButton}
-                        onPress={() => navigation.goBack()}>
-                        <AntDesign name="arrowleft" color={Theme.PrimaryColor} size={30} />
-                    </TouchableOpacity>
-                </ImageBackground>
-            </Animated.View>
+            {postLoading ? (
+                <Loading />
+            ) : (
+                <>
+                    <Animated.View style={{ ...HomeStyle.Image, height: animatedHeight }}>
+                        <ImageBackground
+                            source={{ uri: post.image ? post.image : defaultImage.DEFAULT_ROOM }}
+                            style={{ flex: 1 }}>
+                            <TouchableOpacity
+                                activeOpacity={0.8}
+                                style={StaticStyle.BackButton}
+                                onPress={() => navigation.goBack()}>
+                                <AntDesign name="arrowleft" color={Theme.PrimaryColor} size={30} />
+                            </TouchableOpacity>
+                        </ImageBackground>
+                    </Animated.View>
 
-            <View style={HomeStyle.Body}>
-                <View style={HomeStyle.Header}>
-                    <Text style={HomeStyle.HeaderText}>{post.name}</Text>
-                </View>
+                    <View style={HomeStyle.Body}>
+                        <View style={HomeStyle.Header}>
+                            <Text style={HomeStyle.HeaderText}>{post.name}</Text>
+                        </View>
 
-                <View style={HomeStyle.TabContainer}>
-                    {tabsContent.post.map((f) => (
-                        <TouchableOpacity
-                            key={f.name}
-                            style={HomeStyle.TabItem}
-                            disabled={f.name === tab ? true : false}
-                            onPress={() => handleChangeTab(f.name)}
-                        >
-                            <Text
-                                style={{
-                                    ...HomeStyle.TabText,
-                                    color: f.name === tab ? Theme.PrimaryColor : 'black',
-                                }}
-                            >
-                                {f.label}
-                            </Text>
-                        </TouchableOpacity>
-                    ))}
-                </View>
-                {tabContent()}
-            </View>
+                        <View style={HomeStyle.TabContainer}>
+                            {tabsContent.post.map((f) => (
+                                <TouchableOpacity
+                                    key={f.name}
+                                    style={HomeStyle.TabItem}
+                                    disabled={f.name === tab ? true : false}
+                                    onPress={() => handleChangeTab(f.name)}
+                                >
+                                    <Text
+                                        style={{
+                                            ...HomeStyle.TabText,
+                                            color: f.name === tab ? Theme.PrimaryColor : 'black',
+                                        }}
+                                    >
+                                        {f.label}
+                                    </Text>
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+                        {tabContent()}
+                    </View>
+                </>
+            )}
         </View>
     );
 }

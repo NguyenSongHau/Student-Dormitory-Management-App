@@ -17,7 +17,7 @@ const HomeStyle = StyleSheet.create({
     },
     Header: {
         paddingHorizontal: 8,
-        flexDirection: 'row',
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'space-between',
     },

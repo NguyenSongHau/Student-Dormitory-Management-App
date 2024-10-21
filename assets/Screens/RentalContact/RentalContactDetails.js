@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { Text, View, ActivityIndicator, TouchableOpacity, ScrollView, Alert } from "react-native";
+import { useCallback, useEffect, useState } from "react";
+import { Text, View, ActivityIndicator, TouchableOpacity, ScrollView, Alert, RefreshControl } from "react-native";
 import { formatCurrency, formatDate, getTokens } from "../../Utils/Utilities";
 import { authAPI, endPoints } from "../../Configs/APIs";
-import { gender, statusCode } from "../../Configs/Constants";
+import { gender, statusCode, typeRoom } from "../../Configs/Constants";
 import { ALERT_TYPE, Dialog } from 'react-native-alert-notification';
 import Theme from '../../Styles/Theme';
 import StaticStyle from "../../Styles/StaticStyle";
@@ -11,33 +11,21 @@ import { AntDesign } from '@expo/vector-icons';
 import { Button, Icon } from "react-native-paper";
 import { useAccount } from "../../Store/Contexts/AccountContext";
 import { statusRentalContact } from "../../Configs/Constants";
+import Loading from "../../Components/Common/Loading";
 
 const RentalContactDetails = ({ navigation, route }) => {
     const currentAccount = useAccount();
     const { rentalContactID } = route?.params;
     const [contactDetails, setContactDetails] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
 
     const loadRentContactDetail = async () => {
         setLoading(true);
         const { accessToken } = await getTokens();
         try {
-            let response = await authAPI(accessToken).get(endPoints['rental-contact-student']);
-            if (response.status === statusCode.HTTP_200_OK) {
-                const contacts = response.data.results;
-
-                const foundContact = contacts.find(contact => contact.id === rentalContactID);
-                if (foundContact) {
-                    setContactDetails(foundContact);
-                } else {
-                    Dialog.show({
-                        type: ALERT_TYPE.WARNING,
-                        title: "Không tìm thấy",
-                        textBody: "Hồ sơ không tồn tại!",
-                        button: "Đóng"
-                    });
-                }
-            }
+            let response = await authAPI(accessToken).get(endPoints['rental-contact-detail-student'](rentalContactID));
+            setContactDetails(response.data);
         } catch (error) {
             console.error(error);
             Dialog.show({
@@ -51,6 +39,12 @@ const RentalContactDetails = ({ navigation, route }) => {
         }
     };
 
+    const onRefresh = useCallback(async () => {
+        setRefreshing(true);
+        await loadRentContactDetail();
+        setRefreshing(false);
+    }, [rentalContactID]);
+
     const cancelRentalContact = async () => {
         const { accessToken } = await getTokens();
         try {
@@ -59,10 +53,13 @@ const RentalContactDetails = ({ navigation, route }) => {
                 Dialog.show({
                     type: ALERT_TYPE.SUCCESS,
                     title: "Thành công",
-                    textBody: "Hủy hồ sơ thành công.",
+                    textBody: response.data.message,
                     button: "Đóng"
                 });
-                navigation.goBack();
+
+                setTimeout(() => {
+                    navigation.goBack();
+                }, 2000);
             } else {
                 Dialog.show({
                     type: ALERT_TYPE.WARNING,
@@ -104,11 +101,7 @@ const RentalContactDetails = ({ navigation, route }) => {
     }, [rentalContactID]);
 
     if (loading) {
-        return <ActivityIndicator size="large" color={Theme.PrimaryColor} />;
-    }
-
-    if (!contactDetails) {
-        return <Text>Không có hồ sơ</Text>;
+        return <Loading />
     }
 
     return (
@@ -126,6 +119,9 @@ const RentalContactDetails = ({ navigation, route }) => {
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
+                    refreshControl={
+                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                    }
                 >
                     <View style={RentalContactStyle.InfoContainer}>
                         <View style={RentalContactStyle.InfoHeader}>
@@ -223,6 +219,31 @@ const RentalContactDetails = ({ navigation, route }) => {
                                 <Text style={RentalContactStyle.InfoRowValue}>
                                     {contactDetails.student.academic_year}
                                 </Text>
+                            </View>
+                        </View>
+                    </View>
+
+                    <View style={RentalContactStyle.InfoContainer}>
+                        <View style={RentalContactStyle.InfoHeader}>
+                            <Icon source="star-four-points" color={Theme.PrimaryColor} size={20} />
+                            <Text style={RentalContactStyle.InfoPersonTitle}>Thông tin phòng</Text>
+                        </View>
+                        <View style={RentalContactStyle.InfoRowContainer}>
+                            <View style={RentalContactStyle.InfoRow}>
+                                <Text style={RentalContactStyle.InfoRowTitle}>Mã phòng: </Text>
+                                <Text style={RentalContactStyle.InfoRowValue}>{contactDetails.room.id}</Text>
+                            </View>
+                            <View style={RentalContactStyle.InfoRow}>
+                                <Text style={RentalContactStyle.InfoRowTitle}>Tên phòng: </Text>
+                                <Text style={RentalContactStyle.InfoRowValue}>{contactDetails.room.name}</Text>
+                            </View>
+                            <View style={RentalContactStyle.InfoRow}>
+                                <Text style={RentalContactStyle.InfoRowTitle}>Loại phòng: </Text>
+                                <Text style={RentalContactStyle.InfoRowValue}>{contactDetails.room.type === "NORAML" ? typeRoom.NORMAL : typeRoom.SERVICE}</Text>
+                            </View>
+                            <View style={RentalContactStyle.InfoRow}>
+                                <Text style={RentalContactStyle.InfoRowTitle}>Phòng cho: </Text>
+                                <Text style={RentalContactStyle.InfoRowValue}>{contactDetails.room.room_for === "M" ? gender.M : gender.F}</Text>
                             </View>
                         </View>
                     </View>

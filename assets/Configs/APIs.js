@@ -19,7 +19,7 @@ export const endPoints = {
     update: '/users/current-user/update/',
     //POST: Đăng ký tài khoản cho sinh viên
     'register-student': '/users/register/',
-    //GET: Lấy ra danh sách chuyên viên và quản lý
+    //GET: Lấy danh sách chuyên viên và quản lý
     'specialists-managers': '/users/specialists-managers/',
 
     //GET: Lấy danh sách bài viết
@@ -37,8 +37,13 @@ export const endPoints = {
 
     //GET: Lấy danh sách hồ sơ thuê của sinh viên đã đăng ký
     'rental-contact-student' : '/users/students/rental-contacts/',
+    'rental-contact-detail-student':  (rentalContactID) => `/users/students/rental-contacts/${rentalContactID}/`,
     //POST: Sinh viên hủy hồ sơ đăng ký
     'cancel-rental-contact':  (rentalContactID) => `/rental-contacts/${rentalContactID}/cancel/`,
+    //POST: Chuyên viên duyệt hồ sơ
+    'confirm-rental-contact':  (rentalContactID) => `/rental-contacts/${rentalContactID}/confirm/`,
+    //POST: Chuyên viên từ chối hồ sơ
+    'reject-rental-contact':  (rentalContactID) => `/rental-contacts/${rentalContactID}/reject/`,
     //GET: Lấy danh sách hồ sơ thuê cho Chuyên viên
     'rental-contacts' : '/rental-contacts/',
     //GET: Lấy thông tin một hồ sơ cho Chuyên viên

@@ -11,9 +11,9 @@ import { typeRoom } from '../../Configs/Constants';
 import RentalContactStyle from './RentalContactStyle'
 import APIs, { authAPI, endPoints } from '../../Configs/APIs';
 import { ScrollView } from 'react-native';
-import RenderHTML from 'react-native-render-html';
 import { formatCurrency } from '../../Utils/Utilities';
-import { ALERT_TYPE, Dialog } from 'react-native-alert-notification';
+import { ALERT_TYPE, AlertNotificationRoot, Dialog } from 'react-native-alert-notification';
+import Loading from '../../Components/Common/Loading';
 
 const RentBed = ({ navigation, route }) => {
     const { roomID, bedID } = route.params;
@@ -21,8 +21,9 @@ const RentBed = ({ navigation, route }) => {
     const [bed, setBed] = useState({});
     const [isSelected, setSelection] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [loading, setLoading] = useState(true);
     const currentAccount = useAccount();
-    
+
     useEffect(() => {
         const loadRoom = async () => {
             try {
@@ -55,6 +56,8 @@ const RentBed = ({ navigation, route }) => {
                     textBody: "Hệ thống đang bận, vui lòng thử lại sau!",
                     button: "Đóng"
                 });
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -75,24 +78,18 @@ const RentBed = ({ navigation, route }) => {
                     textBody: "Tạo hồ sơ thành công",
                     button: "Đóng",
                 });
+                setTimeout(() => {
+                    navigation.goBack();
+                }, 2000);
             }
         } catch (error) {
             console.log(error);
-            if(error.status === statusCode.HTTP_500_INTERNAL_SERVER_ERROR){
-                Dialog.show({
-                    type: ALERT_TYPE.DANGER,
-                    title: "Lỗi",
-                    textBody: "Bạn đã đăng ký hồ sơ cho giường này rồi!",
-                    button: "Đóng"
-                });
-            }else{
-                Dialog.show({
-                    type: ALERT_TYPE.DANGER,
-                    title: "Lỗi",
-                    textBody: error.response.data.message,
-                    button: "Đóng"
-                });
-            }
+            Dialog.show({
+                type: ALERT_TYPE.DANGER,
+                title: "Lỗi",
+                textBody: error.response.data.message,
+                button: "Đóng"
+            });
         }
     };
 
@@ -125,6 +122,12 @@ const RentBed = ({ navigation, route }) => {
             setShowModal(true);
         }
     };
+
+    if (loading) {
+        return (
+            <Loading />
+        );
+    }
 
     return (
         <View style={[StaticStyle.BackGround, RentalContactStyle.Container]}>
@@ -233,19 +236,6 @@ const RentBed = ({ navigation, route }) => {
                                 <Text style={RentalContactStyle.InfoRowValue}>
                                     {room.type === "NORMAL" ? typeRoom.NORMAL : typeRoom.SERVICE}
                                 </Text>
-                            </View>
-                            
-                            <View style={RentalContactStyle.InfoRow}>
-                                <Text style={RentalContactStyle.InfoRowTitle}>Mô tả phòng: </Text>
-                                {bed.description ? (
-                                    <RenderHTML
-                                        contentWidth={screenWidth}
-                                        source={{ html: bed.description }}
-                                        baseStyle={RentalContactStyle.InfoRowValue}
-                                    />
-                                ) : (
-                                    <Text>Chưa có mô tả</Text>
-                                )}
                             </View>
 
                             <View style={RentalContactStyle.InfoRow}>
