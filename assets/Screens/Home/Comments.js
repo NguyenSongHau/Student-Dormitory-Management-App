@@ -31,11 +31,12 @@ const Comments = ({ postID }) => {
     const [editContent, setEditContent] = useState('');
 
     const loadComments = async () => {
-        if (!postID || page < 1) return;
+        if (!postID || page <= 0) return;
 
         try {
-            let res = await APIs.get(endPoints['comments'](postID), { params: { page } });
-
+            const params = { page };
+            let res = await APIs.get(endPoints['comments'](postID), { params });
+            
             if (res.status === statusCode.HTTP_200_OK) {
                 if (page === 1) {
                     setComments(res.data.results);

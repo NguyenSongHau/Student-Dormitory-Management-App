@@ -75,6 +75,23 @@ const StaticStyle = StyleSheet.create({
         fontFamily: Theme.Bold,
         fontSize: 18,
     },
+    EmptyContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingBottom: 100,
+    },
+    EmptyImage: {
+        width: 200,
+        height: 200,
+        marginBottom: 20,
+    },
+    EmptyText: {
+        fontFamily: Theme.Bold,
+        color: Theme.PrimaryColor,
+        fontSize: 16,
+        textAlign: 'center'
+    },
 });
 
 export default StaticStyle;

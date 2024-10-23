@@ -3,6 +3,7 @@ import { Text, View, Image, StyleSheet, ActivityIndicator } from 'react-native';
 import Theme from '../../../Styles/Theme';
 import BedCardList from '../../Common/BedCardList';
 import Loading from '../../Common/Loading';
+import StaticStyle from '../../../Styles/StaticStyle';
 
 const BedsListView = ({ beds, navigation, room }) => {
     const [filteredBeds, setFilteredBeds] = useState(beds || []);
@@ -31,7 +32,7 @@ const BedsListView = ({ beds, navigation, room }) => {
 
     if (loading) {
         return (
-            <View style={BedsListViewStyle.LoadingContainer}>
+            <View style={StaticStyle.Container}>
                 <Loading/>
             </View>
         );
@@ -39,12 +40,12 @@ const BedsListView = ({ beds, navigation, room }) => {
 
     if (!filteredBeds || filteredBeds.length === 0) {
         return (
-            <View style={BedsListViewStyle.EmptyContainer}>
+            <View style={StaticStyle.EmptyContainer}>
                 <Image
                     source={require('../../../Assets/Images/Images/No-Bed.png')}
-                    style={BedsListViewStyle.NoBedsImage}
+                    style={StaticStyle.EmptyImage}
                 />
-                <Text style={BedsListViewStyle.NoBedsText}>
+                <Text style={StaticStyle.EmptyText}>
                     Phòng này hiện chưa có giường
                 </Text>
             </View>
@@ -70,30 +71,5 @@ const BedsListView = ({ beds, navigation, room }) => {
         />
     );
 };
-
-const BedsListViewStyle = StyleSheet.create({
-    EmptyContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 20,
-        paddingBottom: 100,
-    },
-    NoBedsImage: {
-        width: 200,
-        height: 200,
-        marginBottom: 20,
-    },
-    NoBedsText: {
-        fontFamily: Theme.Bold,
-        color: Theme.PrimaryColor,
-        fontSize: 16,
-    },
-    LoadingContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-});
 
 export default BedsListView;

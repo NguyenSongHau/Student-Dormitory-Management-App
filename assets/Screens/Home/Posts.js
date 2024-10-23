@@ -67,7 +67,7 @@ const Posts = ({ navigation }) => {
 
     const handleSelectType = (selectedType) => {
         setType(selectedType);
-        setPage(1);
+        setPage(1); 
     };
 
     return (
@@ -119,7 +119,6 @@ const PostStyle = StyleSheet.create({
         alignItems: 'center',
         marginVertical: 10,
     },
-
     SearchBar: {
         flex: 10,
         marginRight: 8,

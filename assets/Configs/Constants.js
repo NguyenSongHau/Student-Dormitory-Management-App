@@ -36,8 +36,8 @@ export const gender = {
 export const statusRentalContact = {
     CANCEL: "Đã hủy",
     PROCESSING: "Đang xử lý",
-    SUCCESS : "Đã duyệt",
-    FAIL: "Từ chối"
+    SUCCESS : "Đạt",
+    FAIL: "Không đạt"
 };
 
 export const statusCode = {

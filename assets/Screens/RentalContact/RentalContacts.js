@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { ScrollView, Text, View, StyleSheet, RefreshControl, ActivityIndicator, Modal, TouchableOpacity } from "react-native";
-import { formatDate, getTokens, loadMore, onRefresh } from "../../Utils/Utilities";
+import { ScrollView, Text, View, StyleSheet, RefreshControl, ActivityIndicator, Modal, TouchableOpacity, Image } from "react-native";
+import { getTokens, loadMore, onRefresh } from "../../Utils/Utilities";
 import { authAPI, endPoints } from "../../Configs/APIs";
 import { statusCode } from "../../Configs/Constants";
 import Theme from '../../Styles/Theme';
@@ -12,30 +12,29 @@ import { statusRentalContact } from "../../Configs/Constants";
 
 const RentalContacts = ({ navigation }) => {
     const [rentalContacts, setRentalContacts] = useState([]);
-    const [filteredContacts, setFilteredContacts] = useState([]);
     const [page, setPage] = useState(1);
+    const [status, setStatus] = useState('ALL');
     const [loading, setLoading] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
-    const [selectedStatus, setSelectedStatus] = useState('ALL');
     const [filterModalVisible, setFilterModalVisible] = useState(false);
 
-    const loadRentContacts = async (pageToLoad = page) => {
-        if (pageToLoad < 1) return;
-
+    const loadRentContacts = async () => {
+        if (page <= 0) return;
         setLoading(true);
-        const { accessToken } = await getTokens();
         try {
-            let response = await authAPI(accessToken).get(endPoints['rental-contact-student'], {
-                params: { page: pageToLoad }
-            });
+            const { accessToken } = await getTokens();
+            const params = { page };
+            if (status !== 'ALL') {
+                params.status = status;
+            }
+
+            const response = await authAPI(accessToken).get(endPoints['rental-contact-student'], { params });
+
             if (response.status === statusCode.HTTP_200_OK) {
-                const newContacts = response.data.results;
-                if (pageToLoad === 1) {
-                    setRentalContacts(newContacts);
-                    setFilteredContacts(newContacts);
+                if (page === 1) {
+                    setRentalContacts(response.data.results);
                 } else {
-                    setRentalContacts((prevRentalContacts) => [...prevRentalContacts, ...newContacts]);
-                    setFilteredContacts((prevFilteredContacts) => [...prevFilteredContacts, ...newContacts]);
+                    setRentalContacts((prevRentalContacts) => [...prevRentalContacts, ...response.data.results]);
                 }
             }
             if (response.data.next === null) {
@@ -47,7 +46,7 @@ const RentalContacts = ({ navigation }) => {
                 type: ALERT_TYPE.DANGER,
                 title: "Lỗi",
                 textBody: "Hệ thống đang bận, vui lòng thử lại sau!",
-                button: "Đóng"
+                button: "Đóng",
             });
         } finally {
             setLoading(false);
@@ -57,28 +56,18 @@ const RentalContacts = ({ navigation }) => {
 
     useEffect(() => {
         loadRentContacts();
-    }, [page]);
-
-    useEffect(() => {
-        if (selectedStatus === 'ALL') {
-            setFilteredContacts(rentalContacts);
-        } else {
-            const filtered = rentalContacts.filter(contact => contact.status === selectedStatus);
-            setFilteredContacts(filtered);
-        }
-    }, [selectedStatus, rentalContacts]);
+    }, [page, status]);
 
     const handleOnScroll = ({ nativeEvent }) => {
         loadMore(nativeEvent, loading, page, setPage);
     };
 
     const handleRefresh = () => {
-        onRefresh({
-            setPage,
-            setRefreshing,
-            setData: setRentalContacts
-        });
-        loadRentContacts(1);
+        setStatus('ALL');
+        setRefreshing(true);
+        setPage(1);
+        setRentalContacts([]);
+        loadRentContacts();
     };
 
     const renderRefreshControl = () => (
@@ -94,14 +83,10 @@ const RentalContacts = ({ navigation }) => {
     };
 
     const handleSelectStatus = (status) => {
-        setSelectedStatus(status);
-        if (status === 'ALL') {
-            setFilteredContacts(rentalContacts);
-        } else {
-            const filtered = rentalContacts.filter(contact => contact.status === status);
-            setFilteredContacts(filtered);
-        }
+        setStatus(status);
+        setPage(1);
         toggleFilterModal();
+        setRefreshing(true);
     };
 
     const goToRentalContactDetails = (rentalContactID) => {
@@ -116,7 +101,7 @@ const RentalContacts = ({ navigation }) => {
             <Text style={RentContactStyle.Title}>Danh sách hồ sơ</Text>
             <TouchableOpacity style={RentContactStyle.FilterButton} onPress={toggleFilterModal}>
                 <Text style={RentContactStyle.FilterButtonText}>
-                    {selectedStatus === 'ALL' ? 'Lọc trạng thái: Tất cả' : `Lọc trạng thái: ${statusRentalContact[selectedStatus]}`}
+                    {status === 'ALL' ? 'Lọc trạng thái: Tất cả' : `Lọc trạng thái: ${statusRentalContact[status]}`}
                 </Text>
             </TouchableOpacity>
             <Modal
@@ -129,13 +114,13 @@ const RentalContacts = ({ navigation }) => {
                     <View style={RentContactStyle.ModalContent}>
                         <Text style={RentContactStyle.ModalTitle}>Chọn trạng thái</Text>
                         <TouchableOpacity onPress={() => handleSelectStatus('ALL')}>
-                            <Text style={[RentContactStyle.ModalText, selectedStatus === 'ALL' && { color: Theme.PrimaryColor, fontWeight: 'bold' }]}>
+                            <Text style={[RentContactStyle.ModalText, status === 'ALL' && { color: Theme.PrimaryColor, fontWeight: 'bold' }]}>
                                 Tất cả
                             </Text>
                         </TouchableOpacity>
                         {Object.keys(statusRentalContact).map((key) => (
                             <TouchableOpacity key={key} onPress={() => handleSelectStatus(key)}>
-                                <Text style={[RentContactStyle.ModalText, selectedStatus === key && { color: Theme.PrimaryColor, fontWeight: 'bold' }]}>
+                                <Text style={[RentContactStyle.ModalText, status === key && { color: Theme.PrimaryColor, fontWeight: 'bold' }]}>
                                     {statusRentalContact[key]}
                                 </Text>
                             </TouchableOpacity>
@@ -155,8 +140,20 @@ const RentalContacts = ({ navigation }) => {
                 scrollEventThrottle={16}
             >
                 {!refreshing && loading && page === 1 && <Loading style={{ marginBottom: 16 }} />}
-                
-                {filteredContacts.map((contact) => (
+
+                {!loading && rentalContacts.length === 0 && (
+                    <View style={[StaticStyle.EmptyContainer, {marginTop: 120}]}>
+                        <Image
+                            source={require('../../Assets/Images/Images/No-Rental-Contact.png')}
+                            style={StaticStyle.EmptyImage}
+                        />
+                        <Text style={StaticStyle.EmptyText}>
+                            Hiện không có hồ sơ
+                        </Text>
+                    </View>
+                )}
+
+                {rentalContacts.map((contact) => (
                     <RentalContactCard
                         key={contact.id}
                         contact={contact}
@@ -222,7 +219,7 @@ const RentContactStyle = StyleSheet.create({
         color: Theme.PrimaryColor,
         marginTop: 20,
         fontFamily: Theme.Bold,
-    },
+    }
 });
 
 export default RentalContacts;

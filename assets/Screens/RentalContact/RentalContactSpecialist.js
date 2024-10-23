@@ -1,41 +1,39 @@
 import { useEffect, useState } from "react";
-import { ScrollView, Text, View, StyleSheet, RefreshControl, ActivityIndicator, Modal, TouchableOpacity } from "react-native";
-import { formatDate, getTokens, loadMore, onRefresh } from "../../Utils/Utilities";
+import { ScrollView, Text, View, StyleSheet, RefreshControl, ActivityIndicator, Modal, TouchableOpacity, Image } from "react-native";
+import { getTokens, loadMore } from "../../Utils/Utilities";
 import { authAPI, endPoints } from "../../Configs/APIs";
 import { statusCode } from "../../Configs/Constants";
 import Theme from '../../Styles/Theme';
 import { ALERT_TYPE, Dialog } from 'react-native-alert-notification';
-import StaticStyle from '../../Styles/StaticStyle';
 import Loading from "../../Components/Common/Loading";
 import RentalContactCard from "../../Components/RentalContact/RentalContactCard";
 import { statusRentalContact } from "../../Configs/Constants";
+import StaticStyle from "../../Styles/StaticStyle";
 
 const RentalContactSpecialist = ({ navigation }) => {
     const [rentalContacts, setRentalContacts] = useState([]);
-    const [filteredContacts, setFilteredContacts] = useState([]);
     const [page, setPage] = useState(1);
+    const [status, setStatus] = useState('ALL');
     const [loading, setLoading] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
-    const [selectedStatus, setSelectedStatus] = useState('ALL');
     const [filterModalVisible, setFilterModalVisible] = useState(false);
 
-    const loadRentContacts = async (pageToLoad = page) => {
-        if (pageToLoad < 1) return;
-
+    const loadRentContacts = async () => {
+        if (page <= 0) return;
         setLoading(true);
-        const { accessToken } = await getTokens();
         try {
-            let response = await authAPI(accessToken).get(endPoints['rental-contacts'], {
-                params: { page: pageToLoad }
-            });
+            const { accessToken } = await getTokens();
+            const params = { page };
+            if (status !== 'ALL') {
+                params.status = status;
+            }
+
+            const response = await authAPI(accessToken).get(endPoints['rental-contacts'], { params });
             if (response.status === statusCode.HTTP_200_OK) {
-                const newContacts = response.data.results;
-                if (pageToLoad === 1) {
-                    setRentalContacts(newContacts);
-                    setFilteredContacts(newContacts);
+                if (page === 1) {
+                    setRentalContacts(response.data.results);
                 } else {
-                    setRentalContacts((prevRentalContacts) => [...prevRentalContacts, ...newContacts]);
-                    setFilteredContacts((prevFilteredContacts) => [...prevFilteredContacts, ...newContacts]);
+                    setRentalContacts((prevRentalContacts) => [...prevRentalContacts, ...response.data.results]);
                 }
             }
             if (response.data.next === null) {
@@ -47,7 +45,7 @@ const RentalContactSpecialist = ({ navigation }) => {
                 type: ALERT_TYPE.DANGER,
                 title: "Lỗi",
                 textBody: "Hệ thống đang bận, vui lòng thử lại sau!",
-                button: "Đóng"
+                button: "Đóng",
             });
         } finally {
             setLoading(false);
@@ -57,28 +55,18 @@ const RentalContactSpecialist = ({ navigation }) => {
 
     useEffect(() => {
         loadRentContacts();
-    }, [page]);
-
-    useEffect(() => {
-        if (selectedStatus === 'ALL') {
-            setFilteredContacts(rentalContacts);
-        } else {
-            const filtered = rentalContacts.filter(contact => contact.status === selectedStatus);
-            setFilteredContacts(filtered);
-        }
-    }, [selectedStatus, rentalContacts]);
+    }, [page, status]);
 
     const handleOnScroll = ({ nativeEvent }) => {
         loadMore(nativeEvent, loading, page, setPage);
     };
 
     const handleRefresh = () => {
-        onRefresh({
-            setPage,
-            setRefreshing,
-            setData: setRentalContacts
-        });
-        loadRentContacts(1);
+        setStatus('ALL');
+        setRefreshing(true);
+        setPage(1);
+        setRentalContacts([]);
+        loadRentContacts();
     };
 
     const renderRefreshControl = () => (
@@ -94,14 +82,10 @@ const RentalContactSpecialist = ({ navigation }) => {
     };
 
     const handleSelectStatus = (status) => {
-        setSelectedStatus(status);
-        if (status === 'ALL') {
-            setFilteredContacts(rentalContacts);
-        } else {
-            const filtered = rentalContacts.filter(contact => contact.status === status);
-            setFilteredContacts(filtered);
-        }
+        setStatus(status);
+        setPage(1);
         toggleFilterModal();
+        setRefreshing(true);
     };
 
     const goToRentalContactDetails = (rentalContactID) => {
@@ -112,11 +96,11 @@ const RentalContactSpecialist = ({ navigation }) => {
     };
 
     return (
-        <View style={[RentContactStyle.Container, StaticStyle.BackGround]}>
-            <Text style={RentContactStyle.Title}>Danh sách hồ sơ</Text>
-            <TouchableOpacity style={RentContactStyle.FilterButton} onPress={toggleFilterModal}>
-                <Text style={RentContactStyle.FilterButtonText}>
-                    {selectedStatus === 'ALL' ? 'Lọc trạng thái: Tất cả' : `Lọc trạng thái: ${statusRentalContact[selectedStatus]}`}
+        <View style={[RentalContactSpecialistStyle.Container, StaticStyle.BackGround]}>
+            <Text style={RentalContactSpecialistStyle.Title}>Danh sách hồ sơ</Text>
+            <TouchableOpacity style={RentalContactSpecialistStyle.FilterButton} onPress={toggleFilterModal}>
+                <Text style={RentalContactSpecialistStyle.FilterButtonText}>
+                    {status === 'ALL' ? 'Lọc trạng thái: Tất cả' : `Lọc trạng thái: ${statusRentalContact[status]}`}
                 </Text>
             </TouchableOpacity>
             <Modal
@@ -125,25 +109,23 @@ const RentalContactSpecialist = ({ navigation }) => {
                 visible={filterModalVisible}
                 onRequestClose={toggleFilterModal}
             >
-                <View style={RentContactStyle.ModalOverlay}>
-                    <View style={RentContactStyle.ModalContent}>
-                        <Text style={RentContactStyle.ModalTitle}>Chọn trạng thái</Text>
+                <View style={RentalContactSpecialistStyle.ModalOverlay}>
+                    <View style={RentalContactSpecialistStyle.ModalContent}>
+                        <Text style={RentalContactSpecialistStyle.ModalTitle}>Chọn trạng thái</Text>
                         <TouchableOpacity onPress={() => handleSelectStatus('ALL')}>
-                            <Text style={[RentContactStyle.ModalText, selectedStatus === 'ALL' && { color: Theme.PrimaryColor, fontWeight: 'bold' }]}>
+                            <Text style={[RentalContactSpecialistStyle.ModalText, status === 'ALL' && { color: Theme.PrimaryColor, fontWeight: 'bold' }]}>
                                 Tất cả
                             </Text>
                         </TouchableOpacity>
-                        {Object.keys(statusRentalContact)
-                            .filter((key) => key !== 'CANCEL')
-                            .map((key) => (
-                                <TouchableOpacity key={key} onPress={() => handleSelectStatus(key)}>
-                                    <Text style={[RentContactStyle.ModalText, selectedStatus === key && { color: Theme.PrimaryColor, fontWeight: 'bold' }]}>
-                                        {statusRentalContact[key]}
-                                    </Text>
-                                </TouchableOpacity>
-                            ))}
+                        {Object.keys(statusRentalContact).map((key) => (
+                            <TouchableOpacity key={key} onPress={() => handleSelectStatus(key)}>
+                                <Text style={[RentalContactSpecialistStyle.ModalText, status === key && { color: Theme.PrimaryColor, fontWeight: 'bold' }]}>
+                                    {statusRentalContact[key]}
+                                </Text>
+                            </TouchableOpacity>
+                        ))}
                         <TouchableOpacity onPress={toggleFilterModal}>
-                            <Text style={RentContactStyle.CloseText}>Đóng</Text>
+                            <Text style={RentalContactSpecialistStyle.CloseText}>Đóng</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -157,7 +139,20 @@ const RentalContactSpecialist = ({ navigation }) => {
                 scrollEventThrottle={16}
             >
                 {!refreshing && loading && page === 1 && <Loading style={{ marginBottom: 16 }} />}
-                {filteredContacts.map((contact) => (
+
+                {!loading && rentalContacts.length === 0 && (
+                    <View style={[StaticStyle.EmptyContainer, { marginTop: 120 }]}>
+                        <Image
+                            source={require('../../Assets/Images/Images/No-Rental-Contact.png')}
+                            style={StaticStyle.EmptyImage}
+                        />
+                        <Text style={StaticStyle.EmptyText}>
+                            Hiện không có hồ sơ
+                        </Text>
+                    </View>
+                )}
+
+                {rentalContacts.map((contact) => (
                     <RentalContactCard
                         key={contact.id}
                         contact={contact}
@@ -170,7 +165,7 @@ const RentalContactSpecialist = ({ navigation }) => {
     );
 };
 
-const RentContactStyle = StyleSheet.create({
+const RentalContactSpecialistStyle = StyleSheet.create({
     Container: {
         padding: 16,
     },
@@ -223,7 +218,7 @@ const RentContactStyle = StyleSheet.create({
         color: Theme.PrimaryColor,
         marginTop: 20,
         fontFamily: Theme.Bold,
-    },
+    }
 });
 
 export default RentalContactSpecialist;
