@@ -78,24 +78,14 @@ export const profileSections = (currentAccount) => {
             roles: [roles.ADMINISTRATOR, roles.SPECIALIST],
             items: [
                 {
-                    label: 'Quản lý phòng',
+                    label: 'Quản lý phòng và giường',
                     icon: 'door',
-                    screen: 'RoomSettings',
-                },
-                {
-                    label: 'Quản lý giường',
-                    icon: 'bunk-bed-outline',
-                    screen: 'BedSettings',
-                },
-                {
-                    label: 'Quản lý hồ sơ',
-                    icon: 'newspaper-variant-outline',
-                    screen: 'RentalContactSettings',
+                    screen: 'RoomAndBedSettings',
                 },
                 {
                     label: 'Quản lý hóa đơn thuê',
                     icon: 'newspaper-variant-outline',
-                    screen: 'receipt-text-outline',
+                    screen: 'BillRentalContactSettings',
                 },
             ]
         },

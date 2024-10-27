@@ -22,11 +22,13 @@ export const endPoints = {
     //GET: Lấy danh sách chuyên viên và quản lý
     'specialists-managers': '/users/specialists-managers/',
 
-    //GET: Lấy danh sách bài viết
+    //GET: Lấy danh sách tất cả bài viết
     post : '/posts/',
     //GET, PATCH, DELETE: Lấy, cập nhập, xóa một bài viết
     'post-detail': (postID) => `/posts/${postID}/`,
 
+    //GET: Lấy danh sách tất cả các phòng
+    rooms: '/rooms/',
     //GET, PATCH, DELETE: Lấy, cập nhập, xóa một phòng
     'room-detail': (roomID) => `/rooms/${roomID}/`,
     

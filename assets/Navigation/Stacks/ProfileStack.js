@@ -4,6 +4,8 @@ import StudentElectricAndWaterBill from '../../Screens/Profile/StudentElectricAn
 import StudentViolateNotice from '../../Screens/Profile/StudentViolateNotice';
 import Theme from "../../Styles/Theme";
 import EditProfile from '../../Screens/Profile/EditProfile';
+import RoomAndBedSettings from '../../Screens/Profile/RoomAndBedSettings';
+import BillRentalContactSettings from '../../Screens/Profile/BillRentalContactSettings';
 
 const Stack = createStackNavigator();
 
@@ -23,21 +25,15 @@ const ProfileStack = () => {
                 />
 
                 <Stack.Screen
-                    name="StudentBillRentalContact"
-                    component={StudentBillRentalContact}
-                    options={{ title: 'Hóa đơn thuê' }}
+                    name="RoomAndBedSettings"
+                    component={RoomAndBedSettings}
+                    options={{ title: 'Quản lý phòng và giường' }}
                 />
 
                 <Stack.Screen
-                    name="StudentElectricAndWaterBill"
-                    component={StudentElectricAndWaterBill}
-                    options={{ title: 'Hóa đơn điện, nước' }}
-                />
-
-                <Stack.Screen
-                    name="StudentViolateNotice"
-                    component={StudentViolateNotice}
-                    options={{ title: 'Hóa đơn thuê' }}
+                    name="BillRentalContactSettings"
+                    component={BillRentalContactSettings}
+                    options={{ title: 'Quản lý hóa đơn thuê' }}
                 />
             </Stack.Group>
         </Stack.Navigator>
