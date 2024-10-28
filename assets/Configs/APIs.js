@@ -27,7 +27,7 @@ export const endPoints = {
     //GET, PATCH, DELETE: Lấy, cập nhập, xóa một bài viết
     'post-detail': (postID) => `/posts/${postID}/`,
 
-    //GET: Lấy danh sách tất cả các phòng
+    //GET, POST: Lấy danh sách tất cả các phòng và tạo phòng
     rooms: '/rooms/',
     //GET, PATCH, DELETE: Lấy, cập nhập, xóa một phòng
     'room-detail': (roomID) => `/rooms/${roomID}/`,

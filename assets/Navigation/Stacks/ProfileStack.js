@@ -1,11 +1,10 @@
 import { createStackNavigator } from '@react-navigation/stack';
-import StudentBillRentalContact from '../../Screens/Profile/StudentBillRentalContact';
-import StudentElectricAndWaterBill from '../../Screens/Profile/StudentElectricAndWaterBill';
-import StudentViolateNotice from '../../Screens/Profile/StudentViolateNotice';
 import Theme from "../../Styles/Theme";
 import EditProfile from '../../Screens/Profile/EditProfile';
-import RoomAndBedSettings from '../../Screens/Profile/RoomAndBedSettings';
+import RoomAndBedSettings from '../../Screens/Profile/RoomAndBedSetting/RoomAndBedSettings';
 import BillRentalContactSettings from '../../Screens/Profile/BillRentalContactSettings';
+import CreateRoom from '../../Screens/Profile/RoomAndBedSetting/CreateRoom';
+import EditRoom from '../../Screens/Profile/RoomAndBedSetting/EditRoom';
 
 const Stack = createStackNavigator();
 
@@ -18,16 +17,30 @@ const ProfileStack = () => {
             }}
         >
             <Stack.Group>
+                <Stack.Group>
+                    <Stack.Screen
+                        name="RoomAndBedSettings"
+                        component={RoomAndBedSettings}
+                        options={{ title: 'Quản lý phòng và giường' }}
+                    />
+
+                    <Stack.Screen
+                        name="CreateRoom"
+                        component={CreateRoom}
+                        options={{ title: 'Tạo phòng' }}
+                    />
+
+                    <Stack.Screen
+                        name="EditRoom"
+                        component={EditRoom}
+                        options={{ title: 'Sửa phòng' }}
+                    />
+                </Stack.Group>
+
                 <Stack.Screen
                     name="EditProfile"
                     component={EditProfile}
                     options={{ title: 'Hồ sơ cá nhân' }}
-                />
-
-                <Stack.Screen
-                    name="RoomAndBedSettings"
-                    component={RoomAndBedSettings}
-                    options={{ title: 'Quản lý phòng và giường' }}
                 />
 
                 <Stack.Screen

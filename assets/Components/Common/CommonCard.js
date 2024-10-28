@@ -1,4 +1,3 @@
-import moment from "moment";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import RenderHTML from "react-native-render-html";
 import { defaultImage } from "../../Configs/Constants";

@@ -21,7 +21,12 @@ export const rolesName = {
 export const typeRoom = {
     NORMAL: "Phòng thường",
     SERVICE: "Phòng dịch vụ"
-}
+} ;
+
+export const typeRoomName = {
+    NORMAL: "NORMAL",
+    SERVICE: "SERVICE"
+};
 
 export const statusBed = {
     VACUITY : "Trống",
@@ -31,6 +36,11 @@ export const statusBed = {
 export const gender = {
     M: "Nam",
     F: "Nữ"
+};
+
+export const genderSymbol = {
+    M: "M",
+    F: "F"
 };
 
 export const statusRentalContact = {
