@@ -1,10 +1,11 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import Theme from "../../Styles/Theme";
 import EditProfile from '../../Screens/Profile/EditProfile';
-import RoomAndBedSettings from '../../Screens/Profile/RoomAndBedSetting/RoomAndBedSettings';
+import RoomSettings from '../../Screens/Profile/RoomAndBedSettings/RoomSettings';
 import BillRentalContactSettings from '../../Screens/Profile/BillRentalContactSettings';
-import CreateRoom from '../../Screens/Profile/RoomAndBedSetting/CreateRoom';
-import EditRoom from '../../Screens/Profile/RoomAndBedSetting/EditRoom';
+import CreateRoom from '../../Screens/Profile/RoomAndBedSettings/CreateRoom';
+import EditRoom from '../../Screens/Profile/RoomAndBedSettings/EditRoom';
+import BedSettings from '../../Screens/Profile/RoomAndBedSettings/BedSettings';
 
 const Stack = createStackNavigator();
 
@@ -19,9 +20,9 @@ const ProfileStack = () => {
             <Stack.Group>
                 <Stack.Group>
                     <Stack.Screen
-                        name="RoomAndBedSettings"
-                        component={RoomAndBedSettings}
-                        options={{ title: 'Quản lý phòng và giường' }}
+                        name="RoomSettings"
+                        component={RoomSettings}
+                        options={{ title: 'Quản lý phòng' }}
                     />
 
                     <Stack.Screen
@@ -34,6 +35,12 @@ const ProfileStack = () => {
                         name="EditRoom"
                         component={EditRoom}
                         options={{ title: 'Sửa phòng' }}
+                    />
+
+                    <Stack.Screen
+                        name="BedSettings"
+                        component={BedSettings}
+                        options={{ title: 'Quản lý giường' }}
                     />
                 </Stack.Group>
 

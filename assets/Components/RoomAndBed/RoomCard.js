@@ -4,24 +4,24 @@ import Theme from '../../Styles/Theme';
 import { formatDate } from "../../Utils/Utilities";
 import { defaultImage, gender, typeRoom } from "../../Configs/Constants";
 
-const RoomCard = ({ bed }) => {
+const RoomCard = ({ room }) => {
     return (
         <View style={RoomCardStyle.Card}>
             <View style={RoomCardStyle.CardImage}>
                 <Image
                     style={RoomCardStyle.Image}
-                    source={{ uri: bed.image ? bed.image : defaultImage.DEFAULT_ROOM }}
+                    source={{ uri: room.image ? room.image : defaultImage.DEFAULT_ROOM }}
                 />
             </View>
-            <Text style={RoomCardStyle.CardTitle}>{bed.name}</Text>
-            <Text style={RoomCardStyle.CardDetail}>Loại phòng: {bed.type === "SERVICE" ? typeRoom.SERVICE : typeRoom.NORMAL}</Text>
-            <Text style={RoomCardStyle.CardDetail}>Số giường: {bed.number_of_bed}</Text>
-            <Text style={RoomCardStyle.CardDetail}>Phòng cho: {bed.room_for === "F" ? gender.F : gender.M}</Text>
+            <Text style={RoomCardStyle.CardTitle}>{room.name}</Text>
+            <Text style={RoomCardStyle.CardDetail}>Loại phòng: {room.type === "SERVICE" ? typeRoom.SERVICE : typeRoom.NORMAL}</Text>
+            <Text style={RoomCardStyle.CardDetail}>Số giường: {room.number_of_room}</Text>
+            <Text style={RoomCardStyle.CardDetail}>Phòng cho: {room.room_for === "F" ? gender.F : gender.M}</Text>
             <Text style={RoomCardStyle.CardDate}>
-                Ngày tạo: <Text>{formatDate(bed.created_date)}</Text>
+                Ngày tạo: <Text>{formatDate(room.created_date)}</Text>
             </Text>
             <Text style={RoomCardStyle.CardDate}>
-                Cập nhật lần cuối: <Text>{formatDate(bed.updated_date)}</Text>
+                Cập nhật lần cuối: <Text>{formatDate(room.updated_date)}</Text>
             </Text>
         </View>
     );

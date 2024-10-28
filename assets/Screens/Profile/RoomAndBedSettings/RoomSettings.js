@@ -12,7 +12,7 @@ import StaticStyle from "../../../Styles/StaticStyle";
 import Searchbar from "../../../Components/Common/SearchBar";
 import { BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from '@gorhom/bottom-sheet';
 
-const RoomAndBedSettings = ({ navigation }) => {
+const RoomSettings = ({ navigation }) => {
     const [rooms, setRooms] = useState([]);
     const [name, setName] = useState('');
     const [page, setPage] = useState(1);
@@ -81,14 +81,20 @@ const RoomAndBedSettings = ({ navigation }) => {
         });
     };
 
-    const openBottomSheet = (room) => {
-        setSelectedRoom(room);
-        bottomSheetRef.current?.present();
-    };
-
     const gotoEditRoom = () => {
         navigation.navigate('EditRoom', { room: selectedRoom });
         bottomSheetRef.current?.close();
+    };
+
+    const gotoBedSettings = (roomID) => {
+        navigation.navigate('BedSettings', {
+            roomID: roomID
+        });
+    };
+
+    const openBottomSheet = (room) => {
+        setSelectedRoom(room);
+        bottomSheetRef.current?.present();
     };
 
     const handleDelete = async () => {
@@ -164,9 +170,9 @@ const RoomAndBedSettings = ({ navigation }) => {
                     style={StaticStyle.BackGround}
                 >
                     {!refreshing && loading && page === 1 && <Loading style={{ marginBottom: 16 }} />}
-                    {rooms.map((bed, index) => (
-                        <TouchableOpacity key={index} onLongPress={() => openBottomSheet(bed)}>
-                            <RoomCard bed={bed} />
+                    {rooms.map((room, index) => (
+                        <TouchableOpacity key={index} onLongPress={() => openBottomSheet(room)} onPress={() => gotoBedSettings(room.id)}>
+                            <RoomCard room={room} />
                         </TouchableOpacity>
                     ))}
                     {loading && page > 1 && <ActivityIndicator size="large" color={Theme.PrimaryColor} style={{ marginBottom: 16 }} />}
@@ -218,4 +224,4 @@ const RoomAndBedSettingStyle = StyleSheet.create({
     },
 });
 
-export default RoomAndBedSettings;
+export default RoomSettings;
