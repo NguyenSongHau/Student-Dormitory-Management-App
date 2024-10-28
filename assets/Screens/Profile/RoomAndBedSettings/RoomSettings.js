@@ -81,12 +81,12 @@ const RoomSettings = ({ navigation }) => {
         });
     };
 
-    const gotoEditRoom = () => {
+    const goToEditRoom = () => {
         navigation.navigate('EditRoom', { room: selectedRoom });
         bottomSheetRef.current?.close();
     };
 
-    const gotoBedSettings = (roomID) => {
+    const goToBedSettings = (roomID) => {
         navigation.navigate('BedSettings', {
             roomID: roomID
         });
@@ -97,7 +97,7 @@ const RoomSettings = ({ navigation }) => {
         bottomSheetRef.current?.present();
     };
 
-    const handleDelete = async () => {
+    const handleDeleteRoom = async () => {
         Alert.alert(
             "Xác nhận xóa phòng",
             "Bạn có muốn xóa phòng này không?",
@@ -171,7 +171,7 @@ const RoomSettings = ({ navigation }) => {
                 >
                     {!refreshing && loading && page === 1 && <Loading style={{ marginBottom: 16 }} />}
                     {rooms.map((room, index) => (
-                        <TouchableOpacity key={index} onLongPress={() => openBottomSheet(room)} onPress={() => gotoBedSettings(room.id)}>
+                        <TouchableOpacity key={index} onLongPress={() => openBottomSheet(room)} onPress={() => goToBedSettings(room.id)}>
                             <RoomCard room={room} />
                         </TouchableOpacity>
                     ))}
@@ -187,10 +187,10 @@ const RoomSettings = ({ navigation }) => {
                 >
                     <BottomSheetView style={StaticStyle.BottomSheetView}>
                         <Text style={StaticStyle.BottomSheetTitle}>Lựa chọn</Text>
-                        <TouchableOpacity style={StaticStyle.BottomSheetButton} onPress={gotoEditRoom}>
+                        <TouchableOpacity style={StaticStyle.BottomSheetButton} onPress={goToEditRoom}>
                             <Text style={StaticStyle.BottomSheetButtonText}>Chỉnh sửa</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={StaticStyle.BottomSheetButton} onPress={handleDelete}>
+                        <TouchableOpacity style={StaticStyle.BottomSheetButton} onPress={handleDeleteRoom}>
                             <Text style={StaticStyle.BottomSheetButtonText}>Xóa</Text>
                         </TouchableOpacity>
                     </BottomSheetView>

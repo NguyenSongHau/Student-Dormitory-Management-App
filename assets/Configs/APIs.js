@@ -32,6 +32,8 @@ export const endPoints = {
     //GET, PATCH, DELETE: Lấy, cập nhập, xóa một phòng
     'room-detail': (roomID) => `/rooms/${roomID}/`,
     
+    //GET,POST: Lấy danh sách giường và tạo giường
+    beds : '/beds/',
     //GET, PATCH, DELETE: Lấy, cập nhập, xóa một giường
     'bed-detail': (bedID) => `/beds/${bedID}/`,
     //POST: Thuê giường

@@ -6,6 +6,8 @@ import BillRentalContactSettings from '../../Screens/Profile/BillRentalContactSe
 import CreateRoom from '../../Screens/Profile/RoomAndBedSettings/CreateRoom';
 import EditRoom from '../../Screens/Profile/RoomAndBedSettings/EditRoom';
 import BedSettings from '../../Screens/Profile/RoomAndBedSettings/BedSettings';
+import CreateBed from '../../Screens/Profile/RoomAndBedSettings/CreateBed';
+import EditBed from '../../Screens/Profile/RoomAndBedSettings/EditBed';
 
 const Stack = createStackNavigator();
 
@@ -34,13 +36,25 @@ const ProfileStack = () => {
                     <Stack.Screen
                         name="EditRoom"
                         component={EditRoom}
-                        options={{ title: 'Sửa phòng' }}
+                        options={{ title: 'Chỉnh sửa phòng' }}
                     />
 
                     <Stack.Screen
                         name="BedSettings"
                         component={BedSettings}
                         options={{ title: 'Quản lý giường' }}
+                    />
+
+                    <Stack.Screen
+                        name="CreateBed"
+                        component={CreateBed}
+                        options={{ title: 'Tạo giường' }}
+                    />
+
+                    <Stack.Screen
+                        name="EditBed"
+                        component={EditBed}
+                        options={{ title: 'Chỉnh sửa giường' }}
                     />
                 </Stack.Group>
 

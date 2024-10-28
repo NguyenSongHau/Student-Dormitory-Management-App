@@ -135,7 +135,7 @@ const CreateRoom = ({ navigation }) => {
             Dialog.show({
                 type: ALERT_TYPE.WARNING,
                 title: "Lỗi",
-                textBody: "Hệ thống đang lỗi, vui lòng thử lại sau!",
+                textBody: "Tạo phòng thất bại!",
                 button: "Đóng",
             });
         }
@@ -167,7 +167,7 @@ const CreateRoom = ({ navigation }) => {
                     activeUnderlineColor="transparent"
                     outlineColor={Theme.PrimaryColor}
                     mode="outlined"
-                    right={<TextInput.Icon icon="door-open" />}
+                    right={<TextInput.Icon icon="door-open" color={Theme.PrimaryColor}/>}
                 />
 
                 <Text style={RoomAndBedSettingStyle.Title}>Loại phòng</Text>
@@ -182,7 +182,7 @@ const CreateRoom = ({ navigation }) => {
                         activeUnderlineColor="transparent"
                         outlineColor={Theme.PrimaryColor}
                         mode="outlined"
-                        right={<TextInput.Icon icon="format-list-bulleted-type" />}
+                        right={<TextInput.Icon icon="format-list-bulleted-type" color={Theme.PrimaryColor} />}
                     />
                 </TouchableOpacity>
 
@@ -198,7 +198,7 @@ const CreateRoom = ({ navigation }) => {
                         activeUnderlineColor="transparent"
                         outlineColor={Theme.PrimaryColor}
                         mode="outlined"
-                        right={<TextInput.Icon icon="gender-female" />}
+                        right={<TextInput.Icon icon="gender-female" color={Theme.PrimaryColor} />}
                     />
                 </TouchableOpacity>
 

@@ -13,7 +13,7 @@ const RoomAndBedSettingStyle = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         borderRadius: 10,
-        backgroundColor: "white",
+        backgroundColor: Theme.WhiteColor,
         marginBottom: 16,
     },
     Image: {
@@ -23,7 +23,7 @@ const RoomAndBedSettingStyle = StyleSheet.create({
     },
     Input: {
         marginTop: 16,
-        backgroundColor: "white",
+        backgroundColor: Theme.WhiteColor,
         borderWidth: 1,
         borderColor: Theme.PrimaryColor,
         borderRadius: 5,

@@ -33,6 +33,11 @@ export const statusBed = {
     NONVACUITY: "Đã thuê"
 };
 
+export const statusBedName = {
+    VACUITY : "VACUITY",
+    NONVACUITY: "NONVACUITY"
+};
+
 export const gender = {
     M: "Nam",
     F: "Nữ"

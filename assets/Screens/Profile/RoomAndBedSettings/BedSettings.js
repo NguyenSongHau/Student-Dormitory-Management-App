@@ -1,14 +1,15 @@
 import React, { useEffect, useState, useRef } from "react";
-import { RefreshControl, StyleSheet, View, ScrollView, ActivityIndicator, Text, TouchableOpacity, Image } from "react-native";
+import { RefreshControl, StyleSheet, View, ScrollView, ActivityIndicator, Text, TouchableOpacity, Image, Alert } from "react-native";
 import { Icon } from "react-native-paper";
 import Theme from '../../../Styles/Theme';
-import APIs, { endPoints } from "../../../Configs/APIs";
+import APIs, { authAPI, endPoints } from "../../../Configs/APIs";
 import { statusCode } from "../../../Configs/Constants";
 import { ALERT_TYPE, Dialog } from "react-native-alert-notification";
 import Loading from "../../../Components/Common/Loading";
-import BedCard from "../../../Components/RoomAndBed/BedCard"; // Adjust this import as needed
+import BedCard from "../../../Components/RoomAndBed/BedCard";
 import StaticStyle from "../../../Styles/StaticStyle";
 import { BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from '@gorhom/bottom-sheet';
+import { getTokens } from "../../../Utils/Utilities";
 
 const BedSettings = ({ navigation, route }) => {
     const { roomID } = route.params;
@@ -21,7 +22,6 @@ const BedSettings = ({ navigation, route }) => {
 
     const loadBeds = async () => {
         if (page <= 0) return;
-        console.log(beds);
         setLoading(true);
 
         try {
@@ -74,14 +74,58 @@ const BedSettings = ({ navigation, route }) => {
         bottomSheetRef.current?.present();
     };
 
-    const gotoEditBed = () => {
+    const goToEditBed = () => {
         navigation.navigate('EditBed', { bed: selectedBed });
         bottomSheetRef.current?.close();
     };
 
-    const handleDelete = async () => {
-        // Your delete logic here (similar to handleDelete in RoomSettings)
+    const handleDeleteBed = async () => {
+        Alert.alert(
+            "Xác nhận xóa giường",
+            "Bạn có muốn xóa giường này không?",
+            [
+                {
+                    text: "Hủy",
+                    style: "cancel",
+                },
+                {
+                    text: "Xóa",
+                    onPress: async () => {
+                        try {
+                            const { accessToken } = await getTokens();
+                            const response = await authAPI(accessToken).delete(endPoints['bed-detail'](selectedBed.id));
+    
+                            if (response.status === statusCode.HTTP_204_NO_CONTENT) {
+                                setBeds((prevBeds) => prevBeds.filter((bed) => bed.id !== selectedBed.id));
+                                Dialog.show({
+                                    type: ALERT_TYPE.SUCCESS,
+                                    title: "Thành công",
+                                    textBody: "Giường đã được xóa thành công.",
+                                    button: "Đóng",
+                                });
+                            }
+                        } catch (error) {
+                            console.error(error);
+                            Dialog.show({
+                                type: ALERT_TYPE.WARNING,
+                                title: "Lỗi",
+                                textBody: "Xóa giường thất bại.",
+                                button: "Đóng",
+                            });
+                        }
+    
+                        bottomSheetRef.current?.close();
+                    },
+                },
+            ],
+            { cancelable: true }
+        );
     };
+    
+    const goToCreateBed = () => {
+        navigation.navigate('CreateBed', { roomID });
+    };
+
 
     return (
         <BottomSheetModalProvider>
@@ -94,7 +138,7 @@ const BedSettings = ({ navigation, route }) => {
                 >
                     {!refreshing && loading && page === 1 && <Loading style={{ marginBottom: 16 }} />}
                     {beds.length === 0 && !loading && (
-                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginVertical: 205 }}>
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginVertical: 210 }}>
                             <Image
                                 source={require('../../../Assets/Images/Images/No-Bed.png')}
                                 style={{ width: 200, height: 200 }}
@@ -119,18 +163,37 @@ const BedSettings = ({ navigation, route }) => {
                 >
                     <BottomSheetView style={StaticStyle.BottomSheetView}>
                         <Text style={StaticStyle.BottomSheetTitle}>Lựa chọn</Text>
-                        <TouchableOpacity style={StaticStyle.BottomSheetButton} onPress={gotoEditBed}>
+                        <TouchableOpacity style={StaticStyle.BottomSheetButton} onPress={goToEditBed}>
                             <Text style={StaticStyle.BottomSheetButtonText}>Chỉnh sửa</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={StaticStyle.BottomSheetButton} onPress={handleDelete}>
+                        <TouchableOpacity style={StaticStyle.BottomSheetButton} onPress={handleDeleteBed}>
                             <Text style={StaticStyle.BottomSheetButtonText}>Xóa</Text>
                         </TouchableOpacity>
                     </BottomSheetView>
                 </BottomSheetModal>
+
+                <TouchableOpacity
+                    style={styles.AddButton}
+                    onPress={goToCreateBed}
+                >
+                    <Icon source="plus-circle" size={30} color={Theme.WhiteColor} />
+                </TouchableOpacity>
             </View>
         </BottomSheetModalProvider>
     );
 };
+
+const styles = StyleSheet.create({
+    AddButton: {
+        position: 'absolute',
+        bottom: 20,
+        right: 20,
+        backgroundColor: Theme.PrimaryColor,
+        borderRadius: 32,
+        padding: 10,
+        elevation: 5,
+    },
+});
 
 const BedSettingsStyle = StyleSheet.create({
     Container: {
