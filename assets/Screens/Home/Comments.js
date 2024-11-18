@@ -28,7 +28,9 @@ const Comments = ({ postID }) => {
     const bottomSheetRef = useRef(null);
     const [selectedComment, setSelectedComment] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
+    const [oldContent, setOldContent] = useState('');
     const [editContent, setEditContent] = useState('');
+    const [commentEditID, setCommentEditID] = useState('');
 
     const loadComments = async () => {
         if (!postID || page <= 0) return;
@@ -36,7 +38,7 @@ const Comments = ({ postID }) => {
         try {
             const params = { page };
             let res = await APIs.get(endPoints['comments'](postID), { params });
-            
+
             if (res.status === statusCode.HTTP_200_OK) {
                 if (page === 1) {
                     setComments(res.data.results);
@@ -106,35 +108,37 @@ const Comments = ({ postID }) => {
         }
     };
 
-    const toggleOptions = (commentId, comment) => {
+    const toggleOptions = (comment) => {
         setSelectedComment(comment);
         bottomSheetRef.current?.present();
     };
 
-    const handleEdit = () => {
+    const handleEditComment = () => {
+        setCommentEditID(selectedComment.id);
+        setOldContent(selectedComment.content);
         setEditContent(selectedComment.content);
         setIsEditing(true);
     };
 
     const handleUpdateComment = async () => {
-        if (!editContent.trim()) {
+        if (!editContent.trim() || (oldContent === editContent)) {
             Dialog.show({
-                type: ALERT_TYPE.WARNING,
-                title: "Lỗi",
-                textBody: "Chưa nhập nội dung bình luận!",
+                type: ALERT_TYPE.SUCCESS,
+                title: "Thành công",
+                textBody: "Cập nhập bình luận thành công.",
                 button: "Đóng",
             });
+            setIsEditing(false)
+            bottomSheetRef.current?.close();
             return;
         }
-
-        setSubmitting(true);
 
         try {
             const formData = new FormData();
             formData.append('content', editContent);
 
             const { accessToken } = await getTokens();
-            let res = await authAPI(accessToken).put(endPoints['comment-detail'](selectedComment.id), formData, {
+            let res = await authAPI(accessToken).put(endPoints['comment-detail'](commentEditID), formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -143,14 +147,14 @@ const Comments = ({ postID }) => {
             if (res.status === statusCode.HTTP_200_OK) {
                 setComments((prevComments) =>
                     prevComments.map((comment) =>
-                        comment.id === selectedComment.id ? res.data : comment
+                        comment.id === commentEditID ? res.data : comment
                     )
                 );
                 setIsEditing(false);
                 setEditContent('');
                 Dialog.show({
                     type: ALERT_TYPE.SUCCESS,
-                    title: "Lỗi",
+                    title: "Thành công",
                     textBody: "Cập nhập bình luận thành công.",
                     button: "Đóng",
                 });
@@ -276,7 +280,7 @@ const Comments = ({ postID }) => {
                                 {item.user.id === currentAccount.data.id && (
                                     <TouchableOpacity
                                         style={CommentStyle.MoreIcon}
-                                        onPress={() => toggleOptions(item.id, item)}
+                                        onPress={() => toggleOptions(item)}
                                     >
                                         <Icon source="dots-horizontal" size={20} />
                                     </TouchableOpacity>
@@ -313,7 +317,7 @@ const Comments = ({ postID }) => {
                 >
                     <BottomSheetView style={StaticStyle.BottomSheetView}>
                         <Text style={StaticStyle.BottomSheetTitle}>Lựa chọn</Text>
-                        <TouchableOpacity style={StaticStyle.BottomSheetButton} onPress={handleEdit}>
+                        <TouchableOpacity style={StaticStyle.BottomSheetButton} onPress={handleEditComment}>
                             <Text style={StaticStyle.BottomSheetButtonText}>Chỉnh sửa</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={StaticStyle.BottomSheetButton} onPress={handleDeleteComment}>
@@ -337,7 +341,7 @@ const Comments = ({ postID }) => {
                                 style={CommentStyle.ModalTextInput}
                                 multiline
                             />
-                            <TouchableOpacity style={CommentStyle.ModalButton} onPress={handleUpdateComment}>
+                            <TouchableOpacity style={CommentStyle.ModalButton} onPress={() => handleUpdateComment()}>
                                 <Text style={CommentStyle.ModalButtonText}>Cập nhật</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={CommentStyle.ModalButton} onPress={() => setIsEditing(false)}>
@@ -459,7 +463,7 @@ const CommentStyle = StyleSheet.create({
         borderRadius: 5,
         padding: 10,
         marginBottom: 20,
-        fontSize: 18
+        fontSize: 16
     },
     ModalButton: {
         backgroundColor: Theme.PrimaryColor,
@@ -473,8 +477,8 @@ const CommentStyle = StyleSheet.create({
         fontFamily: Theme.Bold,
         fontSize: 17
     },
-    LoadingContanier:{
-          flex: 1,
+    LoadingContanier: {
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
     }

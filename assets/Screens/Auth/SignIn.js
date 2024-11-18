@@ -1,6 +1,6 @@
 import APIs, { authAPI, endPoints, CLIENT_ID, CLIENT_SECRET, } from '../../Configs/APIs';
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Theme from "../../Styles/Theme";
 import { ScrollView, StyleSheet, View } from "react-native";
 import AuthStyle from '../../Components/Auth/AuthStyle';
@@ -18,11 +18,32 @@ import { setTokens } from '../../Utils/Utilities';
 import { SignInAction } from '../../Store/Actions/AccountAction';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../Configs/Firebase';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignIn = ({ navigation }) => {
     const dispatch = useAccountDispatch();
     const [account, setAccount] = useState({});
     const [isChecked, setChecked] = useState(false);
+
+    useEffect(() => {
+        const loadCredentials = async () => {
+            try {
+                const savedUsername = await AsyncStorage.getItem('username');
+                const savedPassword = await AsyncStorage.getItem('password');
+                if (savedUsername && savedPassword) {
+                    setAccount({
+                        username: savedUsername,
+                        password: savedPassword
+                    });
+                    setChecked(true);
+                }
+            } catch (error) {
+                console.error("Error loading credentials from AsyncStorage", error);
+            }
+        };
+
+        loadCredentials();
+    }, []);
 
     const handleSignIn = async () => {
         for (const field of signInFields) {
@@ -72,9 +93,16 @@ const SignIn = ({ navigation }) => {
             }
 
             await signInWithEmailAndPassword(auth, account['username'], account['password']);
-
             await setTokens(tokens);
             dispatch(SignInAction(response.data));
+
+            if (isChecked) {
+                await AsyncStorage.setItem('username', account['username']);
+                await AsyncStorage.setItem('password', account['password']);
+            } else {
+                await AsyncStorage.removeItem('username');
+                await AsyncStorage.removeItem('password');
+            }
         } catch (error) {
             if (error.message && error.message.includes('auth/invalid-credential')) {
                 createUserWithEmailAndPassword(auth, account['username'], account['password'])
@@ -106,10 +134,6 @@ const SignIn = ({ navigation }) => {
         };
     };
 
-    const handleForgotPassword = () => {
-
-    };
-
     return (
         <AlertNotificationRoot>
             <ScrollView style={StaticStyle.BackGround}>
@@ -129,7 +153,6 @@ const SignIn = ({ navigation }) => {
                                 onPressFunc={handleSignIn}
                                 isChecked={isChecked}
                                 setChecked={setChecked}
-                                onForgotPassword={handleForgotPassword}
                             />
 
                             <AuthFooter navigation={navigation} content="Chưa có tài khoản?" screen="SignUp" linkText="Đăng ký" />

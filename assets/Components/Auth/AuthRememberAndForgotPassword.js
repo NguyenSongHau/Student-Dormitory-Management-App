@@ -11,7 +11,7 @@ const AuthRememberAndForgotPassword = ({ isChecked, setChecked, onForgotPassword
                     onPress={() => setChecked(!isChecked)}
                     color={Theme.PrimaryColor}
                 />
-                <Text style={styles.CheckboxLabel}>Nhớ mật khẩu</Text>
+                <Text style={styles.CheckboxLabel}>Ghi nhớ</Text>
             </View>
             <TouchableOpacity onPress={onForgotPassword}>
                 <Text style={styles.ForgotPasswordText}>Quên mật khẩu</Text>

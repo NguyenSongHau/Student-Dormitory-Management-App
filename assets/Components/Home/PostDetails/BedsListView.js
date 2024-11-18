@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, Image, StyleSheet, ActivityIndicator } from 'react-native';
-import Theme from '../../../Styles/Theme';
 import BedCardList from '../../Common/BedCardList';
 import Loading from '../../Common/Loading';
 import StaticStyle from '../../../Styles/StaticStyle';

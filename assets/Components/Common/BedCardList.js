@@ -2,7 +2,7 @@ import { ScrollView, RefreshControl } from 'react-native';
 import BedCard from './BedCard';
 import Loading from './Loading';
 import Theme from '../../Styles/Theme';
-import { loadMore, onRefresh } from '../../Utils/Utilities';
+import { loadMore} from '../../Utils/Utilities';
 
 const BedCardList = ({ data, loading, refreshing, setRefreshing, page, setPage, setData, ...props }) => {
     const handleOnScroll = ({ nativeEvent }) => {
