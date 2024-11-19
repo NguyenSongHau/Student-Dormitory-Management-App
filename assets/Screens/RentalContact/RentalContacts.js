@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ScrollView, Text, View, StyleSheet, RefreshControl, ActivityIndicator, Modal, TouchableOpacity, Image } from "react-native";
-import { getTokens, loadMore, onRefresh } from "../../Utils/Utilities";
+import { getTokens, loadMore, onRefresh, search } from "../../Utils/Utilities";
 import { authAPI, endPoints } from "../../Configs/APIs";
 import { statusCode } from "../../Configs/Constants";
 import Theme from '../../Styles/Theme';
@@ -9,11 +9,13 @@ import StaticStyle from '../../Styles/StaticStyle';
 import Loading from "../../Components/Common/Loading";
 import RentalContactCard from "../../Components/RentalContact/RentalContactCard";
 import { statusRentalContact } from "../../Configs/Constants";
+import Searchbar from "../../Components/Common/SearchBar";
 
 const RentalContacts = ({ navigation }) => {
     const [rentalContacts, setRentalContacts] = useState([]);
     const [page, setPage] = useState(1);
     const [status, setStatus] = useState('ALL');
+    const [rentalNumber, setRentalNumber] = useState('');
     const [loading, setLoading] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const [filterModalVisible, setFilterModalVisible] = useState(false);
@@ -23,7 +25,7 @@ const RentalContacts = ({ navigation }) => {
         setLoading(true);
         try {
             const { accessToken } = await getTokens();
-            const params = { page };
+            const params = { page, rentalNumber };
             if (status !== 'ALL') {
                 params.status = status;
             }
@@ -56,7 +58,7 @@ const RentalContacts = ({ navigation }) => {
 
     useEffect(() => {
         loadRentContacts();
-    }, [page, status]);
+    }, [page, status, rentalNumber]);
 
     const handleOnScroll = ({ nativeEvent }) => {
         loadMore(nativeEvent, loading, page, setPage);
@@ -142,7 +144,7 @@ const RentalContacts = ({ navigation }) => {
                 {!refreshing && loading && page === 1 && <Loading style={{ marginBottom: 16 }} />}
 
                 {!loading && rentalContacts.length === 0 && (
-                    <View style={[StaticStyle.EmptyContainer, {marginTop: 120}]}>
+                    <View style={[StaticStyle.EmptyContainer, { marginTop: 120 }]}>
                         <Image
                             source={require('../../Assets/Images/Images/No-Rental-Contact.png')}
                             style={StaticStyle.EmptyImage}

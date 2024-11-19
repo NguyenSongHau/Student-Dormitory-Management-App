@@ -2,7 +2,7 @@ import { Text } from "react-native";
 
 const BillRentalContactSettings = () => {
     return(
-        <Text>BillRentalContactSettings</Text>
+        <Text>Hello</Text>
     )
 }
 

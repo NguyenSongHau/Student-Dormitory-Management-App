@@ -10,7 +10,6 @@ export const CLIENT_ID = 'uOqz2uf28tiT7Xt8C4XMwjJlAat4Wiv4jg9svICb';
 export const CLIENT_SECRET = 'MF9xWpb21LaGo4jMIuBJxeyx8jPMUi3KV8Gpj2hjps5mzEnDU6jJDCDMFPlUH2Zg2nofbfN2L1rmrhU50PXV61mvC7GFBeF9EeiGc9oxXxJ6QlkkbqVfKGiZAQ4bAYXo';
 
 export const endPoints = {
-    ////Account
     //POST: Lấy access token đăng nhập
     token: '/o/token/',
     //GET: Xem thông tin tài khoản đang đăng nhập
@@ -52,6 +51,9 @@ export const endPoints = {
     'rental-contacts' : '/rental-contacts/',
     //GET: Lấy thông tin một hồ sơ cho Chuyên viên
     'rental-contact-details' : (rentalContactID) => `/rental-contacts/${rentalContactID}/`,
+    //GET: Lấy danh sách hóa đơn đã xuất
+    //POST: Xuất hóa đơn thuê giường cho Chuyên viên
+    
 
     //GET, POST: Lấy danh sách bình luận và bình luận vào bài viết
     comments : (postID) => `/posts/${postID}/comments/`,

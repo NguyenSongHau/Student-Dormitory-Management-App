@@ -157,7 +157,7 @@ const BedSettings = ({ navigation, route }) => {
                 <BottomSheetModal
                     ref={bottomSheetRef}
                     index={0}
-                    snapPoints={['27%']}
+                    snapPoints={['28%']}
                     enablePanDownToClose
                     onDismiss={() => setSelectedBed(null)}
                 >

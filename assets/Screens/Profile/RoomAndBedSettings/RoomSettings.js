@@ -181,7 +181,7 @@ const RoomSettings = ({ navigation }) => {
                 <BottomSheetModal
                     ref={bottomSheetRef}
                     index={0}
-                    snapPoints={['27%']}
+                    snapPoints={['28%']}
                     enablePanDownToClose
                     onDismiss={() => setSelectedRoom(null)}
                 >
