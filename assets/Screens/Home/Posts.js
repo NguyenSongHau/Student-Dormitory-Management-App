@@ -7,9 +7,10 @@ import StaticStyle from '../../Styles/StaticStyle';
 import { search } from '../../Utils/Utilities';
 import HomeStyle from './HomeStyle';
 import { ALERT_TYPE, Dialog } from 'react-native-alert-notification';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import Searchbar from '../../Components/Common/SearchBar';
 import Filter from '../../Components/Common/Filter';
+import Theme from '../../Styles/Theme';
 
 const Posts = ({ navigation }) => {
     const [posts, setPosts] = useState([]);
@@ -67,7 +68,7 @@ const Posts = ({ navigation }) => {
 
     const handleSelectType = (selectedType) => {
         setType(selectedType);
-        setPage(1); 
+        setPage(1);
     };
 
     return (
@@ -78,12 +79,12 @@ const Posts = ({ navigation }) => {
                         <Text style={HomeStyle.HeaderTitle}>Bài viết</Text>
                     </View>
 
-                    <View style={PostStyle.SearchFilterContainer}>
+                    <View style={StaticStyle.SearchFilterContainer}>
                         <Searchbar
                             value={name}
                             placeholder="Tìm kiếm bản tin"
                             onChangeText={(value) => search(value, setPage, setName)}
-                            style={PostStyle.SearchBar}
+                            style={StaticStyle.SearchBar}
                         />
 
                         <Filter
@@ -92,20 +93,32 @@ const Posts = ({ navigation }) => {
                         />
                     </View>
 
-                    <CommonCardList
-                        refreshing={refreshing}
-                        loading={loading}
-                        data={posts}
-                        page={page}
-                        loadMore={true}
-                        onRefresh={true}
-                        setPage={setPage}
-                        setName={setName}
-                        setFilter={setType}
-                        setData={setPosts}
-                        setRefreshing={setRefreshing}
-                        onPress={(post) => goToPostDetails(post.id)}
-                    />
+                    {posts.length === 0 && !loading ? (
+                        <View style={StaticStyle.EmptyContainer}>
+                                <View style={PostStyle.CenterImage}>
+                                    <Image
+                                        source={require("../../Assets/Images/Images/No-Search.png")}
+                                        style={StaticStyle.EmptyImage}
+                                    />
+                                </View>
+                                <Text style={StaticStyle.EmptyText}>Kết quả tìm kiếm không phù hợp</Text>
+                        </View>
+                    ) : (
+                        <CommonCardList
+                            refreshing={refreshing}
+                            loading={loading}
+                            data={posts}
+                            page={page}
+                            loadMore={true}
+                            onRefresh={true}
+                            setPage={setPage}
+                            setName={setName}
+                            setFilter={setType}
+                            setData={setPosts}
+                            setRefreshing={setRefreshing}
+                            onPress={(post) => goToPostDetails(post.id)}
+                        />
+                    )}
                 </View>
             </DismissKeyboard>
         </View>
@@ -113,16 +126,7 @@ const Posts = ({ navigation }) => {
 }
 
 const PostStyle = StyleSheet.create({
-    SearchFilterContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginVertical: 10,
-    },
-    SearchBar: {
-        flex: 10,
-        marginRight: 8,
-    },
+
 });
 
 export default Posts;

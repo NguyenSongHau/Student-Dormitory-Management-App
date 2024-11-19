@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Image, StyleSheet, ActivityIndicator } from 'react-native';
+import { Text, View, Image, StyleSheet } from 'react-native';
 import BedCardList from '../../Common/BedCardList';
 import Loading from '../../Common/Loading';
 import StaticStyle from '../../../Styles/StaticStyle';
@@ -32,42 +32,38 @@ const BedsListView = ({ beds, navigation, room }) => {
     if (loading) {
         return (
             <View style={StaticStyle.Container}>
-                <Loading/>
+                <Loading />
             </View>
         );
     }
-
-    if (!filteredBeds || filteredBeds.length === 0) {
-        return (
-            <View style={StaticStyle.EmptyContainer}>
-                <Image
-                    source={require('../../../Assets/Images/Images/No-Bed.png')}
-                    style={StaticStyle.EmptyImage}
-                />
-                <Text style={StaticStyle.EmptyText}>
-                    Phòng này hiện chưa có giường
-                </Text>
-            </View>
-        );
-    }
-
-    const handleBedPress = (bedID) => {
-        navigation.navigate('BedDetails', { bedID, roomID: room.id });
-    };
 
     return (
-        <BedCardList
-            data={filteredBeds}
-            navigation={navigation}
-            loading={loading}
-            refreshing={refreshing}
-            setRefreshing={setRefreshing}
-            page={page}
-            setPage={setPage}
-            onPress={handleBedPress}
-            loadMore={true}
-            handleRefresh={handleRefresh}
-        />
+        <View style={StaticStyle.Container}>
+            {filteredBeds && filteredBeds.length === 0 ? (
+                <View style={[StaticStyle.EmptyContainer, { marginTop: 84 }]}>
+                    <Image
+                        source={require('../../../Assets/Images/Images/No-Bed.png')}
+                        style={StaticStyle.EmptyImage}
+                    />
+                    <Text style={StaticStyle.EmptyText}>
+                        Phòng này hiện chưa có giường
+                    </Text>
+                </View>
+            ) : (
+                <BedCardList
+                    data={filteredBeds}
+                    navigation={navigation}
+                    loading={loading}
+                    refreshing={refreshing}
+                    setRefreshing={setRefreshing}
+                    page={page}
+                    setPage={setPage}
+                    onPress={(bedID) => navigation.navigate('BedDetails', { bedID, roomID: room.id })}
+                    loadMore={true}
+                    handleRefresh={handleRefresh}
+                />
+            )}
+        </View>
     );
 };
 

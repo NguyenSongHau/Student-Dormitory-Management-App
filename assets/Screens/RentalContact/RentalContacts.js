@@ -9,13 +9,11 @@ import StaticStyle from '../../Styles/StaticStyle';
 import Loading from "../../Components/Common/Loading";
 import RentalContactCard from "../../Components/RentalContact/RentalContactCard";
 import { statusRentalContact } from "../../Configs/Constants";
-import Searchbar from "../../Components/Common/SearchBar";
 
 const RentalContacts = ({ navigation }) => {
     const [rentalContacts, setRentalContacts] = useState([]);
     const [page, setPage] = useState(1);
     const [status, setStatus] = useState('ALL');
-    const [rentalNumber, setRentalNumber] = useState('');
     const [loading, setLoading] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const [filterModalVisible, setFilterModalVisible] = useState(false);
@@ -25,7 +23,7 @@ const RentalContacts = ({ navigation }) => {
         setLoading(true);
         try {
             const { accessToken } = await getTokens();
-            const params = { page, rentalNumber };
+            const params = { page };
             if (status !== 'ALL') {
                 params.status = status;
             }
@@ -58,7 +56,7 @@ const RentalContacts = ({ navigation }) => {
 
     useEffect(() => {
         loadRentContacts();
-    }, [page, status, rentalNumber]);
+    }, [page, status]);
 
     const handleOnScroll = ({ nativeEvent }) => {
         loadMore(nativeEvent, loading, page, setPage);

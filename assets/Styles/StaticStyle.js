@@ -76,21 +76,29 @@ const StaticStyle = StyleSheet.create({
         fontSize: 18,
     },
     EmptyContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingBottom: 100,
+        marginHorizontal: 'auto',
+        marginVertical: 'auto',
+        marginTop: 50,
     },
     EmptyImage: {
-        width: 200,
-        height: 200,
-        marginBottom: 20,
+        width: 250,
+        height: 250,
     },
     EmptyText: {
         fontFamily: Theme.Bold,
         color: Theme.PrimaryColor,
         fontSize: 16,
-        textAlign: 'center'
+        textAlign: 'center',
+    },
+    SearchFilterContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginVertical: 10,
+    },
+    SearchBar: {
+        flex: 10,
+        marginRight: 8,
     },
 });
 
