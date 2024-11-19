@@ -9,11 +9,13 @@ import StaticStyle from '../../Styles/StaticStyle';
 import Loading from "../../Components/Common/Loading";
 import RentalContactCard from "../../Components/RentalContact/RentalContactCard";
 import { statusRentalContact } from "../../Configs/Constants";
+import Searchbar from "../../Components/Common/SearchBar";
 
 const RentalContacts = ({ navigation }) => {
     const [rentalContacts, setRentalContacts] = useState([]);
     const [page, setPage] = useState(1);
     const [status, setStatus] = useState('ALL');
+    const [rentalNumber, setRentalNumber] = useState("");
     const [loading, setLoading] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const [filterModalVisible, setFilterModalVisible] = useState(false);
@@ -28,8 +30,12 @@ const RentalContacts = ({ navigation }) => {
                 params.status = status;
             }
 
+            if (rentalNumber.trim() !== "") {
+                params.rental_number = rentalNumber.trim();
+            }
+    
             const response = await authAPI(accessToken).get(endPoints['rental-contact-student'], { params });
-
+    
             if (response.status === statusCode.HTTP_200_OK) {
                 if (page === 1) {
                     setRentalContacts(response.data.results);
@@ -53,10 +59,10 @@ const RentalContacts = ({ navigation }) => {
             setRefreshing(false);
         }
     };
-
+    
     useEffect(() => {
         loadRentContacts();
-    }, [page, status]);
+    }, [page, status, rentalNumber]);
 
     const handleOnScroll = ({ nativeEvent }) => {
         loadMore(nativeEvent, loading, page, setPage);
@@ -65,6 +71,7 @@ const RentalContacts = ({ navigation }) => {
     const handleRefresh = () => {
         setStatus('ALL');
         setRefreshing(true);
+        setRentalNumber("");
         setPage(1);
         setRentalContacts([]);
         loadRentContacts();
@@ -99,11 +106,21 @@ const RentalContacts = ({ navigation }) => {
     return (
         <View style={[RentContactStyle.Container, StaticStyle.BackGround]}>
             <Text style={RentContactStyle.Title}>Danh sách hồ sơ</Text>
+            <View style={[StaticStyle.SearchFilterContainer, {marginVertical: 0}]}>
+                <Searchbar
+                    value={rentalNumber}
+                    placeholder="Nhập mã hóa đơn"
+                    onChangeText={(value) => search(value, setPage, setRentalNumber)}
+                    style={StaticStyle.SearchBar}
+                />
+            </View>
+
             <TouchableOpacity style={RentContactStyle.FilterButton} onPress={toggleFilterModal}>
                 <Text style={RentContactStyle.FilterButtonText}>
                     {status === 'ALL' ? 'Lọc trạng thái: Tất cả' : `Lọc trạng thái: ${statusRentalContact[status]}`}
                 </Text>
             </TouchableOpacity>
+
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -142,13 +159,13 @@ const RentalContacts = ({ navigation }) => {
                 {!refreshing && loading && page === 1 && <Loading style={{ marginBottom: 16 }} />}
 
                 {!loading && rentalContacts.length === 0 && (
-                    <View style={[StaticStyle.EmptyContainer, { marginTop: 120 }]}>
+                    <View style={[StaticStyle.EmptyContainer, { marginTop: 60 }]}>
                         <Image
                             source={require('../../Assets/Images/Images/No-Rental-Contact.png')}
                             style={StaticStyle.EmptyImage}
                         />
                         <Text style={StaticStyle.EmptyText}>
-                            Hiện không có hồ sơ
+                            Không có hồ sơ
                         </Text>
                     </View>
                 )}

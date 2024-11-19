@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ScrollView, Text, View, StyleSheet, RefreshControl, ActivityIndicator, Modal, TouchableOpacity, Image } from "react-native";
-import { getTokens, loadMore } from "../../Utils/Utilities";
+import { getTokens, loadMore, search } from "../../Utils/Utilities";
 import { authAPI, endPoints } from "../../Configs/APIs";
 import { statusCode } from "../../Configs/Constants";
 import Theme from '../../Styles/Theme';
@@ -9,11 +9,13 @@ import Loading from "../../Components/Common/Loading";
 import RentalContactCard from "../../Components/RentalContact/RentalContactCard";
 import { statusRentalContact } from "../../Configs/Constants";
 import StaticStyle from "../../Styles/StaticStyle";
+import Searchbar from "../../Components/Common/SearchBar";
 
 const RentalContactSpecialist = ({ navigation }) => {
     const [rentalContacts, setRentalContacts] = useState([]);
     const [page, setPage] = useState(1);
     const [status, setStatus] = useState('ALL');
+    const [rentalNumber, setRentalNumber] = useState("");
     const [loading, setLoading] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const [filterModalVisible, setFilterModalVisible] = useState(false);
@@ -26,6 +28,10 @@ const RentalContactSpecialist = ({ navigation }) => {
             const params = { page };
             if (status !== 'ALL') {
                 params.status = status;
+            }
+
+            if (rentalNumber.trim() !== "") {
+                params.rental_number = rentalNumber.trim();
             }
 
             const response = await authAPI(accessToken).get(endPoints['rental-contacts'], { params });
@@ -55,7 +61,7 @@ const RentalContactSpecialist = ({ navigation }) => {
 
     useEffect(() => {
         loadRentContacts();
-    }, [page, status]);
+    }, [page, status, rentalNumber]);
 
     const handleOnScroll = ({ nativeEvent }) => {
         loadMore(nativeEvent, loading, page, setPage);
@@ -64,6 +70,7 @@ const RentalContactSpecialist = ({ navigation }) => {
     const handleRefresh = () => {
         setStatus('ALL');
         setRefreshing(true);
+        setRentalNumber("");
         setPage(1);
         setRentalContacts([]);
         loadRentContacts();
@@ -98,6 +105,14 @@ const RentalContactSpecialist = ({ navigation }) => {
     return (
         <View style={[RentalContactSpecialistStyle.Container, StaticStyle.BackGround]}>
             <Text style={RentalContactSpecialistStyle.Title}>Danh sách hồ sơ</Text>
+            <View style={[StaticStyle.SearchFilterContainer, {marginVertical: 0}]}>
+                <Searchbar
+                    value={rentalNumber}
+                    placeholder="Nhập mã hóa đơn"
+                    onChangeText={(value) => search(value, setPage, setRentalNumber)}
+                    style={StaticStyle.SearchBar}
+                />
+            </View>
             <TouchableOpacity style={RentalContactSpecialistStyle.FilterButton} onPress={toggleFilterModal}>
                 <Text style={RentalContactSpecialistStyle.FilterButtonText}>
                     {status === 'ALL' ? 'Lọc trạng thái: Tất cả' : `Lọc trạng thái: ${statusRentalContact[status]}`}
